@@ -1,0 +1,24 @@
+name: tekko
+description: "A new Flutter project."
+publish_to: "none"
+version: 0.1.0
+
+environment:
+  sdk: ^3.6.0
+
+dependencies:
+  another_flutter_splash_screen: ^1.2.1
+  flutter:
+    sdk: flutter
+  lottie: ^3.3.0
+
+dev_dependencies:
+  flutter_lints: ^5.0.0
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/animations/
+    - assets/images/
