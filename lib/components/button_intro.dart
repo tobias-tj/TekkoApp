@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 
 class ButtonIntro extends StatelessWidget {
-  const ButtonIntro({
-    super.key,
-    required this.onNext,
-    required this.textButton,
-  });
+  const ButtonIntro(
+      {super.key,
+      required this.onNext,
+      required this.textButton,
+      this.isParent = false});
 
   final VoidCallback onNext;
   final String textButton;
+  final bool isParent;
 
   @override
   Widget build(BuildContext context) {
@@ -18,8 +19,9 @@ class ButtonIntro extends StatelessWidget {
         height: 80,
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage(
-                "assets/images/buttonWelcome.png"), // Ruta de la imagen
+            image: AssetImage(isParent
+                ? "assets/images/buttonParent.png"
+                : "assets/images/buttonWelcome.png"), // Ruta de la imagen
             fit: BoxFit.fill, // Ajusta la imagen al tamaño del botón
           ),
         ),

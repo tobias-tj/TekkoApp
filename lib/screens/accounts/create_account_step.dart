@@ -4,7 +4,7 @@ import 'package:tekko/components/button_intro.dart';
 import 'package:tekko/components/input_account.dart';
 import 'package:tekko/components/input_animation.dart';
 import 'package:tekko/screens/home_screen.dart';
-import 'package:tekko/styles/app_colors.dart'; // Asegúrate de importar tu archivo de colores
+import 'package:tekko/styles/app_colors.dart';
 
 class CreateAccountStep extends StatefulWidget {
   const CreateAccountStep({
@@ -120,10 +120,11 @@ class _CreateAccountStepState extends State<CreateAccountStep> {
             ),
           ),
           const SizedBox(height: 20),
-          InputAnimationName(
+          InputAnimation(
             inputController: controller,
             hintText: inputHint,
             inputType: inputType,
+            isAgeInput: isAge,
           ),
           const SizedBox(height: 20),
           ButtonIntro(onNext: onPressed, textButton: buttonText),
@@ -145,9 +146,13 @@ class _CreateAccountStepState extends State<CreateAccountStep> {
           ),
         ),
         const SizedBox(height: 20),
-        Lottie.asset('assets/animations/parent_icon.json', height: 150),
+        Lottie.asset('assets/animations/parentIconApp.json', height: 150),
         const SizedBox(height: 20),
-        ButtonIntro(onNext: _goToNextStep, textButton: "Siguiente")
+        ButtonIntro(
+          onNext: _goToNextStep,
+          textButton: "Siguiente",
+          isParent: true,
+        )
       ],
     );
   }
@@ -233,7 +238,11 @@ class _CreateAccountStepState extends State<CreateAccountStep> {
             inputType: TextInputType.text,
           ),
           const SizedBox(height: 20),
-          ButtonIntro(onNext: _goToHome, textButton: "Crear Cuenta"),
+          ButtonIntro(
+            onNext: _goToHome,
+            textButton: "Crear Cuenta",
+            isParent: true,
+          ),
           const SizedBox(height: 20),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,

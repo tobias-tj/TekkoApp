@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tekko/styles/app_colors.dart';
 
-class InputAnimationName extends StatefulWidget {
+class InputAnimation extends StatefulWidget {
   final String hintText;
   final TextInputType inputType;
   final TextEditingController inputController;
   final bool isAgeInput; // Nueva bandera
 
-  const InputAnimationName({
+  const InputAnimation({
     super.key,
     required this.inputController,
     required this.hintText,
@@ -17,10 +17,10 @@ class InputAnimationName extends StatefulWidget {
   });
 
   @override
-  State<InputAnimationName> createState() => _InputAnimationNameState();
+  State<InputAnimation> createState() => _InputAnimationNameState();
 }
 
-class _InputAnimationNameState extends State<InputAnimationName> {
+class _InputAnimationNameState extends State<InputAnimation> {
   String _userInput = "";
 
   @override
