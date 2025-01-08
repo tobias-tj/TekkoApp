@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:tekko/components/button_intro.dart';
-import 'package:tekko/screens/accounts/input_account.dart';
+import 'package:tekko/components/input_account.dart';
+import 'package:tekko/components/input_animation.dart';
 import 'package:tekko/screens/home_screen.dart';
 import 'package:tekko/styles/app_colors.dart'; // Asegúrate de importar tu archivo de colores
 
@@ -70,21 +71,22 @@ class _CreateAccountStepState extends State<CreateAccountStep> {
         children: [
           // Paso 1: Nombre
           _buildStep(
-            title: '¿Cómo te llamas?',
-            inputHint: 'Ingresa tu nombre',
-            controller: _nameController,
-            buttonText: 'SIGUIENTE',
-            onPressed: _goToNextStep,
-          ),
+              title: '¿Cómo te llamas?',
+              inputHint: 'Ingresa tu nombre',
+              controller: _nameController,
+              buttonText: 'SIGUIENTE',
+              onPressed: _goToNextStep,
+              inputType: TextInputType.name,
+              isAge: false),
           // Paso 2: Edad
           _buildStep(
-            title: '¿Cuántos años tienes?',
-            inputHint: 'Ingresa tu edad',
-            controller: _ageController,
-            buttonText: 'CONFIRMAR',
-            onPressed: _goToNextStep,
-            isNumericInput: true,
-          ),
+              title: '¿Cuántos años tienes?',
+              inputHint: 'Ingresa tu edad',
+              controller: _ageController,
+              buttonText: 'CONFIRMAR',
+              onPressed: _goToNextStep,
+              inputType: TextInputType.number,
+              isAge: true),
           // Paso 3: Espacio para padres
           _buildParentStep(),
           // Paso 4: Prueba matemática
@@ -96,14 +98,14 @@ class _CreateAccountStepState extends State<CreateAccountStep> {
     );
   }
 
-  Widget _buildStep({
-    required String title,
-    required String inputHint,
-    required TextEditingController controller,
-    required String buttonText,
-    required VoidCallback onPressed,
-    bool isNumericInput = false,
-  }) {
+  Widget _buildStep(
+      {required String title,
+      required String inputHint,
+      required TextEditingController controller,
+      required String buttonText,
+      required VoidCallback onPressed,
+      required TextInputType inputType,
+      required bool isAge}) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Column(
@@ -112,22 +114,16 @@ class _CreateAccountStepState extends State<CreateAccountStep> {
           Text(
             title,
             style: const TextStyle(
-              fontSize: 28,
+              fontSize: 30,
               fontWeight: FontWeight.bold,
-              color: AppColors.softCreamDark,
+              color: AppColors.chocolateDark,
             ),
           ),
           const SizedBox(height: 20),
-          TextField(
-            controller: controller,
-            keyboardType:
-                isNumericInput ? TextInputType.number : TextInputType.text,
-            decoration: InputDecoration(
-              hintText: inputHint,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(15),
-              ),
-            ),
+          InputAnimationName(
+            inputController: controller,
+            hintText: inputHint,
+            inputType: inputType,
           ),
           const SizedBox(height: 20),
           ButtonIntro(onNext: onPressed, textButton: buttonText),
@@ -145,7 +141,7 @@ class _CreateAccountStepState extends State<CreateAccountStep> {
           style: TextStyle(
             fontSize: 28,
             fontWeight: FontWeight.bold,
-            color: AppColors.softCreamDark,
+            color: AppColors.chocolateDark,
           ),
         ),
         const SizedBox(height: 20),
@@ -165,7 +161,7 @@ class _CreateAccountStepState extends State<CreateAccountStep> {
           style: TextStyle(
             fontSize: 28,
             fontWeight: FontWeight.bold,
-            color: AppColors.softCreamDark,
+            color: AppColors.chocolateDark,
           ),
         ),
         const SizedBox(height: 20),
@@ -209,24 +205,32 @@ class _CreateAccountStepState extends State<CreateAccountStep> {
         children: [
           const Text(
             'Correo Electrónico',
-            style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+            style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                color: AppColors.chocolateDark),
           ),
           const SizedBox(height: 10),
           InputAccount(
             hintText: "Ejemplo@gmail.com",
             inputController: _emailController,
             isPass: false,
+            inputType: TextInputType.emailAddress,
           ),
           const SizedBox(height: 20),
           const Text(
             'Contraseña',
-            style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+            style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                color: AppColors.chocolateDark),
           ),
           const SizedBox(height: 10),
           InputAccount(
             hintText: "Ingresa una contraseña",
             inputController: _passwordController,
             isPass: true,
+            inputType: TextInputType.text,
           ),
           const SizedBox(height: 20),
           ButtonIntro(onNext: _goToHome, textButton: "Crear Cuenta"),

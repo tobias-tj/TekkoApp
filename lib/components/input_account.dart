@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 class InputAccount extends StatelessWidget {
   final String hintText;
   final bool isPass;
+  final TextInputType inputType;
   const InputAccount(
       {super.key,
       required TextEditingController inputController,
       required this.hintText,
-      required this.isPass})
+      required this.isPass,
+      required this.inputType})
       : _inputController = inputController;
 
   final TextEditingController _inputController;
@@ -23,6 +25,7 @@ class InputAccount extends StatelessWidget {
       ),
       child: TextField(
         controller: _inputController,
+        keyboardType: inputType,
         obscureText: isPass ? true : false,
         decoration: InputDecoration(
           fillColor: Colors.white,

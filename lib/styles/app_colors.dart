@@ -8,4 +8,5 @@ class AppColors {
   static const Color textColor = Colors.white;
   static const Color softCreamDark = Color.fromARGB(255, 255, 191, 120);
   static const Color yellowButton = Color.fromARGB(255, 231, 196, 23);
+  static const Color chocolateDark = Color.fromARGB(255, 126, 63, 18);
 }
