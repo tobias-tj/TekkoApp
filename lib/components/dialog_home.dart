@@ -18,7 +18,7 @@ class DialogHome extends StatelessWidget {
           // Animacion de Lottie
           Lottie.asset(
             "assets/animations/dogHome1.json",
-            repeat: false,
+            repeat: true,
             width: 150,
             height: 150,
           ),
