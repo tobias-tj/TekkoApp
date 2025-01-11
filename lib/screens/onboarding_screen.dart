@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:tekko/screens/accounts/create_account_screen.dart';
 import 'package:tekko/screens/home_screen.dart';
 import 'package:tekko/styles/app_colors.dart';
@@ -42,11 +43,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             onNext: () {
               if (index == 1) {
                 // Si es el último paso, navegar a la CreateAccount
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                      builder: (_) => const CreateAccountScreen()),
-                );
+                context.go('create-account');
               } else {
                 // Si no es el último paso, avanzar al siguiente
                 _pageController.nextPage(

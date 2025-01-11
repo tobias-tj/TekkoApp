@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
 import 'package:tekko/components/button_intro.dart';
 import 'package:tekko/components/input_account.dart';
 import 'package:tekko/components/input_animation.dart';
-import 'package:tekko/screens/home_screen.dart';
 import 'package:tekko/styles/app_colors.dart';
 
 class CreateAccountStep extends StatefulWidget {
@@ -53,10 +53,7 @@ class _CreateAccountStepState extends State<CreateAccountStep> {
 
   void _goToHome() {
     // Lógica para redirigir al Home
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (_) => const HomePage()),
-    );
+    context.goNamed('home');
   }
 
   @override

@@ -1,59 +1,67 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:another_flutter_splash_screen/another_flutter_splash_screen.dart';
-import 'package:tekko/screens/onboarding_screen.dart';
-import 'package:tekko/styles/app_colors.dart'; // Asegúrate de importar tu archivo de colores
+import 'package:go_router/go_router.dart';
+import 'package:tekko/styles/app_colors.dart';
 
-class SplashScreen extends StatelessWidget {
+class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
+
+  @override
+  State<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // Espera 4 segundos y navega a la siguiente pantalla usando GoRouter
+    Future.delayed(const Duration(milliseconds: 4000), () {
+      context.go('/create-account');
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final waveHeight = size.height * 0.4; // Calcula la altura del límite
 
-    return FlutterSplashScreen(
-      backgroundColor: Colors.transparent,
-      duration: const Duration(milliseconds: 4000),
-      splashScreenBody: Stack(
-        children: [
-          // Fondo color softCream
-          Container(
-            width: size.width,
-            height: size.height,
-            color: AppColors.softCream, // Aplica el color de fondo
-          ),
-          const CustomBackground(),
-          Positioned(
-            top: waveHeight,
-            left: 0,
-            right: 0,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Lottie.asset(
-                  "assets/animations/dogsplash.json",
-                  repeat: false,
-                  width: 250,
-                  height: 250,
+    return Stack(
+      children: [
+        // Fondo color softCream
+        Container(
+          width: size.width,
+          height: size.height,
+          color: AppColors.softCream, // Aplica el color de fondo
+        ),
+        const CustomBackground(),
+        Positioned(
+          top: waveHeight,
+          left: 0,
+          right: 0,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Lottie.asset(
+                "assets/animations/dogsplash.json",
+                repeat: false,
+                width: 250,
+                height: 250,
+              ),
+              const SizedBox(height: 20),
+              const Text(
+                'TEKKO',
+                style: TextStyle(
+                  fontSize: 38,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.softCreamDark,
+                  letterSpacing: 2,
                 ),
-                const SizedBox(height: 20),
-                const Text(
-                  'TEKKO',
-                  style: TextStyle(
-                    fontSize: 38,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.softCreamDark,
-                    letterSpacing: 2,
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
-      ),
-      nextScreen: const OnboardingScreen(),
+        ),
+      ],
     );
   }
 }

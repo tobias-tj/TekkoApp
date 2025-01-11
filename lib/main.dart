@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tekko/screens/splash_screen.dart';
+import 'package:tekko/app_routes.dart';
 
 void main() {
   runApp(const MainApp());
@@ -10,9 +10,9 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       debugShowCheckedModeBanner: false,
-      home: const SplashScreen(),
+      routerConfig: appRouter,
     );
   }
 }
