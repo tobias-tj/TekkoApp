@@ -12,6 +12,16 @@ import 'package:tekko/screens/splash_screen.dart';
 final GoRouter appRouter = GoRouter(
   initialLocation: '/splash',
   routes: [
+    GoRoute(
+      name: 'splash',
+      path: '/splash',
+      builder: (context, state) => const SplashScreen(),
+    ),
+    GoRoute(
+      name: 'create-account',
+      path: '/create-account',
+      builder: (context, state) => const CreateAccountScreen(),
+    ),
     ShellRoute(
       builder: (context, state, child) {
         return Scaffold(
@@ -20,16 +30,6 @@ final GoRouter appRouter = GoRouter(
         );
       },
       routes: [
-        GoRoute(
-          name: 'splash',
-          path: '/splash',
-          builder: (context, state) => const SplashScreen(),
-        ),
-        GoRoute(
-          name: 'create-account',
-          path: '/create-account',
-          builder: (context, state) => const CreateAccountScreen(),
-        ),
         GoRoute(
           name: 'home',
           path: '/home',
