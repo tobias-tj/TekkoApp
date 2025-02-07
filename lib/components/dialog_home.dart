@@ -10,7 +10,7 @@ class DialogHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: AppColors.chocolateDark,
+      color: AppColors.softCreamDark,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
       elevation: 4,
       child: Row(
@@ -33,7 +33,7 @@ class DialogHome extends StatelessWidget {
                   style: TextStyle(
                       fontSize: 28,
                       fontWeight: FontWeight.bold,
-                      color: AppColors.softCream),
+                      color: Colors.white),
                 ),
                 const SizedBox(
                   height: 8,

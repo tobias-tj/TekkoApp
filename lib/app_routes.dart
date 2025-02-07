@@ -8,6 +8,7 @@ import 'package:tekko/screens/notifications/notification_screen.dart';
 import 'package:tekko/screens/settings/setting_screen.dart';
 import 'package:tekko/components/navigation_wrapper.dart';
 import 'package:tekko/screens/splash_screen.dart';
+import 'package:tekko/screens/words/word_screen.dart';
 
 final GoRouter appRouter = GoRouter(
   initialLocation: '/splash',
@@ -21,6 +22,14 @@ final GoRouter appRouter = GoRouter(
       name: 'create-account',
       path: '/create-account',
       builder: (context, state) => const CreateAccountScreen(),
+    ),
+    GoRoute(
+      name: 'word-screen',
+      path: '/word-screen/:title',
+      builder: (context, state) {
+        final title = state.pathParameters['title'] ?? 'Sin título';
+        return WordScreen(textTitle: title);
+      },
     ),
     ShellRoute(
       builder: (context, state, child) {

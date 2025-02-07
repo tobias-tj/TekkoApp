@@ -46,7 +46,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                   height: 80,
                   decoration: BoxDecoration(
                     image: const DecorationImage(
-                      image: AssetImage("assets/images/topTitleDog.png"),
+                      image: AssetImage("assets/images/iconTitleDog.png"),
                       fit: BoxFit.fill,
                     ),
                   ),

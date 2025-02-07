@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tekko/components/dialog_home.dart';
 import 'package:tekko/components/list_card_item_home.dart';
 import 'package:tekko/components/top_custom_background.dart';
 import 'package:tekko/styles/app_colors.dart';
@@ -13,7 +12,10 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final List<Map<String, dynamic>> items = [
-    {'imagePath': 'assets/images/conversationIcon.png', 'title': 'Palabras'},
+    {
+      'imagePath': 'assets/images/conversationIcon.png',
+      'title': 'Conversacion'
+    },
     {'imagePath': 'assets/images/ropIcon.png', 'title': 'Ropas'},
     {'imagePath': 'assets/images/familyIcon.png', 'title': 'Familia'},
     {'imagePath': 'assets/images/foodIcon.png', 'title': 'Alimentos'},
@@ -36,11 +38,9 @@ class _HomePageState extends State<HomePage> {
           ),
           Column(
             children: [
-              TopCustomBackground(title: "Hola Tobias!"),
-
-              DialogHome(),
+              TopCustomBackground(),
               const SizedBox(
-                  height: 10), // Espaciado entre DialogHome y GridView
+                  height: 2), // Espaciado entre DialogHome y GridView
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
