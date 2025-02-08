@@ -118,7 +118,7 @@ class TopCustomBackground extends StatelessWidget {
 
           // DialogHome (se mantiene en su posición original)
           const Positioned(
-            top: 140, // Ajusta la posición según sea necesario
+            top: 140,
             left: 0,
             right: 0,
             child: DialogHome(),

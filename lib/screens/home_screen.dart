@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tekko/components/list_card_item_home.dart';
 import 'package:tekko/components/top_custom_background.dart';
+import 'package:tekko/data/list_item_home.dart';
 import 'package:tekko/styles/app_colors.dart';
 
 class HomePage extends StatefulWidget {
@@ -11,17 +12,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final List<Map<String, dynamic>> items = [
-    {
-      'imagePath': 'assets/images/conversationIcon.png',
-      'title': 'Conversacion'
-    },
-    {'imagePath': 'assets/images/ropIcon.png', 'title': 'Ropas'},
-    {'imagePath': 'assets/images/familyIcon.png', 'title': 'Familia'},
-    {'imagePath': 'assets/images/foodIcon.png', 'title': 'Alimentos'},
-    {'imagePath': 'assets/images/gamesIcon.png', 'title': 'Juegos'},
-    {'imagePath': 'assets/images/animalsIcon.png', 'title': 'Animales'},
-  ];
+  final List<Item> items = ItemData.getAll();
 
   @override
   Widget build(BuildContext context) {
@@ -58,8 +49,9 @@ class _HomePageState extends State<HomePage> {
                     itemBuilder: (context, index) {
                       final item = items[index];
                       return ListCardItemHome(
-                        imagePath: item['imagePath'],
-                        title: item['title'],
+                        id: item.id,
+                        imagePath: item.imagePath,
+                        title: item.title,
                       );
                     },
                   ),

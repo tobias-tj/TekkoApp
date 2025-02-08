@@ -25,10 +25,12 @@ final GoRouter appRouter = GoRouter(
     ),
     GoRoute(
       name: 'word-screen',
-      path: '/word-screen/:title',
+      path: '/word-screen/:id/:title',
       builder: (context, state) {
         final title = state.pathParameters['title'] ?? 'Sin título';
-        return WordScreen(textTitle: title);
+        final id = int.tryParse(state.pathParameters['id'] ?? '') ??
+            0; // Convertir ID a entero
+        return WordScreen(id: id, textTitle: title);
       },
     ),
     ShellRoute(

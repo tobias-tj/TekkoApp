@@ -3,15 +3,19 @@ import 'package:go_router/go_router.dart';
 import 'package:tekko/styles/app_colors.dart';
 
 class ListCardItemHome extends StatelessWidget {
+  final int id;
   final String imagePath;
   final String title;
   const ListCardItemHome(
-      {super.key, required this.imagePath, required this.title});
+      {super.key,
+      required this.id,
+      required this.imagePath,
+      required this.title});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => context.push('/word-screen/$title'),
+      onTap: () => context.push('/word-screen/$id/$title'),
       child: Card(
         color: AppColors.chocolateDark,
         shape: RoundedRectangleBorder(
