@@ -1,9 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:tekko/components/dialog_home.dart';
+import 'package:tekko/components/profile_icon_manager.dart';
 import 'package:tekko/styles/app_colors.dart';
 
-class TopCustomBackground extends StatelessWidget {
+class TopCustomBackground extends StatefulWidget {
   const TopCustomBackground({super.key});
+
+  @override
+  State<TopCustomBackground> createState() => _TopCustomBackgroundState();
+}
+
+class _TopCustomBackgroundState extends State<TopCustomBackground> {
+  String _selectedIcon = 'assets/images/iconProfile.png';
+
+  @override
+  void initState() {
+    super.initState();
+    _loadProfileIcon();
+  }
+
+  Future<void> _loadProfileIcon() async {
+    final icon = await ProfileIconManager.getSelectedIcon();
+    setState(() {
+      _selectedIcon = icon;
+    });
+  }
+
+  void _changeProfileIcon(String newIcon) async {
+    await ProfileIconManager.saveSelectedIcon(newIcon);
+    setState(() {
+      _selectedIcon = newIcon;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,17 +65,29 @@ class TopCustomBackground extends StatelessWidget {
                 // Izquierda: Fondo circular con un icono
                 Padding(
                   padding: const EdgeInsets.only(left: 16.0),
-                  child: Container(
-                      width: 60,
-                      height: 60,
-                      decoration: BoxDecoration(
-                        color: Colors.white, // Color del fondo circular
-                        shape: BoxShape.circle,
-                      ),
-                      child: Image.asset(
-                        'assets/images/iconProfile.png',
-                        fit: BoxFit.cover,
-                      )),
+                  child: PopupMenuButton<String>(
+                    onSelected: _changeProfileIcon,
+                    itemBuilder: (context) => [
+                      'assets/images/iconProfile.png',
+                      'assets/images/animalsIcon.png',
+                      'assets/images/dogJake.png'
+                    ].map((iconPath) {
+                      return PopupMenuItem<String>(
+                        value: iconPath,
+                        child: Row(
+                          children: [
+                            Image.asset(iconPath, width: 40),
+                            const SizedBox(width: 8),
+                            Text(
+                              'Icono',
+                            ),
+                          ],
+                        ),
+                      );
+                    }).toList(),
+                    child: Image.asset(_selectedIcon,
+                        fit: BoxFit.fill, width: 45, height: 45),
+                  ),
                 ),
 
                 // Centro: "Nivel 1", barra de progreso y "Nivel De Progreso"
