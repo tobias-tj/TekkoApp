@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tekko/screens/accounts/create_account_screen.dart';
+import 'package:tekko/screens/activity/activity_screen.dart';
 import 'package:tekko/screens/calendar/calendar_screen.dart';
 import 'package:tekko/screens/favorites/favorite_screen.dart';
+import 'package:tekko/screens/games/drawing_screen.dart';
 import 'package:tekko/screens/home_screen.dart';
 import 'package:tekko/screens/notifications/notification_screen.dart';
 import 'package:tekko/screens/settings/setting_screen.dart';
@@ -32,6 +34,17 @@ final GoRouter appRouter = GoRouter(
             0; // Convertir ID a entero
         return WordScreen(id: id, textTitle: title);
       },
+    ),
+    GoRoute(
+      name: 'drawing',
+      path: '/drawing',
+      pageBuilder: (context, state) =>
+          NoTransitionPage(child: const DrawingScreen()),
+    ),
+    GoRoute(
+      name: 'activity',
+      path: '/activity',
+      builder: (context, state) => const ActivityScreen(),
     ),
     ShellRoute(
       builder: (context, state, child) {

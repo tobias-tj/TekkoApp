@@ -10,6 +10,7 @@ dependencies:
   another_flutter_splash_screen: ^1.2.1
   audioplayers: ^5.2.1
   curved_navigation_bar: ^1.0.6
+  flame: ^1.24.0
   flutter:
     sdk: flutter
   go_router: ^14.6.3
@@ -29,3 +30,4 @@ flutter:
     - assets/sounds/conversacion/
     - assets/images/words/ropas/
     - assets/sounds/ropas/
+    - assets/images/activities/

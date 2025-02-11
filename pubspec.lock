@@ -161,6 +161,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.1"
+  flame:
+    dependency: "direct main"
+    description:
+      name: flame
+      sha256: "75eb2b2814a0af2686e9f36649f72249f1921b565d11d5bf956d17f9d8cfa67f"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.24.0"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -288,6 +296,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.15.0"
+  ordered_set:
+    dependency: transitive
+    description:
+      name: ordered_set
+      sha256: fc861bb51fc863cd3e0718e21768af9586e0d5022b91a0fd4437636456cdb7d0
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.1.1"
   path:
     dependency: transitive
     description:
@@ -479,4 +495,4 @@ packages:
     version: "1.1.0"
 sdks:
   dart: ">=3.6.0 <4.0.0"
-  flutter: ">=3.27.0"
+  flutter: ">=3.27.1"

@@ -36,7 +36,7 @@ class ListCardItemHome extends StatelessWidget {
               const SizedBox(height: 8),
               Text(title,
                   style: TextStyle(
-                    fontSize: 18,
+                    fontSize: 16,
                     fontWeight: FontWeight.bold,
                     color: AppColors.softCream,
                   ))

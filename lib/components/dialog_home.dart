@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
 import 'package:tekko/styles/app_colors.dart';
 
@@ -19,12 +20,12 @@ class DialogHome extends StatelessWidget {
           Lottie.asset(
             "assets/animations/dogHome1.json",
             repeat: true,
-            width: 150,
-            height: 150,
+            width: 125,
+            height: 125,
           ),
           Expanded(
               child: Padding(
-            padding: const EdgeInsets.all(28.0),
+            padding: const EdgeInsets.all(18.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
@@ -39,15 +40,13 @@ class DialogHome extends StatelessWidget {
                   height: 8,
                 ),
                 ElevatedButton(
-                    onPressed: () {
-                      print("Boton Hablemos presionado");
-                    },
+                    onPressed: () => context.push('/activity'),
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8.0))),
                     child: const Text(
-                      "Hablemos",
+                      "Actividades",
                       style: TextStyle(color: AppColors.softCreamDark),
                     ))
               ],
