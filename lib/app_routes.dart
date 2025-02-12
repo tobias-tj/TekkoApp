@@ -10,6 +10,7 @@ import 'package:tekko/screens/notifications/notification_screen.dart';
 import 'package:tekko/screens/settings/setting_screen.dart';
 import 'package:tekko/components/navigation_wrapper.dart';
 import 'package:tekko/screens/splash_screen.dart';
+import 'package:tekko/screens/welcome/welcome_screen.dart';
 import 'package:tekko/screens/words/word_screen.dart';
 
 final GoRouter appRouter = GoRouter(
@@ -20,6 +21,10 @@ final GoRouter appRouter = GoRouter(
       path: '/splash',
       builder: (context, state) => const SplashScreen(),
     ),
+    GoRoute(
+        name: 'welcome',
+        path: '/welcome',
+        builder: (context, state) => const WelcomeScreen()),
     GoRoute(
       name: 'create-account',
       path: '/create-account',

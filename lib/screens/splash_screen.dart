@@ -16,7 +16,7 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     // Espera 4 segundos y navega a la siguiente pantalla usando GoRouter
     Future.delayed(const Duration(milliseconds: 4000), () {
-      context.go('/create-account');
+      context.pushReplacement('/welcome');
     });
   }
 
@@ -52,11 +52,11 @@ class _SplashScreenState extends State<SplashScreen> {
               const Text(
                 'TEKKO',
                 style: TextStyle(
-                  fontSize: 38,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.softCreamDark,
-                  letterSpacing: 2,
-                ),
+                    fontSize: 38,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.softCreamDark,
+                    letterSpacing: 2,
+                    decoration: TextDecoration.none),
               ),
             ],
           ),
