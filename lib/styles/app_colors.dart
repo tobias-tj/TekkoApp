@@ -10,4 +10,5 @@ class AppColors {
   static const Color yellowButton = Color.fromARGB(255, 231, 196, 23);
   static const Color chocolateDark = Color.fromARGB(255, 126, 63, 18);
   static const Color chocolateNewDark = Color.fromARGB(255, 84, 41, 10);
+  static const Color chocolateCream = Color.fromARGB(32, 129, 52, 10);
 }
