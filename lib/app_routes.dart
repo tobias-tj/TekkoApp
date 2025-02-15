@@ -6,7 +6,6 @@ import 'package:tekko/screens/calendar/calendar_screen.dart';
 import 'package:tekko/screens/favorites/favorite_screen.dart';
 import 'package:tekko/screens/games/drawing_screen.dart';
 import 'package:tekko/screens/home_screen.dart';
-import 'package:tekko/screens/notifications/notification_screen.dart';
 import 'package:tekko/screens/settings/setting_screen.dart';
 import 'package:tekko/components/navigation_wrapper.dart';
 import 'package:tekko/screens/splash_screen.dart';
@@ -78,13 +77,6 @@ final GoRouter appRouter = GoRouter(
           path: '/favorites',
           pageBuilder: (context, state) => NoTransitionPage(
             child: const FavoriteScreen(),
-          ),
-        ),
-        GoRoute(
-          name: 'notifications',
-          path: '/notifications',
-          pageBuilder: (context, state) => NoTransitionPage(
-            child: const NotificationScreen(),
           ),
         ),
         GoRoute(

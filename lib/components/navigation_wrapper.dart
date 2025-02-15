@@ -17,8 +17,7 @@ class NavigationWrapper extends StatelessWidget {
       '/home': 0,
       '/calendar': 1,
       '/favorites': 2,
-      '/notifications': 3,
-      '/settings': 4,
+      '/settings': 3,
     };
 
     // Obtener el índice correspondiente al nombre de la ruta actual
@@ -34,7 +33,6 @@ class NavigationWrapper extends StatelessWidget {
         Icon(Icons.home_outlined), // Ícono para Home
         Icon(Icons.calendar_month_outlined),
         Icon(Icons.favorite_border),
-        Icon(Icons.notifications_none),
         Icon(Icons.settings_outlined),
       ],
       onTap: (index) {
