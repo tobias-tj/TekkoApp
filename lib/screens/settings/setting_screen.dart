@@ -1,11 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:tekko/components/linear_element.dart';
+import 'package:tekko/components/profile_icon_manager.dart';
 import 'package:tekko/components/top_title_generic.dart';
 import 'package:tekko/screens/settings/item_setting.dart';
 import 'package:tekko/styles/app_colors.dart';
 
-class SettingScreen extends StatelessWidget {
+class SettingScreen extends StatefulWidget {
   const SettingScreen({super.key});
+
+  @override
+  State<SettingScreen> createState() => _SettingScreenState();
+}
+
+class _SettingScreenState extends State<SettingScreen> {
+  @override
+  void initState() {
+    super.initState();
+    _loadProfileIcon();
+  }
+
+  Future<String> _loadProfileIcon() async {
+    return await ProfileIconManager.getSelectedIcon();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,10 +63,36 @@ class SettingScreen extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              Image.asset(
-                                'assets/images/dogJake.png',
-                                width: 80,
-                                height: 80,
+                              FutureBuilder<String>(
+                                future: _loadProfileIcon(),
+                                builder: (context, snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    // Muestra un ícono de carga mientras se recupera el ícono
+                                    return CircularProgressIndicator();
+                                  } else if (snapshot.hasError) {
+                                    // Muestra un ícono por defecto si hay un error
+                                    return Image.asset(
+                                      "assets/images/dogJake.png", // Ruta de un ícono por defecto
+                                      width: 80,
+                                      height: 80,
+                                    );
+                                  } else if (snapshot.hasData) {
+                                    // Muestra el ícono recuperado
+                                    return Image.asset(
+                                      snapshot.data!,
+                                      width: 80,
+                                      height: 80,
+                                    );
+                                  } else {
+                                    // Si no hay datos, muestra un ícono por defecto
+                                    return Image.asset(
+                                      "assets/images/dogJake.png",
+                                      width: 80,
+                                      height: 80,
+                                    );
+                                  }
+                                },
                               ),
                               SizedBox(width: 40),
                               Column(
