@@ -11,4 +11,6 @@ class AppColors {
   static const Color chocolateDark = Color.fromARGB(255, 126, 63, 18);
   static const Color chocolateNewDark = Color.fromARGB(255, 84, 41, 10);
   static const Color chocolateCream = Color.fromARGB(32, 129, 52, 10);
+  static const Color cardBackgroundSoft = Color(0xFFEFC38E);
+  static const Color cardMaskSoft = Color(0xFFE7B67C);
 }
