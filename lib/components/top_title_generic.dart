@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:tekko/styles/app_colors.dart';
 
 class TopTitleGeneric extends StatelessWidget {
-  const TopTitleGeneric({super.key});
+  final String title;
+  const TopTitleGeneric({super.key, required this.title});
 
   @override
   Widget build(BuildContext context) {
@@ -32,8 +33,8 @@ class TopTitleGeneric extends StatelessWidget {
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text(
-                          "Favoritos",
+                        Text(
+                          title,
                           style: TextStyle(
                               fontSize: 24,
                               fontWeight: FontWeight.bold,

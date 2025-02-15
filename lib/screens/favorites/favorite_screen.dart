@@ -25,7 +25,9 @@ class FavoriteScreen extends StatelessWidget {
           ),
           Column(
             children: [
-              TopTitleGeneric(),
+              TopTitleGeneric(
+                title: "Favoritos",
+              ),
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 26.0),
