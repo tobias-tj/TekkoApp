@@ -4,6 +4,7 @@ import 'package:lottie/lottie.dart';
 import 'package:tekko/components/button_intro.dart';
 import 'package:tekko/components/input_account.dart';
 import 'package:tekko/components/input_animation.dart';
+import 'package:tekko/components/math_question.dart';
 import 'package:tekko/styles/app_colors.dart';
 
 class CreateAccountStep extends StatefulWidget {
@@ -25,8 +26,25 @@ class _CreateAccountStepState extends State<CreateAccountStep> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  // Verificar respuesta matemática
+  // Variables para la prueba matemática
+  MathQuestion? _currentQuestion;
+  int? _userAnswer;
+  int _attempts = 0;
+  final int _maxAttempts = 3; // Número máximo de intentos
   bool _isMathCorrect = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _generateNewQuestion();
+  }
+
+  void _generateNewQuestion() {
+    setState(() {
+      _currentQuestion = generateMathQuestion();
+      _userAnswer = null;
+    });
+  }
 
   @override
   void dispose() {
@@ -54,6 +72,37 @@ class _CreateAccountStepState extends State<CreateAccountStep> {
   void _goToHome() {
     // Lógica para redirigir al Home
     context.goNamed('home');
+  }
+
+  void _checkAnswer(int answer) {
+    setState(() {
+      _userAnswer = answer;
+      if (answer == _currentQuestion?.correctAnswer) {
+        _isMathCorrect = true;
+        _goToNextStep(); // Avanzar al siguiente paso si la respuesta es correcta
+      } else {
+        _attempts++;
+        if (_attempts >= _maxAttempts) {
+          // Mostrar un mensaje de error y reiniciar la prueba
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text(
+                  'Has excedido el número máximo de intentos. Intenta de nuevo.'),
+            ),
+          );
+          _attempts = 0;
+          _generateNewQuestion();
+        } else {
+          // Mostrar un mensaje de error y generar una nueva pregunta
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Respuesta incorrecta. Intenta de nuevo.'),
+            ),
+          );
+          _generateNewQuestion();
+        }
+      }
+    });
   }
 
   @override
@@ -155,6 +204,16 @@ class _CreateAccountStepState extends State<CreateAccountStep> {
   }
 
   Widget _buildMathTestStep() {
+    if (_currentQuestion == null) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    // Combinar respuestas correctas e incorrectas y mezclarlas
+    final allAnswers = [
+      _currentQuestion!.correctAnswer,
+      ..._currentQuestion!.incorrectAnswers,
+    ]..shuffle();
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -167,33 +226,29 @@ class _CreateAccountStepState extends State<CreateAccountStep> {
           ),
         ),
         const SizedBox(height: 20),
-        const Text(
-          '¿Cuánto es 3 x 5?',
-          style: TextStyle(fontSize: 22),
+        Text(
+          _currentQuestion!.question,
+          style: const TextStyle(fontSize: 22),
         ),
         const SizedBox(height: 20),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  _isMathCorrect = false;
-                });
-              },
-              child: const Text('12'),
-            ),
-            const SizedBox(width: 20),
-            ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  _isMathCorrect = true;
-                });
-                _goToNextStep();
-              },
-              child: const Text('15'),
-            ),
-          ],
+          children: allAnswers.map((answer) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: ElevatedButton(
+                onPressed: () {
+                  _checkAnswer(answer);
+                },
+                child: Text(answer.toString()),
+              ),
+            );
+          }).toList(),
+        ),
+        const SizedBox(height: 20),
+        Text(
+          'Intentos restantes: ${_maxAttempts - _attempts}',
+          style: const TextStyle(fontSize: 16, color: Colors.red),
         ),
       ],
     );

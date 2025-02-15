@@ -72,7 +72,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 style: TextStyle(
                     fontSize: 40,
                     fontWeight: FontWeight.bold,
-                    color: AppColors.softCreamDark,
+                    color: AppColors.chocolateNewDark,
                     decoration: TextDecoration.none),
               ),
               Text(
@@ -80,7 +80,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 style: TextStyle(
                     fontSize: 49,
                     fontWeight: FontWeight.bold,
-                    color: AppColors.softCreamDark,
+                    color: AppColors.chocolateNewDark,
                     decoration: TextDecoration.none),
               ),
             ],
