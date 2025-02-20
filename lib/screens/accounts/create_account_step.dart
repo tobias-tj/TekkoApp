@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
 import 'package:tekko/components/button_intro.dart';
-import 'package:tekko/components/input_account.dart';
 import 'package:tekko/components/input_animation.dart';
 import 'package:tekko/components/math_question.dart';
 import 'package:tekko/styles/app_colors.dart';

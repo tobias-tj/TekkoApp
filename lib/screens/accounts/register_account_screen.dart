@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tekko/components/button_intro.dart';
 import 'package:tekko/styles/app_colors.dart';
-import 'package:tekko/components/input_account.dart'; // Asegúrate de tener este componente
+import 'package:tekko/components/input_account.dart';
 
 class RegisterAccount extends StatefulWidget {
   const RegisterAccount({super.key});
