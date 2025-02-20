@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tekko/screens/accounts/create_account_screen.dart';
+import 'package:tekko/screens/accounts/login_account_screen.dart';
+import 'package:tekko/screens/accounts/register_account_screen.dart';
 import 'package:tekko/screens/activity/activity_screen.dart';
 import 'package:tekko/screens/calendar/calendar_screen.dart';
 import 'package:tekko/screens/favorites/favorite_screen.dart';
@@ -28,6 +30,16 @@ final GoRouter appRouter = GoRouter(
       name: 'create-account',
       path: '/create-account',
       builder: (context, state) => const CreateAccountScreen(),
+    ),
+    GoRoute(
+      name: 'register',
+      path: '/register',
+      builder: (context, state) => const RegisterAccount(),
+    ),
+    GoRoute(
+      name: 'login',
+      path: '/login',
+      builder: (context, state) => const LoginAccount(),
     ),
     GoRoute(
       name: 'word-screen',

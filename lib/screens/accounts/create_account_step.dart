@@ -57,7 +57,7 @@ class _CreateAccountStepState extends State<CreateAccountStep> {
   }
 
   void _goToNextStep() {
-    if (_currentStep < 4) {
+    if (_currentStep < 3) {
       setState(() {
         _currentStep++;
       });
@@ -66,12 +66,10 @@ class _CreateAccountStepState extends State<CreateAccountStep> {
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
       );
+    } else if (_currentStep == 3) {
+      // Redirigir a RegisterAccount después de completar el paso 4
+      context.go('/register');
     }
-  }
-
-  void _goToHome() {
-    // Lógica para redirigir al Home
-    context.goNamed('home');
   }
 
   void _checkAnswer(int answer) {
@@ -137,8 +135,8 @@ class _CreateAccountStepState extends State<CreateAccountStep> {
           _buildParentStep(),
           // Paso 4: Prueba matemática
           _buildMathTestStep(),
-          // Paso 5: Correo y contraseña
-          _buildAccountCreationStep(),
+          // // Paso 5: Correo y contraseña
+          // _buildAccountCreationStep(),
         ],
       ),
     );
@@ -251,70 +249,6 @@ class _CreateAccountStepState extends State<CreateAccountStep> {
           style: const TextStyle(fontSize: 16, color: Colors.red),
         ),
       ],
-    );
-  }
-
-  Widget _buildAccountCreationStep() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Text(
-            'Correo Electrónico',
-            style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-                color: AppColors.chocolateDark),
-          ),
-          const SizedBox(height: 10),
-          InputAccount(
-            hintText: "Ejemplo@gmail.com",
-            inputController: _emailController,
-            isPass: false,
-            inputType: TextInputType.emailAddress,
-          ),
-          const SizedBox(height: 20),
-          const Text(
-            'Contraseña',
-            style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-                color: AppColors.chocolateDark),
-          ),
-          const SizedBox(height: 10),
-          InputAccount(
-            hintText: "Ingresa una contraseña",
-            inputController: _passwordController,
-            isPass: true,
-            inputType: TextInputType.text,
-          ),
-          const SizedBox(height: 20),
-          ButtonIntro(
-            onNext: _goToHome,
-            textButton: "Crear Cuenta",
-            isParent: true,
-          ),
-          const SizedBox(height: 20),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              IconButton(
-                icon: const Icon(Icons.email, color: Colors.red),
-                onPressed: () {
-                  // Lógica para autenticación con Gmail
-                },
-              ),
-              IconButton(
-                icon: const Icon(Icons.facebook, color: Colors.blue),
-                onPressed: () {
-                  // Lógica para autenticación con Facebook
-                },
-              ),
-            ],
-          ),
-        ],
-      ),
     );
   }
 }
