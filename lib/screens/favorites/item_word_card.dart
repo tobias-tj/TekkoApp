@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tekko/app.dart';
 import 'package:tekko/data/list_item_word.dart';
 import 'package:tekko/styles/app_colors.dart';
 
@@ -45,11 +44,11 @@ class ItemWordCard extends StatelessWidget {
                       item.title,
                       style: const TextStyle(
                         color: Colors.white,
-                        fontSize: 16,
+                        fontSize: 14,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const SizedBox(width: 8.0),
+                    const SizedBox(width: 1.0),
                     Image.asset(
                       'assets/images/iconSound.png',
                       width: 20,

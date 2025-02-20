@@ -58,7 +58,12 @@ class _AgendListState extends State<AgendList> {
                       return Padding(
                         padding: const EdgeInsets.symmetric(vertical: 8),
                         child: Container(
-                          color: AppColors.textColor,
+                          decoration: BoxDecoration(
+                            color: task["done"]
+                                ? AppColors.chocolateNewDark
+                                : AppColors.textColor,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
                           child: Row(
                             children: [
                               // CheckBox para completar la tarea
@@ -66,6 +71,7 @@ class _AgendListState extends State<AgendList> {
                                 value: task["done"],
                                 activeColor: AppColors.chocolateDark,
                                 onChanged: (value) => toggleTask(index),
+                                checkColor: AppColors.cardMaskSoft,
                               ),
                               const SizedBox(width: 10),
                               // Información de la tarea
@@ -79,7 +85,7 @@ class _AgendListState extends State<AgendList> {
                                         fontSize: 16,
                                         fontWeight: FontWeight.w600,
                                         color: task["done"]
-                                            ? Colors.grey
+                                            ? AppColors.cardMaskSoft
                                             : AppColors.chocolateDark,
                                         decoration: task["done"]
                                             ? TextDecoration.lineThrough
@@ -90,7 +96,9 @@ class _AgendListState extends State<AgendList> {
                                       task["time"],
                                       style: TextStyle(
                                         fontSize: 14,
-                                        color: AppColors.chocolateNewDark,
+                                        color: task["done"]
+                                            ? AppColors.cardMaskSoft
+                                            : AppColors.chocolateDark,
                                       ),
                                     ),
                                   ],
