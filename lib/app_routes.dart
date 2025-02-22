@@ -5,6 +5,8 @@ import 'package:tekko/screens/accounts/login_account_screen.dart';
 import 'package:tekko/screens/accounts/register_account_screen.dart';
 import 'package:tekko/screens/activity/activity_screen.dart';
 import 'package:tekko/screens/calendar/calendar_screen.dart';
+import 'package:tekko/screens/calendar/level_up_screen.dart';
+import 'package:tekko/screens/calendar/winner_screen.dart';
 import 'package:tekko/screens/favorites/favorite_screen.dart';
 import 'package:tekko/screens/games/drawing_screen.dart';
 import 'package:tekko/screens/home_screen.dart';
@@ -61,6 +63,18 @@ final GoRouter appRouter = GoRouter(
       name: 'activity',
       path: '/activity',
       builder: (context, state) => const ActivityScreen(),
+    ),
+    GoRoute(
+      name: 'winner',
+      path: '/winner',
+      pageBuilder: (context, state) =>
+          NoTransitionPage(child: const WinnerScreen()),
+    ),
+    GoRoute(
+      name: 'levelUp',
+      path: '/levelUp',
+      pageBuilder: (context, state) =>
+          NoTransitionPage(child: const LevelUpScreen()),
     ),
     ShellRoute(
       builder: (context, state, child) {

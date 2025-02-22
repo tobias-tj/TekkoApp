@@ -83,6 +83,7 @@ class _CreateAccountStepState extends State<CreateAccountStep> {
           // Mostrar un mensaje de error y reiniciar la prueba
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
+              duration: Durations.short3,
               content: Text(
                   'Has excedido el número máximo de intentos. Intenta de nuevo.'),
             ),
@@ -93,6 +94,7 @@ class _CreateAccountStepState extends State<CreateAccountStep> {
           // Mostrar un mensaje de error y generar una nueva pregunta
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
+              duration: Durations.short3,
               content: Text('Respuesta incorrecta. Intenta de nuevo.'),
             ),
           );
