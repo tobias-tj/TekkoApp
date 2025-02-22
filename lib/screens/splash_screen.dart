@@ -4,7 +4,9 @@ import 'package:go_router/go_router.dart';
 import 'package:tekko/styles/app_colors.dart';
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({super.key});
+  final String? mode; // Parámetro opcional para el modo
+
+  const SplashScreen({super.key, this.mode});
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
@@ -14,9 +16,14 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    // Espera 4 segundos y navega a la siguiente pantalla usando GoRouter
     Future.delayed(const Duration(milliseconds: 4000), () {
-      context.pushReplacement('/welcome');
+      if (widget.mode == 'parent') {
+        // Redirigir al AdminHomeScreen si el modo es "parent"
+        context.pushReplacement('/adminHome');
+      } else {
+        // Redirigir al WelcomeScreen en el flujo normal
+        context.pushReplacement('/welcome');
+      }
     });
   }
 

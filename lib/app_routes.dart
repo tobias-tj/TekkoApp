@@ -10,6 +10,8 @@ import 'package:tekko/screens/calendar/winner_screen.dart';
 import 'package:tekko/screens/favorites/favorite_screen.dart';
 import 'package:tekko/screens/games/drawing_screen.dart';
 import 'package:tekko/screens/home_screen.dart';
+import 'package:tekko/screens/parent/admin_home_screen.dart';
+import 'package:tekko/screens/parent/parent_pin_screen.dart';
 import 'package:tekko/screens/settings/setting_screen.dart';
 import 'package:tekko/components/navigation_wrapper.dart';
 import 'package:tekko/screens/splash_screen.dart';
@@ -22,7 +24,10 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       name: 'splash',
       path: '/splash',
-      builder: (context, state) => const SplashScreen(),
+      builder: (context, state) {
+        final mode = state.uri.queryParameters['mode'];
+        return SplashScreen(mode: mode);
+      },
     ),
     GoRoute(
         name: 'welcome',
@@ -75,6 +80,19 @@ final GoRouter appRouter = GoRouter(
       path: '/levelUp',
       pageBuilder: (context, state) =>
           NoTransitionPage(child: const LevelUpScreen()),
+    ),
+    GoRoute(
+      name: 'adminHome',
+      path: '/adminHome',
+      pageBuilder: (context, state) => NoTransitionPage(
+        child: const AdminHomeScreen(),
+      ),
+    ),
+    GoRoute(
+      name: 'parentModePin',
+      path: '/parentModePin',
+      pageBuilder: (context, state) =>
+          NoTransitionPage(child: const ParentPinScreen()),
     ),
     ShellRoute(
       builder: (context, state, child) {

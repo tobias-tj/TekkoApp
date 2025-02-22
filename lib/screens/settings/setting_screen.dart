@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:tekko/components/linear_element.dart';
 import 'package:tekko/components/profile_icon_manager.dart';
 import 'package:tekko/components/top_title_generic.dart';
@@ -136,7 +137,7 @@ class _SettingScreenState extends State<SettingScreen> {
                               padding: const EdgeInsets.all(18),
                               child: ElevatedButton(
                                   onPressed: () {
-                                    // Lógica para manejar el modo padres
+                                    context.pushReplacement('/parentModePin');
                                   },
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: AppColors
