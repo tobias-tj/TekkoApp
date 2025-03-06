@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:tekko/components/admin/navigation_admin_wrapper.dart';
 import 'package:tekko/screens/accounts/create_account_screen.dart';
 import 'package:tekko/screens/accounts/login_account_screen.dart';
 import 'package:tekko/screens/accounts/register_account_screen.dart';
@@ -10,7 +11,9 @@ import 'package:tekko/screens/calendar/winner_screen.dart';
 import 'package:tekko/screens/favorites/favorite_screen.dart';
 import 'package:tekko/screens/games/drawing_screen.dart';
 import 'package:tekko/screens/home_screen.dart';
+import 'package:tekko/screens/parent/admin_help_screen.dart';
 import 'package:tekko/screens/parent/admin_home_screen.dart';
+import 'package:tekko/screens/parent/admin_setting_screen.dart';
 import 'package:tekko/screens/parent/parent_pin_screen.dart';
 import 'package:tekko/screens/settings/setting_screen.dart';
 import 'package:tekko/components/navigation_wrapper.dart';
@@ -81,13 +84,36 @@ final GoRouter appRouter = GoRouter(
       pageBuilder: (context, state) =>
           NoTransitionPage(child: const LevelUpScreen()),
     ),
-    GoRoute(
-      name: 'adminHome',
-      path: '/adminHome',
-      pageBuilder: (context, state) => NoTransitionPage(
-        child: const AdminHomeScreen(),
-      ),
-    ),
+    ShellRoute(
+        builder: (context, state, child) {
+          return Scaffold(
+            body: child,
+            bottomNavigationBar: const NavigationAdminWrapper(),
+          );
+        },
+        routes: [
+          GoRoute(
+            name: 'adminHome',
+            path: '/adminHome',
+            pageBuilder: (context, state) => NoTransitionPage(
+              child: const AdminHomeScreen(),
+            ),
+          ),
+          GoRoute(
+            name: 'adminHelp',
+            path: '/adminHelp',
+            pageBuilder: (context, state) => NoTransitionPage(
+              child: const AdminHelpScreen(),
+            ),
+          ),
+          GoRoute(
+            name: 'adminSettings',
+            path: '/adminSettings',
+            pageBuilder: (context, state) => NoTransitionPage(
+              child: const AdminSettingScreen(),
+            ),
+          ),
+        ]),
     GoRoute(
       name: 'parentModePin',
       path: '/parentModePin',
