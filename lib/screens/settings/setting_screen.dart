@@ -125,12 +125,6 @@ class _SettingScreenState extends State<SettingScreen> {
                             ),
                             LinearElement(size: size),
                             ItemSetting(
-                              title: "Editar Perfil",
-                            ),
-                            ItemSetting(
-                              title: "Cambiar Contraseña",
-                            ),
-                            ItemSetting(
                               title: "Musica",
                             ),
                             Padding(
@@ -166,16 +160,6 @@ class _SettingScreenState extends State<SettingScreen> {
                                           height: 40),
                                     ],
                                   )),
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            LinearElement(size: size),
-                            ItemSetting(
-                              title: "Mas informacion",
-                            ),
-                            ItemSetting(
-                              title: "Creditos",
                             ),
                             SizedBox(
                               height: 20,

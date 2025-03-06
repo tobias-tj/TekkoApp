@@ -20,8 +20,9 @@ class _SplashScreenState extends State<SplashScreen> {
       if (widget.mode == 'parent') {
         // Redirigir al AdminHomeScreen si el modo es "parent"
         context.pushReplacement('/adminHome');
+      } else if (widget.mode == 'homeUser') {
+        context.pushReplacement('/home');
       } else {
-        // Redirigir al WelcomeScreen en el flujo normal
         context.pushReplacement('/welcome');
       }
     });

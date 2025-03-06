@@ -2,6 +2,7 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tekko/styles/app_colors.dart';
+import 'package:hugeicons/hugeicons.dart';
 
 class NavigationAdminWrapper extends StatelessWidget {
   const NavigationAdminWrapper({super.key});
@@ -28,10 +29,20 @@ class NavigationAdminWrapper extends StatelessWidget {
       buttonBackgroundColor: Colors.white,
       animationDuration: const Duration(milliseconds: 300),
       index: currentIndex, // Índice de la ruta actual
-      items: const [
-        Icon(Icons.home_outlined), // Ícono para Home
-        Icon(Icons.attach_money_sharp),
-        Icon(Icons.settings_outlined),
+      items: [
+        const HugeIcon(
+          icon: HugeIcons.strokeRoundedHome01,
+          color: AppColors.chocolateNewDark,
+          size: 27.0,
+        ),
+        HugeIcon(
+            icon: HugeIcons.strokeRoundedHealtcare,
+            color: AppColors.chocolateNewDark,
+            size: 27.0),
+        HugeIcon(
+            icon: HugeIcons.strokeRoundedSettings01,
+            color: AppColors.chocolateNewDark,
+            size: 27.0),
       ],
       onTap: (index) {
         // Lista de rutas por índice

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:hugeicons/hugeicons.dart';
 import 'package:tekko/styles/app_colors.dart';
 
 class NavigationWrapper extends StatelessWidget {
@@ -30,10 +31,25 @@ class NavigationWrapper extends StatelessWidget {
       animationDuration: const Duration(milliseconds: 300),
       index: currentIndex, // Índice de la ruta actual
       items: const [
-        Icon(Icons.home_outlined), // Ícono para Home
-        Icon(Icons.calendar_month_outlined),
-        Icon(Icons.favorite_border),
-        Icon(Icons.settings_outlined),
+        HugeIcon(
+          icon: HugeIcons.strokeRoundedHome01,
+          color: AppColors.chocolateNewDark,
+          size: 27.0,
+        ),
+        HugeIcon(
+          icon: HugeIcons.strokeRoundedCalendarFavorite02,
+          color: AppColors.chocolateNewDark,
+          size: 27.0,
+        ),
+        HugeIcon(
+          icon: HugeIcons.strokeRoundedFavourite,
+          color: AppColors.chocolateNewDark,
+          size: 27.0,
+        ),
+        HugeIcon(
+            icon: HugeIcons.strokeRoundedSettings01,
+            color: AppColors.chocolateNewDark,
+            size: 27.0)
       ],
       onTap: (index) {
         // Lista de rutas por índice
