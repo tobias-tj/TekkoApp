@@ -1,25 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:tekko/components/admin/top_custom_calendar.dart';
 import 'package:tekko/styles/app_colors.dart';
 
-class AdminHomeScreen extends StatelessWidget {
+class AdminHomeScreen extends StatefulWidget {
   const AdminHomeScreen({super.key});
 
   @override
+  State<AdminHomeScreen> createState() => _AdminHomeScreenState();
+}
+
+class _AdminHomeScreenState extends State<AdminHomeScreen> {
+  @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+
     return Scaffold(
       backgroundColor: AppColors.softCream,
-      appBar: AppBar(
-        title: const Text("Modo Padres - Administrador"),
-      ),
-      body: const Center(
-        child: Text(
-          "Bienvenido al Modo Padres",
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-            color: AppColors.chocolateNewDark,
+      body: Stack(
+        children: [
+          Container(
+            width: size.width,
+            height: size.height,
+            color: AppColors.softCream,
           ),
-        ),
+          Column(
+            children: [
+              TopCustomCalendar(),
+              const SizedBox(height: 2),
+            ],
+          )
+        ],
       ),
     );
   }
