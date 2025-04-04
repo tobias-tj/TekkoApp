@@ -30,8 +30,7 @@ class _HomePageState extends State<HomePage> {
           Column(
             children: [
               TopCustomBackground(),
-              const SizedBox(
-                  height: 2), // Espaciado entre DialogHome y GridView
+              const SizedBox(height: 2),
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tekko/components/button_intro.dart';
 import 'package:tekko/components/input_animation.dart';
 import 'package:tekko/components/math_question.dart';
@@ -22,15 +23,9 @@ class _CreateAccountStepState extends State<CreateAccountStep> {
   // Controladores de texto para los inputs
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _ageController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
 
   // Variables para la prueba matemática
   MathQuestion? _currentQuestion;
-  int? _userAnswer;
-  int _attempts = 0;
-  final int _maxAttempts = 3; // Número máximo de intentos
-  bool _isMathCorrect = false;
 
   @override
   void initState() {
@@ -41,7 +36,6 @@ class _CreateAccountStepState extends State<CreateAccountStep> {
   void _generateNewQuestion() {
     setState(() {
       _currentQuestion = generateMathQuestion();
-      _userAnswer = null;
     });
   }
 
@@ -50,13 +44,24 @@ class _CreateAccountStepState extends State<CreateAccountStep> {
     _pageController.dispose();
     _nameController.dispose();
     _ageController.dispose();
-    _emailController.dispose();
-    _passwordController.dispose();
     super.dispose();
   }
 
-  void _goToNextStep() {
+  Future<void> _saveUserData() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    await prefs.setString('userName', _nameController.text);
+    await prefs.setInt('userAge', int.tryParse(_ageController.text) ?? 0);
+
+    print('Datos guardados: ${_nameController.text}, ${_ageController.text}');
+  }
+
+  void _goToNextStep() async {
     if (_currentStep < 3) {
+      if (_currentStep == 0 || _currentStep == 1) {
+        await _saveUserData();
+      }
+
       setState(() {
         _currentStep++;
       });
@@ -73,33 +78,18 @@ class _CreateAccountStepState extends State<CreateAccountStep> {
 
   void _checkAnswer(int answer) {
     setState(() {
-      _userAnswer = answer;
       if (answer == _currentQuestion?.correctAnswer) {
-        _isMathCorrect = true;
         _goToNextStep(); // Avanzar al siguiente paso si la respuesta es correcta
       } else {
-        _attempts++;
-        if (_attempts >= _maxAttempts) {
-          // Mostrar un mensaje de error y reiniciar la prueba
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              duration: Durations.short3,
-              content: Text(
-                  'Has excedido el número máximo de intentos. Intenta de nuevo.'),
-            ),
-          );
-          _attempts = 0;
-          _generateNewQuestion();
-        } else {
-          // Mostrar un mensaje de error y generar una nueva pregunta
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              duration: Durations.short3,
-              content: Text('Respuesta incorrecta. Intenta de nuevo.'),
-            ),
-          );
-          _generateNewQuestion();
-        }
+        _generateNewQuestion();
+        // Mostrar un mensaje de error y generar una nueva pregunta
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            duration: Durations.short3,
+            content: Text('Respuesta incorrecta. Intenta de nuevo.'),
+          ),
+        );
+        _generateNewQuestion();
       }
     });
   }
@@ -245,10 +235,6 @@ class _CreateAccountStepState extends State<CreateAccountStep> {
           }).toList(),
         ),
         const SizedBox(height: 20),
-        Text(
-          'Intentos restantes: ${_maxAttempts - _attempts}',
-          style: const TextStyle(fontSize: 16, color: Colors.red),
-        ),
       ],
     );
   }

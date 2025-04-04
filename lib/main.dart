@@ -1,18 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tekko/app_routes.dart';
+import 'package:tekko/features/auth/data/datasources/auth_remote_datasource.dart';
+import 'package:tekko/features/auth/data/bloc/auth_bloc.dart';
+import 'package:tekko/features/auth/data/repositories/auth_repository_impl.dart';
+import 'package:tekko/features/auth/domain/usecases/login_usecase.dart';
+import 'package:tekko/features/auth/domain/usecases/register_usecase.dart';
+import 'package:tekko/features/core/network/dio_client.dart';
 
 void main() {
   runApp(const MainApp());
 }
+
+final dioClient = DioClient();
+final authRemoteDataSource = AuthRemoteDataSource(dio: dioClient.dio);
+final authRepository =
+    AuthRepositoryImpl(remoteDataSource: authRemoteDataSource);
+final registerUseCase = RegisterUseCase(repository: authRepository);
+final loginUseCase = LoginUsecase(repository: authRepository);
+final authBloc =
+    AuthBloc(registerUseCase: registerUseCase, loginUsecase: loginUseCase);
 
 class MainApp extends StatelessWidget {
   const MainApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      debugShowCheckedModeBanner: false,
-      routerConfig: appRouter,
-    );
+    return BlocProvider(
+        create: (context) => authBloc,
+        child: MaterialApp.router(
+          debugShowCheckedModeBanner: false,
+          routerConfig: appRouter,
+        ));
   }
 }
