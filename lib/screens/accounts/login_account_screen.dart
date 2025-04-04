@@ -19,6 +19,8 @@ class _LoginAccountState extends State<LoginAccount> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
+  bool _isLoading = false;
+
   void _goToRegister() {
     // Lógica para redirigir al Register
     context.goNamed('register');
@@ -32,6 +34,10 @@ class _LoginAccountState extends State<LoginAccount> {
   }
 
   Future<void> _login() async {
+    if (_isLoading) return;
+
+    setState(() => _isLoading = true);
+
     final loginModel = LoginModel(
         email: _emailController.text, password: _passwordController.text);
     context.read<AuthBloc>().add(LoginRequested(loginModel: loginModel));
@@ -47,8 +53,11 @@ class _LoginAccountState extends State<LoginAccount> {
             StorageUtils.setInt('parentId', state.parentId ?? 0);
             StorageUtils.setInt('childrenId', state.childrenId ?? 0);
 
-            context.goNamed('home');
+            if (mounted) {
+              context.goNamed('home');
+            }
           } else if (state is AuthFailure) {
+            setState(() => _isLoading = false);
             ScaffoldMessenger.of(context)
                 .showSnackBar(SnackBar(content: Text(state.error)));
           }
@@ -151,7 +160,8 @@ class _LoginAccountState extends State<LoginAccount> {
                             const SizedBox(height: 10),
                             ButtonIntro(
                               onNext: _login,
-                              textButton: "Ingresar",
+                              textButton:
+                                  _isLoading ? 'Ingresando...' : 'Ingresar',
                               isParent: true,
                             ),
                             const SizedBox(height: 20),

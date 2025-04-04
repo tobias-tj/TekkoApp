@@ -20,6 +20,8 @@ class _RegisterAccountState extends State<RegisterAccount> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
+  bool _isLoading = false;
+
   void _goToLogin() {
     // Lógica para redirigir al Login
     context.goNamed('login');
@@ -34,24 +36,36 @@ class _RegisterAccountState extends State<RegisterAccount> {
   }
 
   Future<void> _register() async {
+    if (_isLoading) return;
+
+    setState(() => _isLoading = true);
+
     if (_passwordController.text.length < 6) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('La contraseña debe tener al menos 6 caracteres'),
         ),
       );
+      setState(() => _isLoading = false);
       return;
     }
-    final nameKid = await StorageUtils.getString('userName') ?? '';
-    final ageKid = await StorageUtils.getInt('userAge') ?? 0;
+    try {
+      final nameKid = await StorageUtils.getString('userName') ?? '';
+      final ageKid = await StorageUtils.getInt('userAge') ?? 0;
 
-    final authModel = AuthModel(
-        fullNameParent: _nameController.text,
-        email: _emailController.text,
-        password: _passwordController.text,
-        nameKid: nameKid,
-        ageKid: ageKid);
-    context.read<AuthBloc>().add(RegisterRequested(authModel: authModel));
+      final authModel = AuthModel(
+          fullNameParent: _nameController.text,
+          email: _emailController.text,
+          password: _passwordController.text,
+          nameKid: nameKid,
+          ageKid: ageKid);
+      context.read<AuthBloc>().add(RegisterRequested(authModel: authModel));
+    } catch (e) {
+      setState(() => _isLoading = false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: ${e.toString()}')),
+      );
+    }
   }
 
   @override
@@ -64,8 +78,13 @@ class _RegisterAccountState extends State<RegisterAccount> {
             StorageUtils.setInt('parentId', state.parentId ?? 0);
             StorageUtils.setInt('childrenId', state.childrenId ?? 0);
 
-            context.goNamed('home');
+            // await showSuccessAnimation();
+
+            if (mounted) {
+              context.goNamed('home');
+            }
           } else if (state is AuthFailure) {
+            setState(() => _isLoading = false);
             ScaffoldMessenger.of(context)
                 .showSnackBar(SnackBar(content: Text(state.error)));
           }
@@ -150,7 +169,9 @@ class _RegisterAccountState extends State<RegisterAccount> {
                           const SizedBox(height: 30),
                           ButtonIntro(
                             onNext: _register,
-                            textButton: "Crear Cuenta",
+                            textButton: _isLoading
+                                ? 'Creando cuenta...'
+                                : 'Crear Cuenta',
                             isParent: true,
                           ),
                           const SizedBox(height: 20),
