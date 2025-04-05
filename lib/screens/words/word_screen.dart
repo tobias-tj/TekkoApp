@@ -41,7 +41,7 @@ class _WordScreenState extends State<WordScreen> {
               const SizedBox(height: 2),
               Expanded(
                   child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                padding: const EdgeInsets.symmetric(horizontal: 12.0),
                 child: GridView.builder(
                     gridDelegate:
                         const SliverGridDelegateWithMaxCrossAxisExtent(
