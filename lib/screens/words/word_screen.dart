@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tekko/components/list_card_word.dart';
 import 'package:tekko/components/top_custom_title.dart';
 import 'package:tekko/data/list_item_word.dart';
+import 'package:tekko/features/services/favorites_services.dart';
 import 'package:tekko/styles/app_colors.dart';
 
 class WordScreen extends StatefulWidget {
@@ -15,12 +16,25 @@ class WordScreen extends StatefulWidget {
 
 class _WordScreenState extends State<WordScreen> {
   late List<ItemWord> filteredItems;
+  List<int> favoriteWordIds = [];
 
   @override
   void initState() {
     super.initState();
     // Filtrar palabras según el ID del tipo
     filteredItems = ItemWordData.getWordsByType(widget.id);
+    _loadFavorites();
+  }
+
+  Future<void> _loadFavorites() async {
+    final favorites = await FavoritesService.getFavorites();
+    print("Palabras favoritas obtenidas:");
+    print(favorites);
+    if (mounted) {
+      setState(() {
+        favoriteWordIds = favorites;
+      });
+    }
   }
 
   @override
@@ -51,11 +65,16 @@ class _WordScreenState extends State<WordScreen> {
                     itemCount: filteredItems.length,
                     itemBuilder: (context, index) {
                       final item = filteredItems[index];
+                      final isFavorite = favoriteWordIds.contains(item.idWord);
+                      print('ID: ${item.idWord}, Favorito: $isFavorite');
+
                       return ListCardWord(
-                        imagePath: item.imagePath,
-                        title: item.title,
-                        soundPath: item.soundPath,
-                      );
+                          key: ValueKey('${item.idWord}_$isFavorite'),
+                          wordId: item.idWord,
+                          imagePath: item.imagePath,
+                          title: item.title,
+                          soundPath: item.soundPath,
+                          isFavorite: isFavorite);
                     }),
               ))
             ],

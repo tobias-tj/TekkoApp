@@ -1,21 +1,63 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:tekko/features/services/favorites_services.dart';
 import 'package:tekko/styles/app_colors.dart';
 
-class ListCardWord extends StatelessWidget {
+class ListCardWord extends StatefulWidget {
+  final int wordId;
   final String imagePath;
   final String title;
   final String soundPath;
+  final bool isFavorite;
 
   const ListCardWord(
       {super.key,
+      required this.wordId,
       required this.imagePath,
       required this.title,
-      required this.soundPath});
+      required this.soundPath,
+      required this.isFavorite});
+
+  @override
+  State<ListCardWord> createState() => _ListCardWordState();
+}
+
+class _ListCardWordState extends State<ListCardWord> {
+  late bool _isFavorite;
+  @override
+  void initState() {
+    super.initState();
+    _isFavorite = widget.isFavorite;
+  }
+
+  @override
+  void didUpdateWidget(ListCardWord oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // Sincronizamos con el padre si cambia
+    if (widget.isFavorite != _isFavorite) {
+      setState(() {
+        _isFavorite = widget.isFavorite;
+      });
+    }
+  }
+
+  void _toggleFavorite() async {
+    setState(() {
+      _isFavorite = !_isFavorite;
+    });
+
+    // Luego actualizamos el almacenamiento
+    if (_isFavorite) {
+      await FavoritesService.addFavorite(widget.wordId);
+    } else {
+      await FavoritesService.removeFavorite(widget.wordId);
+    }
+  }
 
   void _playSound() {
     final player = AudioPlayer();
-    player.play(AssetSource(soundPath)); // Reproduce el sonido desde assets
+    player.play(
+        AssetSource(widget.soundPath)); // Reproduce el sonido desde assets
   }
 
   @override
@@ -38,19 +80,22 @@ class ListCardWord extends StatelessWidget {
                   Align(
                     alignment: Alignment.center,
                     child: Image.asset(
-                      imagePath,
+                      widget.imagePath,
                       height: 50,
                       width: 50,
                       fit: BoxFit.cover,
                     ),
                   ),
                   IconButton(
-                      onPressed: () {},
-                      icon: const Icon(
-                        Icons.favorite_border,
-                        color: AppColors.chocolateNewDark,
-                        size: 35,
-                      ))
+                    onPressed: _toggleFavorite,
+                    icon: Icon(
+                      _isFavorite ? Icons.favorite : Icons.favorite_border,
+                      color: widget.isFavorite
+                          ? Colors.red
+                          : AppColors.chocolateNewDark,
+                      size: 35,
+                    ),
+                  ),
                 ],
               ),
               const SizedBox(height: 22),
@@ -58,7 +103,7 @@ class ListCardWord extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    title,
+                    widget.title,
                     style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
