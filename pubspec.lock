@@ -97,6 +97,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.1"
+  card_game:
+    dependency: "direct main"
+    description:
+      name: card_game
+      sha256: "2cf1c26fc96a774484f5b7e6e291533e430c77b84156cc1c879861fd36b426f5"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.1"
   characters:
     dependency: transitive
     description:
@@ -230,6 +238,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "9.1.0"
+  flutter_hooks:
+    dependency: "direct main"
+    description:
+      name: flutter_hooks
+      sha256: b772e710d16d7a20c0740c4f855095026b31c7eb5ba3ab67d2bd52021cd9461d
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.21.2"
   flutter_lints:
     dependency: "direct dev"
     description:
@@ -448,6 +464,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.6"
+  playing_cards:
+    dependency: transitive
+    description:
+      name: playing_cards
+      sha256: "392d5e42317ec657f6814a282e6bb70942c6599d22dac89cdc741a8b2b095d09"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.4.1+11"
   plugin_platform_interface:
     dependency: transitive
     description:

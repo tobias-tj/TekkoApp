@@ -10,6 +10,7 @@ import 'package:tekko/screens/calendar/level_up_screen.dart';
 import 'package:tekko/screens/calendar/winner_screen.dart';
 import 'package:tekko/screens/favorites/favorite_screen.dart';
 import 'package:tekko/screens/games/drawing_screen.dart';
+import 'package:tekko/screens/games/memory_screen.dart';
 import 'package:tekko/screens/games/number_screen.dart';
 import 'package:tekko/screens/home_screen.dart';
 import 'package:tekko/screens/parent/admin_help_screen.dart';
@@ -73,6 +74,12 @@ final GoRouter appRouter = GoRouter(
       path: '/numbers',
       pageBuilder: (context, state) =>
           NoTransitionPage(child: const NumberScreen()),
+    ),
+    GoRoute(
+      name: 'memory',
+      path: '/memory',
+      pageBuilder: (context, state) =>
+          NoTransitionPage(child: const MemoryScreen()),
     ),
     GoRoute(
       name: 'activity',
