@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:tekko/components/admin/custom_calendar.dart';
 import 'package:tekko/components/admin/task_card.dart';
-import 'package:tekko/components/admin/top_custom_calendar.dart';
 import 'package:tekko/styles/app_colors.dart';
 
 class AdminHomeScreen extends StatefulWidget {
@@ -12,6 +12,8 @@ class AdminHomeScreen extends StatefulWidget {
 }
 
 class _AdminHomeScreenState extends State<AdminHomeScreen> {
+  DateTime? _selectedDate;
+
   final List<Map<String, dynamic>> mockTasks = [
     {
       "title": "Limpiar Cuarto",
@@ -48,15 +50,67 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
         children: [
           Column(
             children: [
-              TopCustomCalendar(),
+              SizedBox(
+                height: size.height * 0.4 + 120,
+                child: Stack(
+                  children: [
+                    Positioned(
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        child: Container(
+                          height: size.height * 0.2,
+                          color: AppColors.chocolateNewDark,
+                        )),
+                    Positioned(
+                        top: 50,
+                        left: 0,
+                        right: 0,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Text(
+                                  "Gesto Actividades",
+                                  style: TextStyle(
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.bold,
+                                      color: AppColors.softCreamDark),
+                                )
+                              ],
+                            )
+                          ],
+                        )),
+                    Positioned(
+                      top: 95,
+                      left: 0,
+                      right: 0,
+                      child: CustomCalendar(
+                        onDateSelected: (date) {
+                          print('Fecha seleccionada desde padre: $date');
+                          // Aquí puedes hacer lo que necesites con la fecha
+                        },
+                      ),
+                    )
+                  ],
+                ),
+              ),
               const SizedBox(height: 2),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text("Tiempo"),
-                    const Text("Detalle Actividades"),
+                    Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: const Text(
+                        "Actividades",
+                        style: TextStyle(color: AppColors.chocolateNewDark),
+                      ),
+                    ),
                     ElevatedButton(
                       onPressed: () {},
                       style: ElevatedButton.styleFrom(
@@ -76,6 +130,17 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                   ],
                 ),
               ),
+              if (_selectedDate != null)
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    "Fecha seleccionada: ${_selectedDate!.toLocal()}",
+                    style: TextStyle(
+                      color: AppColors.chocolateNewDark,
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
               Expanded(
                 child: ListView.builder(
                   padding: const EdgeInsets.all(8),
@@ -86,15 +151,6 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                       padding: const EdgeInsets.only(bottom: 12),
                       child: Row(
                         children: [
-                          SizedBox(
-                            width: 50,
-                            child: Text(
-                              "${task['startTime']}",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
                           Expanded(
                             child: TaskCard(
                               title: task['title'],

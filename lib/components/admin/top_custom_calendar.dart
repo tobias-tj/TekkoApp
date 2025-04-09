@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tekko/components/admin/admin_calendar.dart';
+import 'package:tekko/components/admin/custom_calendar.dart';
 import 'package:tekko/styles/app_colors.dart';
 
 class TopCustomCalendar extends StatefulWidget {
@@ -14,7 +14,7 @@ class _TopCustomCalendarState extends State<TopCustomCalendar> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return SizedBox(
-      height: size.height * 0.4,
+      height: size.height * 0.4 + 45,
       child: Stack(
         children: [
           Positioned(
@@ -47,7 +47,17 @@ class _TopCustomCalendarState extends State<TopCustomCalendar> {
                   )
                 ],
               )),
-          const Positioned(top: 140, left: 0, right: 0, child: AdminCalendar())
+          Positioned(
+            top: 95,
+            left: 0,
+            right: 0,
+            child: CustomCalendar(
+              onDateSelected: (date) {
+                print('Fecha seleccionada desde padre: $date');
+                // Aquí puedes hacer lo que necesites con la fecha
+              },
+            ),
+          )
         ],
       ),
     );

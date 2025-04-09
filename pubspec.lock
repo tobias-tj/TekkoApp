@@ -81,6 +81,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.0"
+  awesome_calendart:
+    dependency: "direct main"
+    description:
+      name: awesome_calendart
+      sha256: "360ec436e95194b9e391133945e1f7a0c594ccc49e0628af3de19513d761f4fd"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.2.1"
   bloc:
     dependency: "direct main"
     description:
@@ -312,6 +320,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.0.7"
+  intl:
+    dependency: "direct main"
+    description:
+      name: intl
+      sha256: "3df61194eb431efc39c4ceba583b95633a403f46c9fd341e550ce0bfa50e9aa5"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.20.2"
   js:
     dependency: transitive
     description:
