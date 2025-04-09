@@ -4,4 +4,5 @@ class ApiConstants {
   static const String loginEndpoint = '/login';
   static const String experienceEndpoint = '/experience';
   static const String pinEndpoint = '/securityParent';
+  static const String createActivityEndpoint = '/createActivity';
 }

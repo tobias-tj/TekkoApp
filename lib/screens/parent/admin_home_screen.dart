@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:tekko/components/admin/task_card.dart';
 import 'package:tekko/components/admin/top_custom_calendar.dart';
 import 'package:tekko/styles/app_colors.dart';
@@ -40,7 +41,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
       backgroundColor: AppColors.softCream,
       floatingActionButton: FloatingActionButton(
         backgroundColor: AppColors.chocolateNewDark,
-        onPressed: () {},
+        onPressed: () => context.goNamed('createActivity'),
         child: const Icon(Icons.add, color: Colors.white),
       ),
       body: Stack(

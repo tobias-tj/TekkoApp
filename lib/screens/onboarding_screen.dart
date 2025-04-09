@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:tekko/screens/accounts/create_account_screen.dart';
-import 'package:tekko/screens/home_screen.dart';
 import 'package:tekko/styles/app_colors.dart';
-import 'onboarding_step.dart'; // Asegúrate de importar el componente de OnboardingStep.
+import 'onboarding_step.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
