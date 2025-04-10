@@ -1,17 +1,22 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:tekko/features/auth/data/models/filter_activity_dto.dart';
 import 'package:tekko/features/auth/data/models/form_activity_model.dart';
 import 'package:tekko/features/auth/domain/usecases/create_activity.dart';
+import 'package:tekko/features/auth/domain/usecases/get_activities.dart';
 
 part 'activity_event.dart';
 part 'activity_state.dart';
 
 class ActivityBloc extends Bloc<ActivityEvent, ActivityState> {
   final CreateActivityUseCases createActivity;
+  final GetActivitiesUseCases getActivities;
 
-  ActivityBloc({required this.createActivity}) : super(ActivityInitial()) {
+  ActivityBloc({required this.createActivity, required this.getActivities})
+      : super(ActivityInitial()) {
     on<ActivityRequested>(_onActivityRequested);
+    on<ActivitiesLoadRequested>(_onActivitiesLoadRequested);
   }
 
   Future<void> _onActivityRequested(
@@ -40,6 +45,25 @@ class ActivityBloc extends Bloc<ActivityEvent, ActivityState> {
         message: e.toString().contains('Exception:')
             ? e.toString().split('Exception:')[1].trim()
             : 'An unexpected error occurred',
+      ));
+    }
+  }
+
+  Future<void> _onActivitiesLoadRequested(
+    ActivitiesLoadRequested event,
+    Emitter<ActivityState> emit,
+  ) async {
+    emit(ActivityLoading());
+
+    try {
+      final activities = await getActivities(
+          event.dateFilter, event.parentId, event.statusFilter);
+      emit(ActivitiesLoadSuccess(activities: activities));
+    } catch (e) {
+      emit(ActivityError(
+        message: e.toString().contains('Exception:')
+            ? e.toString().split('Exception:')[1].trim()
+            : 'Failed to load activities',
       ));
     }
   }

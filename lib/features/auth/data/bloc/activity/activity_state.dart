@@ -33,3 +33,12 @@ class ActivityError extends ActivityState {
   @override
   List<Object> get props => [message];
 }
+
+class ActivitiesLoadSuccess extends ActivityState {
+  final List<FilterActivityDto> activities;
+
+  const ActivitiesLoadSuccess({required this.activities});
+
+  @override
+  List<Object> get props => [activities];
+}

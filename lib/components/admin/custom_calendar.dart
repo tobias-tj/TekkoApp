@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:tekko/styles/app_colors.dart';
 
 class CustomCalendar extends StatefulWidget {
   final Function(DateTime) onDateSelected;
@@ -11,17 +13,23 @@ class CustomCalendar extends StatefulWidget {
 }
 
 class _CustomCalendarState extends State<CustomCalendar> {
-  DateTime _currentDate = DateTime.now();
-  DateTime _selectedDate = DateTime.now();
+  late DateTime _currentDate;
+  late DateTime _selectedDate;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentDate = DateTime.now();
+    _selectedDate = DateTime.now();
+    initializeDateFormatting('es'); // Inicializa formatos en español
+  }
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.softCream,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
@@ -33,12 +41,12 @@ class _CustomCalendarState extends State<CustomCalendar> {
         ],
       ),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          // Encabezado con mes y año
           _buildHeader(),
-          // Días de la semana
+          const SizedBox(height: 8),
           _buildWeekDays(),
-          // Días del mes
+          const SizedBox(height: 4),
           _buildDaysGrid(),
         ],
       ),
@@ -50,47 +58,50 @@ class _CustomCalendarState extends State<CustomCalendar> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         IconButton(
-          icon: const Icon(Icons.chevron_left),
-          onPressed: () {
-            setState(() {
-              _currentDate =
-                  DateTime(_currentDate.year, _currentDate.month - 1);
-            });
-          },
+          icon: const Icon(Icons.chevron_left, size: 24),
+          color: AppColors.chocolateNewDark,
+          onPressed: () => setState(() {
+            _currentDate = DateTime(_currentDate.year, _currentDate.month - 1);
+          }),
         ),
         Text(
-          DateFormat('MMMM yyyy').format(_currentDate),
-          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          DateFormat('MMMM yyyy', 'es').format(_currentDate),
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: AppColors.chocolateNewDark,
+          ),
         ),
         IconButton(
-          icon: const Icon(Icons.chevron_right),
-          onPressed: () {
-            setState(() {
-              _currentDate =
-                  DateTime(_currentDate.year, _currentDate.month + 1);
-            });
-          },
+          icon: const Icon(Icons.chevron_right, size: 24),
+          color: AppColors.chocolateNewDark,
+          onPressed: () => setState(() {
+            _currentDate = DateTime(_currentDate.year, _currentDate.month + 1);
+          }),
         ),
       ],
     );
   }
 
   Widget _buildWeekDays() {
-    final weekDays = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
+    final weekDays = DateFormat.E('es').dateSymbols.SHORTWEEKDAYS;
+    final orderedWeekDays = [...weekDays.sublist(1), weekDays[0]];
+
     return Row(
-      children: weekDays.map((day) {
-        return Expanded(
-          child: Center(
-            child: Text(
-              day,
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.grey,
-              ),
-            ),
-          ),
-        );
-      }).toList(),
+      children: orderedWeekDays
+          .map((day) => Expanded(
+                child: Center(
+                  child: Text(
+                    day,
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.chocolateNewDark,
+                    ),
+                  ),
+                ),
+              ))
+          .toList(),
     );
   }
 
@@ -109,36 +120,43 @@ class _CustomCalendarState extends State<CustomCalendar> {
       ),
       itemCount: daysInMonth + startingWeekday - 1,
       itemBuilder: (context, index) {
-        if (index < startingWeekday - 1) {
-          return const SizedBox.shrink();
-        }
+        if (index < startingWeekday - 1) return const SizedBox.shrink();
 
         final day = index - startingWeekday + 2;
         final currentDay = DateTime(_currentDate.year, _currentDate.month, day);
         final isSelected = _selectedDate.year == currentDay.year &&
             _selectedDate.month == currentDay.month &&
             _selectedDate.day == currentDay.day;
+        final isToday = currentDay.year == DateTime.now().year &&
+            currentDay.month == DateTime.now().month &&
+            currentDay.day == DateTime.now().day;
 
         return GestureDetector(
           onTap: () {
-            setState(() {
-              _selectedDate = currentDay;
-            });
-            print('Fecha seleccionada: ${currentDay.toString()}');
+            setState(() => _selectedDate = currentDay);
+            print(
+                'Fecha seleccionada: ${DateFormat('dd/MM/yyyy').format(currentDay)}');
             widget.onDateSelected(currentDay);
           },
           child: Container(
             margin: const EdgeInsets.all(2),
             decoration: BoxDecoration(
-              color: isSelected ? Colors.blue : Colors.transparent,
+              color:
+                  isSelected ? AppColors.chocolateNewDark : Colors.transparent,
+              border: isToday && !isSelected
+                  ? Border.all(color: AppColors.chocolateNewDark, width: 1.5)
+                  : null,
               shape: BoxShape.circle,
             ),
             child: Center(
               child: Text(
                 day.toString(),
                 style: TextStyle(
-                  color: isSelected ? Colors.white : Colors.black,
-                  fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                  fontSize: 14,
+                  color: isSelected ? Colors.white : AppColors.chocolateNewDark,
+                  fontWeight: isSelected || isToday
+                      ? FontWeight.bold
+                      : FontWeight.normal,
                 ),
               ),
             ),

@@ -83,9 +83,35 @@ class TaskCard extends StatelessWidget {
                       const SizedBox(height: 8),
                       Row(
                         children: [
-                          const Icon(Icons.access_time, size: 16),
-                          const SizedBox(width: 4),
-                          Text("$startTime - $endTime"),
+                          const Icon(Icons.calendar_today,
+                              size: 14, color: Colors.black54),
+                          const SizedBox(width: 6),
+                          Expanded(
+                            child: Text(
+                              '${_extractDate(startTime)} hasta ${_extractDate(endTime)}',
+                              style: const TextStyle(
+                                fontSize: 13,
+                                color: Colors.black87,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 4),
+                      Row(
+                        children: [
+                          const Icon(Icons.access_time,
+                              size: 14, color: Colors.black54),
+                          const SizedBox(width: 6),
+                          Expanded(
+                            child: Text(
+                              '${_extractTime(startTime)} hasta ${_extractTime(endTime)}',
+                              style: const TextStyle(
+                                fontSize: 13,
+                                color: Colors.black87,
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ],
@@ -98,5 +124,27 @@ class TaskCard extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  String _extractDate(String dateTime) {
+    try {
+      final parts = dateTime.split(',');
+      return parts[0].trim();
+    } catch (_) {
+      return dateTime;
+    }
+  }
+
+  String _extractTime(String dateTime) {
+    try {
+      final parts = dateTime.split(',');
+      return parts[1]
+          .trim()
+          .replaceAll('a.', 'AM')
+          .replaceAll('p.', 'PM')
+          .split('m.')[0];
+    } catch (_) {
+      return dateTime;
+    }
   }
 }
