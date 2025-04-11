@@ -26,4 +26,13 @@ class KidsRepositoryImpl implements KidsRepository {
       rethrow;
     }
   }
+
+  @override
+  Future<void> updateActivity(int activityId) async {
+    try {
+      return await remoteDataSource.updateActivity(activityId);
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

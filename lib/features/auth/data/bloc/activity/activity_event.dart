@@ -38,3 +38,12 @@ class ActivityLoadKidRequested extends ActivityEvent {
   @override
   List<Object> get props => [dateFilter, kidId];
 }
+
+class ActivityUpdateLoadRequested extends ActivityEvent {
+  final int activityId;
+
+  const ActivityUpdateLoadRequested({required this.activityId});
+
+  @override
+  List<Object> get props => ([activityId]);
+}

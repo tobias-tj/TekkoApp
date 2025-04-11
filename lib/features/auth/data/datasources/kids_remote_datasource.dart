@@ -65,4 +65,32 @@ class KidsRemoteDatasource {
       );
     }
   }
+
+  Future<void> updateActivity(int activityId) async {
+    try {
+      final response = await dio.put(
+        ApiConstants.updateActivity,
+        data: {
+          'activityId': activityId,
+        },
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 204) {
+        final data = response.data;
+
+        if (data != null && data['data'] == 'Actividad actualizado con Exito') {
+          return;
+        } else {
+          throw Exception('Respuesta inesperada del servidor');
+        }
+      } else {
+        throw Exception('Error al actualizar la actividad');
+      }
+    } on DioException catch (e) {
+      throw Exception(
+        e.response?.data['message'] ??
+            'Error de red al actualizar la actividad',
+      );
+    }
+  }
 }

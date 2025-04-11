@@ -51,3 +51,12 @@ class ActivitiesKidLoadSuccess extends ActivityState {
   @override
   List<Object> get props => [activities];
 }
+
+class ActivityUpdateSuccess extends ActivityState {
+  final String message;
+
+  const ActivityUpdateSuccess({required this.message});
+
+  @override
+  List<Object> get props => [message];
+}

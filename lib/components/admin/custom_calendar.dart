@@ -134,8 +134,6 @@ class _CustomCalendarState extends State<CustomCalendar> {
         return GestureDetector(
           onTap: () {
             setState(() => _selectedDate = currentDay);
-            print(
-                'Fecha seleccionada: ${DateFormat('dd/MM/yyyy').format(currentDay)}');
             widget.onDateSelected(currentDay);
           },
           child: Container(

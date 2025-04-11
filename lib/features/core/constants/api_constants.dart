@@ -7,4 +7,5 @@ class ApiConstants {
   static const String createActivityEndpoint = '/createActivity';
   static const String getActivityEndpoint = '/getAllActivity';
   static const String getActivityKidEndpoint = '/getActivityByKid';
+  static const String updateActivity = '/updateActivityStatus';
 }

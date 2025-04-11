@@ -3,6 +3,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:tekko/components/show_dialog_action.dart';
 import 'package:tekko/features/auth/data/bloc/activity/activity_bloc.dart';
 import 'package:tekko/features/auth/data/models/activity_kid_dto.dart';
 import 'package:tekko/features/core/utils/format_date.dart';
@@ -46,6 +47,18 @@ class _AgendListState extends State<AgendList> {
       context
           .read<ActivityBloc>()
           .add(ActivityLoadKidRequested(dateFilter: dateFilter, kidId: kidId));
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: ${e.toString()}')),
+      );
+    }
+  }
+
+  Future<void> _updateActivityStatus(int activityId) async {
+    try {
+      context
+          .read<ActivityBloc>()
+          .add(ActivityUpdateLoadRequested(activityId: activityId));
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error: ${e.toString()}')),
@@ -288,9 +301,14 @@ class _AgendListState extends State<AgendList> {
                                                             activity.status ==
                                                                     'COMPLETED'
                                                                 ? null
-                                                                : () {
+                                                                : () async {
+                                                                    await _updateActivityStatus(
+                                                                        activity
+                                                                            .activityId);
                                                                     _playSound();
-                                                                    // TODO: lógica para cambiar el estado
+                                                                    await _getActivityData(
+                                                                        widget
+                                                                            .selectedDate!);
                                                                   },
                                                         icon: Icon(
                                                           Icons.flag,
@@ -353,87 +371,7 @@ class _AgendListState extends State<AgendList> {
                                         Icons.remove_red_eye_outlined,
                                         color: AppColors.yellowButton),
                                     onPressed: () {
-                                      showDialog(
-                                        context: context,
-                                        builder: (context) {
-                                          return AlertDialog(
-                                            backgroundColor:
-                                                AppColors.textColor,
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(15),
-                                            ),
-                                            title: Text(
-                                              activity.titleActivity,
-                                              style: const TextStyle(
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                            content: Column(
-                                              mainAxisSize: MainAxisSize.min,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  "Descripción:",
-                                                  style: TextStyle(
-                                                    fontSize: 14,
-                                                    color:
-                                                        AppColors.chocolateDark,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                                Text(activity
-                                                    .descriptionActivity),
-                                                Text(
-                                                  "Inicia:",
-                                                  style: TextStyle(
-                                                    fontSize: 14,
-                                                    color:
-                                                        AppColors.chocolateDark,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                                Text(formatDatePretty(activity
-                                                    .startActivityTime)),
-                                                Text(
-                                                  "Tiempo Maximo:",
-                                                  style: TextStyle(
-                                                    fontSize: 14,
-                                                    color:
-                                                        AppColors.chocolateDark,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                                Text(formatDatePretty(activity
-                                                    .expirationActivityTime)),
-                                                Text(
-                                                  "Experiencia:",
-                                                  style: TextStyle(
-                                                    fontSize: 14,
-                                                    color:
-                                                        AppColors.chocolateDark,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                                Text(
-                                                  "+${activity.experienceActivity} EXP",
-                                                  style: TextStyle(
-                                                      color: Colors.green),
-                                                ),
-                                              ],
-                                            ),
-                                            actions: [
-                                              TextButton(
-                                                onPressed: () =>
-                                                    Navigator.pop(context),
-                                                child: const Text("Cerrar"),
-                                              ),
-                                            ],
-                                          );
-                                        },
-                                      );
+                                      showDialogAction(context, activity);
                                     },
                                   ),
                                 ),

@@ -31,7 +31,6 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
       final parentId = await StorageUtils.getInt('parentId') ?? 0;
       final dateFilter = DateFormat('yyyy-MM-dd').format(_selectedDate!);
 
-      print(_filter);
       context.read<ActivityBloc>().add(
             ActivitiesLoadRequested(
               dateFilter: dateFilter,

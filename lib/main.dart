@@ -18,6 +18,7 @@ import 'package:tekko/features/auth/domain/usecases/get_activities_by_kid.dart';
 import 'package:tekko/features/auth/domain/usecases/get_experience.dart';
 import 'package:tekko/features/auth/domain/usecases/login_usecase.dart';
 import 'package:tekko/features/auth/domain/usecases/register_usecase.dart';
+import 'package:tekko/features/auth/domain/usecases/update_activity.dart';
 import 'package:tekko/features/auth/domain/usecases/verify_security_pin.dart';
 import 'package:tekko/features/core/network/dio_client.dart';
 import 'package:tekko/styles/app_colors.dart';
@@ -91,6 +92,10 @@ final class MainApp extends StatelessWidget {
                         remoteDataSource: ParentRemoteDatasource(
                             dio: context.read<DioClient>().dio))),
                 getActivitiesByKid: GetActivitiesByKidUseCases(
+                    repository: KidsRepositoryImpl(
+                        remoteDataSource: KidsRemoteDatasource(
+                            dio: context.read<DioClient>().dio))),
+                updateActivity: UpdateActivityUseCases(
                     repository: KidsRepositoryImpl(
                         remoteDataSource: KidsRemoteDatasource(
                             dio: context.read<DioClient>().dio)))),
