@@ -1,28 +1,61 @@
+import 'package:animate_do/animate_do.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
+import 'package:tekko/features/auth/data/bloc/activity/activity_bloc.dart';
+import 'package:tekko/features/auth/data/models/activity_kid_dto.dart';
+import 'package:tekko/features/core/utils/format_date.dart';
+import 'package:tekko/features/core/utils/storage_utils.dart';
 import 'package:tekko/styles/app_colors.dart';
 
 class AgendList extends StatefulWidget {
-  const AgendList({super.key});
+  final DateTime? selectedDate;
+
+  const AgendList({super.key, required this.selectedDate});
 
   @override
   State<AgendList> createState() => _AgendListState();
 }
 
 class _AgendListState extends State<AgendList> {
-  // Mock de tareas
-  final List<Map<String, dynamic>> tasks = [
-    {"title": "Matemáticas", "exp": 10, "time": "08:00 AM", "done": false},
-    {"title": "Inglés", "exp": 5, "time": "10:00 AM", "done": false},
-    {"title": "Ciencias", "exp": 8, "time": "12:00 PM", "done": false},
-    {"title": "Historia", "exp": 6, "time": "03:00 PM", "done": false},
-    {"title": "Deporte", "exp": 7, "time": "05:00 PM", "done": false},
-  ];
+  List<ActivityKidDto> activities = [];
+  @override
+  void initState() {
+    super.initState();
+    if (widget.selectedDate != null) {
+      _getActivityData(widget.selectedDate!);
+    }
+  }
 
-  // Método para marcar una tarea como completada
-  void toggleTask(int index) {
-    setState(() {
-      tasks[index]['done'] = !tasks[index]['done'];
-    });
+  @override
+  void didUpdateWidget(covariant AgendList oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.selectedDate != widget.selectedDate &&
+        widget.selectedDate != null) {
+      _getActivityData(widget.selectedDate!);
+    }
+  }
+
+  Future<void> _getActivityData(DateTime selectedDate) async {
+    try {
+      final kidId = await StorageUtils.getInt('childrenId') ?? 0;
+      final dateFilter =
+          DateFormat('yyyy-MM-dd').format(selectedDate).toString();
+
+      context
+          .read<ActivityBloc>()
+          .add(ActivityLoadKidRequested(dateFilter: dateFilter, kidId: kidId));
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: ${e.toString()}')),
+      );
+    }
+  }
+
+  void _playSound() {
+    final player = AudioPlayer();
+    player.play(AssetSource('sounds/nivel/completed.mp3'));
   }
 
   @override
@@ -48,69 +81,373 @@ class _AgendListState extends State<AgendList> {
                     color: AppColors.chocolateNewDark,
                   ),
                 ),
-                const SizedBox(height: 10),
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: tasks.length,
-                    itemBuilder: (context, index) {
-                      final task = tasks[index];
-
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: task["done"]
-                                ? AppColors.chocolateNewDark
-                                : AppColors.textColor,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Row(
-                            children: [
-                              // CheckBox para completar la tarea
-                              Checkbox(
-                                value: task["done"],
-                                activeColor: AppColors.chocolateDark,
-                                onChanged: (value) => toggleTask(index),
-                                checkColor: AppColors.cardMaskSoft,
-                              ),
-                              const SizedBox(width: 10),
-                              // Información de la tarea
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "${task['title']} +${task['exp']} EXP",
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w600,
-                                        color: task["done"]
-                                            ? AppColors.cardMaskSoft
-                                            : AppColors.chocolateDark,
-                                        decoration: task["done"]
-                                            ? TextDecoration.lineThrough
-                                            : TextDecoration.none,
-                                      ),
-                                    ),
-                                    Text(
-                                      task["time"],
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        color: task["done"]
-                                            ? AppColors.cardMaskSoft
-                                            : AppColors.chocolateDark,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
+                Expanded(child: BlocBuilder<ActivityBloc, ActivityState>(
+                    builder: (context, state) {
+                  if (state is ActivitiesKidLoadSuccess) {
+                    if (state.activities.isEmpty) {
+                      return const Center(
+                        child: Text('No hay actividades para esta fecha'),
                       );
-                    },
-                  ),
-                ),
+                    }
+                    return ListView.builder(
+                      itemCount: state.activities.length,
+                      itemBuilder: (context, index) {
+                        final activity = state.activities[index];
+
+                        return Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 14),
+                            child: Bounce(
+                              animate: activity.status != 'COMPLETED',
+                              duration: const Duration(milliseconds: 800),
+                              child: Stack(children: [
+                                Container(
+                                  decoration: BoxDecoration(
+                                    color: activity.status == 'COMPLETED'
+                                        ? AppColors.chocolateNewDark
+                                        : AppColors.textColor,
+                                    borderRadius: BorderRadius.circular(10),
+                                    boxShadow: activity.status != 'COMPLETED'
+                                        ? [
+                                            BoxShadow(
+                                              color: Colors.yellow
+                                                  .withOpacity(0.5),
+                                              blurRadius: 12,
+                                              spreadRadius: 2,
+                                              offset: const Offset(0, 3),
+                                            )
+                                          ]
+                                        : [],
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Container(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 8,
+                                                      horizontal: 12),
+                                              decoration: BoxDecoration(
+                                                color: activity.status ==
+                                                        'COMPLETED'
+                                                    ? AppColors.chocolateCream
+                                                        .withOpacity(0.4)
+                                                    : AppColors.chocolateCream,
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
+                                              ),
+                                              child: Column(
+                                                children: [
+                                                  Text(
+                                                    activity.titleActivity,
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(
+                                                      fontSize: 18,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: activity.status ==
+                                                              'COMPLETED'
+                                                          ? AppColors
+                                                              .cardMaskSoft
+                                                          : AppColors
+                                                              .chocolateNewDark,
+                                                      decoration: activity
+                                                                  .status ==
+                                                              'COMPLETED'
+                                                          ? TextDecoration
+                                                              .lineThrough
+                                                          : TextDecoration.none,
+                                                    ),
+                                                  ),
+                                                  const SizedBox(height: 4),
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Icon(
+                                                        Icons.emoji_events,
+                                                        color:
+                                                            Colors.amber[700],
+                                                        size: 20,
+                                                      ),
+                                                      const SizedBox(width: 6),
+                                                      Text(
+                                                        '+${activity.experienceActivity} EXP',
+                                                        style: TextStyle(
+                                                          fontSize: 16,
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                          color: Colors
+                                                              .orange[800],
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Padding(
+                                                  padding: const EdgeInsets.all(
+                                                      10.0),
+                                                  child: Row(
+                                                    children: [
+                                                      // 🕒 Icono de inicio
+                                                      Column(
+                                                        children: [
+                                                          Icon(
+                                                              Icons
+                                                                  .play_circle_fill,
+                                                              color: activity
+                                                                          .status ==
+                                                                      'COMPLETED'
+                                                                  ? AppColors
+                                                                      .cardMaskSoft
+                                                                  : Colors
+                                                                      .green,
+                                                              size: 32),
+                                                          const SizedBox(
+                                                              height: 4),
+                                                          Text(
+                                                            'Inicio',
+                                                            style: TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              color: activity
+                                                                          .status ==
+                                                                      'COMPLETED'
+                                                                  ? AppColors
+                                                                      .cardMaskSoft
+                                                                  : Colors
+                                                                      .green,
+                                                            ),
+                                                          ),
+                                                          Text(
+                                                            formatDatePretty(
+                                                                activity
+                                                                    .startActivityTime),
+                                                            style: TextStyle(
+                                                              fontSize: 12,
+                                                              color: activity
+                                                                          .status ==
+                                                                      'COMPLETED'
+                                                                  ? AppColors
+                                                                      .cardMaskSoft
+                                                                  : Colors
+                                                                      .black87,
+                                                            ),
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: Column(
+                                                    children: [
+                                                      TextButton.icon(
+                                                        style: TextButton
+                                                            .styleFrom(
+                                                          backgroundColor: activity
+                                                                      .status ==
+                                                                  'COMPLETED'
+                                                              ? AppColors
+                                                                  .cardMaskSoft
+                                                                  .withOpacity(
+                                                                      0.3)
+                                                              : Colors.redAccent
+                                                                  .withOpacity(
+                                                                      0.1),
+                                                          shape:
+                                                              RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        12),
+                                                          ),
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .symmetric(
+                                                                  horizontal:
+                                                                      12,
+                                                                  vertical: 8),
+                                                        ),
+                                                        onPressed:
+                                                            activity.status ==
+                                                                    'COMPLETED'
+                                                                ? null
+                                                                : () {
+                                                                    _playSound();
+                                                                    // TODO: lógica para cambiar el estado
+                                                                  },
+                                                        icon: Icon(
+                                                          Icons.flag,
+                                                          color: activity
+                                                                      .status ==
+                                                                  'COMPLETED'
+                                                              ? AppColors
+                                                                  .cardMaskSoft
+                                                              : Colors
+                                                                  .redAccent,
+                                                          size: 20,
+                                                        ),
+                                                        label: Text(
+                                                          'Finalizar',
+                                                          style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                            color: activity
+                                                                        .status ==
+                                                                    'COMPLETED'
+                                                                ? AppColors
+                                                                    .cardMaskSoft
+                                                                : Colors
+                                                                    .redAccent,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      const SizedBox(height: 4),
+                                                      Text(
+                                                        formatDatePretty(activity
+                                                            .expirationActivityTime),
+                                                        style: TextStyle(
+                                                          fontSize: 12,
+                                                          color: activity
+                                                                      .status ==
+                                                                  'COMPLETED'
+                                                              ? AppColors
+                                                                  .cardMaskSoft
+                                                              : Colors.black87,
+                                                        ),
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Positioned(
+                                  top: 0,
+                                  right: 0,
+                                  child: IconButton(
+                                    icon: const Icon(
+                                        Icons.remove_red_eye_outlined,
+                                        color: AppColors.yellowButton),
+                                    onPressed: () {
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return AlertDialog(
+                                            backgroundColor:
+                                                AppColors.textColor,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(15),
+                                            ),
+                                            title: Text(
+                                              activity.titleActivity,
+                                              style: const TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            content: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  "Descripción:",
+                                                  style: TextStyle(
+                                                    fontSize: 14,
+                                                    color:
+                                                        AppColors.chocolateDark,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                                Text(activity
+                                                    .descriptionActivity),
+                                                Text(
+                                                  "Inicia:",
+                                                  style: TextStyle(
+                                                    fontSize: 14,
+                                                    color:
+                                                        AppColors.chocolateDark,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                                Text(formatDatePretty(activity
+                                                    .startActivityTime)),
+                                                Text(
+                                                  "Tiempo Maximo:",
+                                                  style: TextStyle(
+                                                    fontSize: 14,
+                                                    color:
+                                                        AppColors.chocolateDark,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                                Text(formatDatePretty(activity
+                                                    .expirationActivityTime)),
+                                                Text(
+                                                  "Experiencia:",
+                                                  style: TextStyle(
+                                                    fontSize: 14,
+                                                    color:
+                                                        AppColors.chocolateDark,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  "+${activity.experienceActivity} EXP",
+                                                  style: TextStyle(
+                                                      color: Colors.green),
+                                                ),
+                                              ],
+                                            ),
+                                            actions: [
+                                              TextButton(
+                                                onPressed: () =>
+                                                    Navigator.pop(context),
+                                                child: const Text("Cerrar"),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ]),
+                            ));
+                      },
+                    );
+                  } else if (state is ActivityLoading) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (state is ActivityError) {
+                    return Center(child: Text('Error cargando Actividades'));
+                  }
+                  return const Center(child: CircularProgressIndicator());
+                })),
               ],
             ),
           ),

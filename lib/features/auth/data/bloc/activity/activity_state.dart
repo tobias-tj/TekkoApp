@@ -42,3 +42,12 @@ class ActivitiesLoadSuccess extends ActivityState {
   @override
   List<Object> get props => [activities];
 }
+
+class ActivitiesKidLoadSuccess extends ActivityState {
+  final List<ActivityKidDto> activities;
+
+  const ActivitiesKidLoadSuccess({required this.activities});
+
+  @override
+  List<Object> get props => [activities];
+}

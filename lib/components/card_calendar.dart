@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:tekko/styles/app_colors.dart';
 
 class CardCalendar extends StatefulWidget {
-  const CardCalendar({super.key});
+  final Function(DateTime) onDateSelected;
+
+  const CardCalendar({super.key, required this.onDateSelected});
 
   @override
   State<CardCalendar> createState() => _CardCalendarState();
@@ -10,23 +12,47 @@ class CardCalendar extends StatefulWidget {
 
 class _CardCalendarState extends State<CardCalendar> {
   late List<Map<String, dynamic>> weekDates;
+  DateTime? selectedDate;
 
   @override
   void initState() {
     super.initState();
-    _loadMockDates();
+    _loadWeekDates();
   }
 
-  void _loadMockDates() {
-    weekDates = [
-      {"day": 7, "weekday": "Domingo", "isToday": false},
-      {"day": 8, "weekday": "Lunes", "isToday": true},
-      {"day": 9, "weekday": "Martes", "isToday": false},
-      {"day": 10, "weekday": "Miércoles", "isToday": false},
-      {"day": 11, "weekday": "Jueves", "isToday": false},
-      {"day": 12, "weekday": "Viernes", "isToday": false},
-      {"day": 13, "weekday": "Sábado", "isToday": false},
+  void _loadWeekDates() {
+    DateTime today = DateTime.now();
+
+    // Obtener el domingo de esta semana
+    int currentWeekday = today.weekday; // lunes = 1, domingo = 7
+    DateTime startOfWeek = today.subtract(Duration(days: currentWeekday % 7));
+
+    weekDates = List.generate(7, (index) {
+      DateTime date = startOfWeek.add(Duration(days: index));
+      return {
+        "date": date,
+        "day": date.day,
+        "weekday": _getWeekdayName(date.weekday),
+        "isToday": _isSameDate(date, today),
+      };
+    });
+  }
+
+  String _getWeekdayName(int weekday) {
+    const weekNames = [
+      'Domingo',
+      'Lunes',
+      'Martes',
+      'Miércoles',
+      'Jueves',
+      'Viernes',
+      'Sábado'
     ];
+    return weekNames[weekday % 7]; // para que domingo (7) sea index 0
+  }
+
+  bool _isSameDate(DateTime a, DateTime b) {
+    return a.year == b.year && a.month == b.month && a.day == b.day;
   }
 
   @override
@@ -66,28 +92,46 @@ class _CardCalendarState extends State<CardCalendar> {
                 child: Row(
                   children: weekDates.map((date) {
                     bool isToday = date['isToday'];
+                    DateTime currentDate = date['date'];
+                    bool isSelected = selectedDate != null &&
+                        _isSameDate(currentDate, selectedDate!);
 
                     return Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 6.0),
                       child: Column(
                         children: [
                           ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              setState(() {
+                                selectedDate = currentDate;
+                              });
+                              widget.onDateSelected(currentDate);
+                            },
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: isToday
+                              backgroundColor: isSelected
                                   ? AppColors.chocolateNewDark
-                                  : AppColors.softCream,
+                                  : (isToday
+                                      ? AppColors.softCream
+                                      : AppColors.softCream),
                               padding: const EdgeInsets.all(20),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(22),
+                                side: isToday
+                                    ? const BorderSide(
+                                        color: AppColors.chocolateNewDark,
+                                        width: 2,
+                                      )
+                                    : BorderSide.none,
                               ),
                             ),
                             child: Text(
                               "${date['day']}",
                               style: TextStyle(
-                                color: isToday
+                                color: isSelected
                                     ? Colors.white
-                                    : AppColors.textColor,
+                                    : (isToday
+                                        ? AppColors.chocolateNewDark
+                                        : AppColors.textColor),
                                 fontWeight: FontWeight.bold,
                               ),
                             ),

@@ -7,6 +7,7 @@ environment:
   sdk: ^3.6.0
 
 dependencies:
+  animate_do: ^4.2.0
   another_flutter_splash_screen: ^1.2.1
   audioplayers: ^5.2.1
   awesome_calendart: ^1.2.1
@@ -54,3 +55,4 @@ flutter:
     - assets/sounds/juegos/
     - assets/images/words/animales/
     - assets/sounds/animales/
+    - assets/sounds/nivel/

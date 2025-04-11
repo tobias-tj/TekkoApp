@@ -3,7 +3,9 @@ import 'package:tekko/components/card_calendar.dart';
 import 'package:tekko/styles/app_colors.dart';
 
 class TopCustomCalendar extends StatefulWidget {
-  const TopCustomCalendar({super.key});
+  final Function(DateTime) onDateChanged;
+
+  const TopCustomCalendar({super.key, required this.onDateChanged});
 
   @override
   State<TopCustomCalendar> createState() => _TopCustomCalendarState();
@@ -47,11 +49,13 @@ class _TopCustomCalendarState extends State<TopCustomCalendar> {
                       ],
                     )
                   ])),
-          const Positioned(
+          Positioned(
             top: 140,
             left: 0,
             right: 0,
-            child: CardCalendar(),
+            child: CardCalendar(
+              onDateSelected: widget.onDateChanged,
+            ),
           ),
         ],
       ),

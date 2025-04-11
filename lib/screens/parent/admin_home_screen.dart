@@ -22,7 +22,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
   @override
   void initState() {
     super.initState();
-    _selectedDate = DateTime.now(); // Inicializa con la fecha actual
+    _selectedDate = DateTime.now();
     _getActivityData();
   }
 

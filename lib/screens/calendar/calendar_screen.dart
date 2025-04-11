@@ -12,6 +12,20 @@ class CalendarScreen extends StatefulWidget {
 }
 
 class _CalendarScreenState extends State<CalendarScreen> {
+  DateTime? selectedDate;
+
+  void _handleDateChanged(DateTime date) {
+    setState(() {
+      selectedDate = date;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    selectedDate = DateTime.now(); // fecha actual por defecto
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -26,9 +40,11 @@ class _CalendarScreenState extends State<CalendarScreen> {
           ),
           Column(
             children: [
-              TopCustomCalendar(),
+              TopCustomCalendar(onDateChanged: _handleDateChanged),
               const SizedBox(height: 2),
-              const AgendList(),
+              AgendList(
+                selectedDate: selectedDate,
+              ),
               // Row(
               //   mainAxisAlignment: MainAxisAlignment.center,
               //   children: [
