@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
@@ -8,6 +9,11 @@ class DialogHome extends StatelessWidget {
     super.key,
   });
 
+  void _playSound() {
+    final player = AudioPlayer();
+    player.play(AssetSource('sounds/nivel/dogSound.mp3'));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -17,11 +23,14 @@ class DialogHome extends StatelessWidget {
       child: Row(
         children: [
           // Animacion de Lottie
-          Lottie.asset(
-            "assets/animations/dogHome1.json",
-            repeat: true,
-            width: 125,
-            height: 125,
+          GestureDetector(
+            onTap: () => _playSound(),
+            child: Lottie.asset(
+              "assets/animations/dogHome1.json",
+              repeat: true,
+              width: 125,
+              height: 125,
+            ),
           ),
           Expanded(
               child: Padding(

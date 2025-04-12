@@ -103,22 +103,27 @@ class _TopCustomBackgroundState extends State<TopCustomBackground> {
                       padding: const EdgeInsets.only(left: 16.0),
                       child: PopupMenuButton<String>(
                         onSelected: _changeProfileIcon,
-                        itemBuilder: (context) => [
-                          'assets/images/iconProfile.png',
-                          'assets/images/animalsIcon.png',
-                          'assets/images/dogJake.png'
-                        ].map((iconPath) {
-                          return PopupMenuItem<String>(
-                            value: iconPath,
-                            child: Row(
-                              children: [
-                                Image.asset(iconPath, width: 40),
-                                const SizedBox(width: 8),
-                                const Text('Icono'),
-                              ],
-                            ),
-                          );
-                        }).toList(),
+                        itemBuilder: (context) {
+                          final iconPaths = [
+                            'assets/images/iconProfile.png',
+                            'assets/images/animals-hd.png',
+                            'assets/images/dogJake.png'
+                          ];
+
+                          return List.generate(iconPaths.length, (index) {
+                            final iconPath = iconPaths[index];
+                            return PopupMenuItem<String>(
+                              value: iconPath,
+                              child: Row(
+                                children: [
+                                  Image.asset(iconPath, width: 40),
+                                  const SizedBox(width: 8),
+                                  Text('Perfil ${index + 1}'),
+                                ],
+                              ),
+                            );
+                          });
+                        },
                         child: Image.asset(
                           _selectedIcon,
                           fit: BoxFit.fill,
