@@ -124,9 +124,6 @@ class _SettingScreenState extends State<SettingScreen> {
                               height: 20,
                             ),
                             LinearElement(size: size),
-                            ItemSetting(
-                              title: "Musica",
-                            ),
                             Padding(
                               padding: const EdgeInsets.all(18),
                               child: ElevatedButton(
