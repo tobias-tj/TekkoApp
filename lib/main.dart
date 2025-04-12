@@ -23,6 +23,7 @@ import 'package:tekko/features/api/domain/usecases/get_profile_details.dart';
 import 'package:tekko/features/api/domain/usecases/login_usecase.dart';
 import 'package:tekko/features/api/domain/usecases/register_usecase.dart';
 import 'package:tekko/features/api/domain/usecases/update_activity.dart';
+import 'package:tekko/features/api/domain/usecases/update_pin.dart';
 import 'package:tekko/features/api/domain/usecases/update_profile.dart';
 import 'package:tekko/features/api/domain/usecases/verify_security_pin.dart';
 import 'package:tekko/features/core/network/dio_client.dart';
@@ -112,6 +113,11 @@ final class MainApp extends StatelessWidget {
                           remoteDataSource: SettingRemoteDatasource(
                               dio: context.read<DioClient>().dio))),
                   updateProfileDetails: UpdateProfileUseCases(
+                    repository: SettingRepositoryImpl(
+                        remoteDataSource: SettingRemoteDatasource(
+                            dio: context.read<DioClient>().dio)),
+                  ),
+                  updatePinDetails: UpdatePinUseCases(
                       repository: SettingRepositoryImpl(
                           remoteDataSource: SettingRemoteDatasource(
                               dio: context.read<DioClient>().dio)))))

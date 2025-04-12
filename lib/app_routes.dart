@@ -19,9 +19,10 @@ import 'package:tekko/screens/parent/admin_help_screen.dart';
 import 'package:tekko/screens/parent/admin_home_screen.dart';
 import 'package:tekko/screens/parent/admin_setting_screen.dart';
 import 'package:tekko/screens/parent/parent_pin_screen.dart';
-import 'package:tekko/components/admin/profile_summary_screen.dart';
+import 'package:tekko/screens/settings/profile_summary_screen.dart';
 import 'package:tekko/screens/settings/setting_screen.dart';
 import 'package:tekko/components/navigation_wrapper.dart';
+import 'package:tekko/screens/settings/update_pin_screen.dart';
 import 'package:tekko/screens/splash_screen.dart';
 import 'package:tekko/screens/welcome/welcome_screen.dart';
 import 'package:tekko/screens/words/word_screen.dart';
@@ -114,6 +115,11 @@ final GoRouter appRouter = GoRouter(
           return NoTransitionPage(
               child: ProfileSummaryScreen(profile: profile));
         }),
+    GoRoute(
+        name: 'updatePin',
+        path: '/updatePin',
+        pageBuilder: (context, status) =>
+            NoTransitionPage(child: const UpdatePinScreen())),
     ShellRoute(
         builder: (context, state, child) {
           return Scaffold(

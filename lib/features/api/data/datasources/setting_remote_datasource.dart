@@ -57,4 +57,26 @@ class SettingRemoteDatasource {
       );
     }
   }
+
+  Future<void> updatePinToken(
+      int parentId, String pinToken, String oldToken) async {
+    try {
+      final response = await dio.put(ApiConstants.updatePinToken, data: {
+        'parentId': parentId,
+        'pinToken': pinToken,
+        'oldToken': oldToken,
+      });
+
+      if (response.data['success'] == true) {
+        return;
+      } else {
+        throw response.data['message'] ??
+            'Error desconocido al actualizar el PIN';
+      }
+    } on DioException catch (e) {
+      final errorMessage = e.response?.data['message'] ??
+          'Error al actualizar el PIN. Pin Invalido!';
+      throw errorMessage; // Lanza directamente el String, no una Exception
+    }
+  }
 }

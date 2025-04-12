@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:tekko/components/admin/profile_summary_screen.dart';
+import 'package:tekko/screens/settings/profile_summary_screen.dart';
 import 'package:tekko/components/linear_element.dart';
 import 'package:tekko/components/profile_icon_manager.dart';
 import 'package:tekko/components/top_title_generic.dart';
@@ -30,6 +30,14 @@ class _AdminSettingScreenState extends State<AdminSettingScreen> {
     super.didChangeDependencies();
     context.read<SettingBloc>().stream.listen((state) {
       if (state is SettingUpdateProfileSuccess) {
+        _getSettingData();
+      }
+    });
+    context.read<SettingBloc>().stream.listen((state) {
+      if (state is SettingUpdatePinTokenSuccess) {
+        _getSettingData();
+      }
+      if (state is SettingError) {
         _getSettingData();
       }
     });
@@ -187,7 +195,7 @@ class _AdminSettingScreenState extends State<AdminSettingScreen> {
                             ),
                             ItemSetting(
                               title: "Cambiar Pin Padres",
-                              onTap: () {},
+                              onTap: (() => context.pushNamed('updatePin')),
                             ),
 
                             Padding(

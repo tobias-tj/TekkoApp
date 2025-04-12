@@ -37,3 +37,12 @@ class SettingUpdateProfileSuccess extends SettingState {
   @override
   List<Object> get props => [message];
 }
+
+class SettingUpdatePinTokenSuccess extends SettingState {
+  final String message;
+
+  const SettingUpdatePinTokenSuccess({required this.message});
+
+  @override
+  List<Object> get props => [message];
+}

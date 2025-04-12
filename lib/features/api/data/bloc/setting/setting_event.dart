@@ -26,3 +26,15 @@ class SettingUpdateProfileRequested extends SettingEvent {
   @override
   List<Object> get props => [updateProfileDto];
 }
+
+class SettingUpdatePinTokenRequested extends SettingEvent {
+  final int parentId;
+  final String pinToken;
+  final String oldToken;
+
+  const SettingUpdatePinTokenRequested(
+      {required this.parentId, required this.pinToken, required this.oldToken});
+
+  @override
+  List<Object> get props => [parentId, pinToken, oldToken];
+}

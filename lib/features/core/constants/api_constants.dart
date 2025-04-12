@@ -10,4 +10,5 @@ class ApiConstants {
   static const String updateActivity = '/updateActivityStatus';
   static const String getProfileDetails = '/getProfileDetails';
   static const String updateProfileDetails = '/updateProfile';
+  static const String updatePinToken = '/updatePin';
 }

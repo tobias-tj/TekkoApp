@@ -18,4 +18,9 @@ class SettingRepositoryImpl implements SettingRepository {
   Future<void> updateProfile(UpdateProfileDto updatedProfile) async {
     return await remoteDataSource.updateProfile(updatedProfile);
   }
+
+  @override
+  Future<void> updatePin(int parentId, String pinToken, String oldToken) async {
+    return await remoteDataSource.updatePinToken(parentId, pinToken, oldToken);
+  }
 }

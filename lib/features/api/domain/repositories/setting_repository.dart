@@ -4,4 +4,5 @@ import 'package:tekko/features/api/data/models/update_profile_dto.dart';
 abstract class SettingRepository {
   Future<DetailsProfileDto> getProfileDetails(int parentId, int childrenId);
   Future<void> updateProfile(UpdateProfileDto updatedProfile);
+  Future<void> updatePin(int parentId, String pinToken, String oldToken);
 }

@@ -53,7 +53,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
       backgroundColor: AppColors.softCream,
       floatingActionButton: FloatingActionButton(
         backgroundColor: AppColors.chocolateNewDark,
-        onPressed: () => context.goNamed('createActivity'),
+        onPressed: () => context.pushNamed('createActivity'),
         child: const Icon(Icons.add, color: Colors.white),
       ),
       body: Stack(
