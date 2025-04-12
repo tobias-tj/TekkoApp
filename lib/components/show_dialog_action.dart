@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tekko/features/auth/data/models/activity_kid_dto.dart';
+import 'package:tekko/features/api/data/models/activity_kid_dto.dart';
 import 'package:tekko/features/core/utils/format_date.dart';
 import 'package:tekko/styles/app_colors.dart';
 

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tekko/components/dialog_home.dart';
 import 'package:tekko/components/profile_icon_manager.dart';
-import 'package:tekko/features/auth/data/bloc/experience/experience_bloc.dart';
+import 'package:tekko/features/api/data/bloc/experience/experience_bloc.dart';
 import 'package:tekko/features/core/utils/storage_utils.dart';
 import 'package:tekko/styles/app_colors.dart';
 

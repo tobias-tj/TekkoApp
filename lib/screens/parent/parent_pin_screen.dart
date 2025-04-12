@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:tekko/features/auth/data/bloc/security_pin/security_pin_bloc.dart';
-import 'package:tekko/features/auth/data/models/security_model.dart';
+import 'package:tekko/features/api/data/bloc/security_pin/security_pin_bloc.dart';
+import 'package:tekko/features/api/data/models/security_model.dart';
 import 'package:tekko/features/core/utils/storage_utils.dart';
 import 'package:tekko/styles/app_colors.dart';
 

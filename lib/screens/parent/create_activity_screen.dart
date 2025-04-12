@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart';
 import 'package:go_router/go_router.dart';
-import 'package:tekko/features/auth/data/bloc/activity/activity_bloc.dart';
-import 'package:tekko/features/auth/data/models/form_activity_model.dart';
+import 'package:tekko/features/api/data/bloc/activity/activity_bloc.dart';
+import 'package:tekko/features/api/data/models/form_activity_model.dart';
 import 'package:tekko/features/core/utils/storage_utils.dart';
 import 'package:tekko/styles/app_colors.dart';
 

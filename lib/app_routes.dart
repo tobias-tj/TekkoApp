@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tekko/components/admin/navigation_admin_wrapper.dart';
+import 'package:tekko/features/api/data/models/details_profile_dto.dart';
 import 'package:tekko/screens/accounts/create_account_screen.dart';
 import 'package:tekko/screens/accounts/login_account_screen.dart';
 import 'package:tekko/screens/accounts/register_account_screen.dart';
@@ -18,6 +19,7 @@ import 'package:tekko/screens/parent/admin_help_screen.dart';
 import 'package:tekko/screens/parent/admin_home_screen.dart';
 import 'package:tekko/screens/parent/admin_setting_screen.dart';
 import 'package:tekko/screens/parent/parent_pin_screen.dart';
+import 'package:tekko/components/admin/profile_summary_screen.dart';
 import 'package:tekko/screens/settings/setting_screen.dart';
 import 'package:tekko/components/navigation_wrapper.dart';
 import 'package:tekko/screens/splash_screen.dart';
@@ -104,6 +106,14 @@ final GoRouter appRouter = GoRouter(
         path: '/createActivity',
         pageBuilder: (context, status) =>
             NoTransitionPage(child: const CreateActivityScreen())),
+    GoRoute(
+        name: 'profileDetails',
+        path: '/profileDetails',
+        pageBuilder: (context, state) {
+          final profile = state.extra as DetailsProfileDto;
+          return NoTransitionPage(
+              child: ProfileSummaryScreen(profile: profile));
+        }),
     ShellRoute(
         builder: (context, state, child) {
           return Scaffold(

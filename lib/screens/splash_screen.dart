@@ -81,10 +81,10 @@ class CustomBackground extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Image.asset(
-      'assets/images/bgsplash.png', // Asegúrate de colocar la ruta correcta de la imagen
+      'assets/images/bgsplash.png',
       width: size.width,
       height: size.height,
-      fit: BoxFit.cover, // Asegura que la imagen se ajuste bien a la pantalla
+      fit: BoxFit.cover,
     );
   }
 }

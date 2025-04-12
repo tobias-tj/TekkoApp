@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:tekko/components/admin/custom_calendar.dart';
 import 'package:tekko/components/admin/task_card.dart';
-import 'package:tekko/features/auth/data/bloc/activity/activity_bloc.dart';
+import 'package:tekko/features/api/data/bloc/activity/activity_bloc.dart';
 import 'package:tekko/features/core/utils/storage_utils.dart';
 import 'package:tekko/styles/app_colors.dart';
 

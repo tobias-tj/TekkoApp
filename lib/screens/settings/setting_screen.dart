@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tekko/components/linear_element.dart';
 import 'package:tekko/components/profile_icon_manager.dart';
 import 'package:tekko/components/top_title_generic.dart';
-import 'package:tekko/screens/settings/item_setting.dart';
+import 'package:tekko/features/api/data/bloc/setting/setting_bloc.dart';
+import 'package:tekko/features/core/utils/storage_utils.dart';
 import 'package:tekko/styles/app_colors.dart';
 
 class SettingScreen extends StatefulWidget {
@@ -18,10 +20,25 @@ class _SettingScreenState extends State<SettingScreen> {
   void initState() {
     super.initState();
     _loadProfileIcon();
+    _getSettingData();
   }
 
   Future<String> _loadProfileIcon() async {
     return await ProfileIconManager.getSelectedIcon();
+  }
+
+  Future<void> _getSettingData() async {
+    try {
+      final parentId = await StorageUtils.getInt('parentId') ?? 0;
+      final childrenId = await StorageUtils.getInt('childrenId') ?? 0;
+
+      context.read<SettingBloc>().add(
+          SettingProfileRequested(parentId: parentId, childrenId: childrenId));
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: ${e.toString()}')),
+      );
+    }
   }
 
   @override
@@ -97,27 +114,37 @@ class _SettingScreenState extends State<SettingScreen> {
                                   },
                                 ),
                                 SizedBox(width: 40),
-                                Column(
-                                  children: [
-                                    Text(
-                                      "Tobias",
-                                      style: const TextStyle(
-                                        color: AppColors.chocolateNewDark,
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    const SizedBox(width: 8.0),
-                                    Text(
-                                      "Ema1@gmail.com",
-                                      style: const TextStyle(
-                                        color: AppColors.chocolateNewDark,
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                                BlocBuilder<SettingBloc, SettingState>(
+                                    builder: (context, state) {
+                                  if (state is SettingProfileSuccess) {
+                                    final profile = state.detailsProfileDto;
+                                    return Column(
+                                      children: [
+                                        Text(
+                                          profile.childName,
+                                          style: const TextStyle(
+                                            color: AppColors.chocolateNewDark,
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        const SizedBox(width: 8.0),
+                                        Text(
+                                          profile.email,
+                                          style: const TextStyle(
+                                            color: AppColors.chocolateNewDark,
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  } else if (state is SettingLoading) {
+                                    return const CircularProgressIndicator();
+                                  } else {
+                                    return const Text("Sin datos de perfil.");
+                                  }
+                                })
                               ],
                             ),
                             SizedBox(

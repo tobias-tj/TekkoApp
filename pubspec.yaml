@@ -42,6 +42,7 @@ flutter:
   assets:
     - assets/animations/
     - assets/images/
+    - assets/images/bgsplash.png
     - assets/images/words/conversacion/
     - assets/sounds/conversacion/
     - assets/images/words/ropas/

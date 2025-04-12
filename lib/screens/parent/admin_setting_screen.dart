@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:tekko/components/admin/profile_summary_screen.dart';
 import 'package:tekko/components/linear_element.dart';
 import 'package:tekko/components/profile_icon_manager.dart';
 import 'package:tekko/components/top_title_generic.dart';
+import 'package:tekko/features/api/data/bloc/setting/setting_bloc.dart';
+import 'package:tekko/features/core/utils/storage_utils.dart';
 import 'package:tekko/screens/settings/item_setting.dart';
 import 'package:tekko/styles/app_colors.dart';
 
@@ -18,10 +22,35 @@ class _AdminSettingScreenState extends State<AdminSettingScreen> {
   void initState() {
     super.initState();
     _loadProfileIcon();
+    _getSettingData();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    context.read<SettingBloc>().stream.listen((state) {
+      if (state is SettingUpdateProfileSuccess) {
+        _getSettingData();
+      }
+    });
   }
 
   Future<String> _loadProfileIcon() async {
     return await ProfileIconManager.getSelectedIcon();
+  }
+
+  Future<void> _getSettingData() async {
+    try {
+      final parentId = await StorageUtils.getInt('parentId') ?? 0;
+      final childrenId = await StorageUtils.getInt('childrenId') ?? 0;
+
+      context.read<SettingBloc>().add(
+          SettingProfileRequested(parentId: parentId, childrenId: childrenId));
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: ${e.toString()}')),
+      );
+    }
   }
 
   @override
@@ -59,6 +88,10 @@ class _AdminSettingScreenState extends State<AdminSettingScreen> {
                         // Contenedor con borde redondeado y color más oscuro
                         Column(
                           children: [
+                            // TextButton(
+                            //     onPressed: () => _getSettingData(),
+                            //     child:
+                            //         Text('Obtener informacion del perfil..')),
                             SizedBox(
                                 height:
                                     10), // Texto acompañado de una imagen de volumen
@@ -97,27 +130,39 @@ class _AdminSettingScreenState extends State<AdminSettingScreen> {
                                   },
                                 ),
                                 SizedBox(width: 40),
-                                Column(
-                                  children: [
-                                    Text(
-                                      "Tobias",
-                                      style: const TextStyle(
-                                        color: AppColors.chocolateNewDark,
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    const SizedBox(width: 8.0),
-                                    Text(
-                                      "Ema1@gmail.com",
-                                      style: const TextStyle(
-                                        color: AppColors.chocolateNewDark,
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                                BlocBuilder<SettingBloc, SettingState>(
+                                    builder: (context, state) {
+                                  if (state is SettingProfileSuccess) {
+                                    final profile = state.detailsProfileDto;
+                                    return Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          profile.parentName,
+                                          style: const TextStyle(
+                                            color: AppColors.chocolateNewDark,
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 8.0),
+                                        Text(
+                                          profile.email,
+                                          style: const TextStyle(
+                                            color: AppColors.chocolateNewDark,
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  } else if (state is SettingLoading) {
+                                    return const CircularProgressIndicator();
+                                  } else {
+                                    return const Text("Sin datos de perfil.");
+                                  }
+                                }),
                               ],
                             ),
                             SizedBox(
@@ -126,13 +171,25 @@ class _AdminSettingScreenState extends State<AdminSettingScreen> {
                             LinearElement(size: size),
                             ItemSetting(
                               title: "Editar Perfil",
+                              onTap: () {
+                                final state = context.read<SettingBloc>().state;
+                                if (state is SettingProfileSuccess) {
+                                  final profile = state.detailsProfileDto;
+                                  context.pushNamed('profileDetails',
+                                      extra: profile);
+                                } else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content: Text('Perfil no disponible.')),
+                                  );
+                                }
+                              },
                             ),
                             ItemSetting(
-                              title: "Cambiar Contraseña",
+                              title: "Cambiar Pin Padres",
+                              onTap: () {},
                             ),
-                            ItemSetting(
-                              title: "Musica",
-                            ),
+
                             Padding(
                               padding: const EdgeInsets.all(18),
                               child: ElevatedButton(
@@ -174,9 +231,11 @@ class _AdminSettingScreenState extends State<AdminSettingScreen> {
                             LinearElement(size: size),
                             ItemSetting(
                               title: "Mas informacion",
+                              onTap: () {},
                             ),
                             ItemSetting(
                               title: "Creditos",
+                              onTap: () {},
                             ),
                             SizedBox(
                               height: 20,
