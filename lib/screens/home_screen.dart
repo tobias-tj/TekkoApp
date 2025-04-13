@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:animate_do/animate_do.dart';
 import 'package:tekko/components/list_card_item_home.dart';
 import 'package:tekko/components/top_custom_background.dart';
 import 'package:tekko/data/list_item_home.dart';
@@ -16,47 +17,43 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-
     return Scaffold(
       backgroundColor: AppColors.softCream,
-      body: Stack(
+      body: Column(
         children: [
-          Container(
-            width: size.width,
-            height: size.height,
-            color: AppColors.softCream,
+          // Encabezado con animación
+          FadeInDown(
+            duration: const Duration(milliseconds: 500),
+            child: const TopCustomBackground(),
           ),
-          Column(
-            children: [
-              TopCustomBackground(),
-              const SizedBox(height: 2),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: GridView.builder(
-                    gridDelegate:
-                        const SliverGridDelegateWithMaxCrossAxisExtent(
-                      maxCrossAxisExtent: 180,
-                      mainAxisExtent: 150, // Máximo ancho de cada tarjeta
-                      mainAxisSpacing:
-                          16, // Espaciado vertical entre las tarjetas
-                      crossAxisSpacing:
-                          16, // Espaciado horizontal entre las tarjetas
-                    ),
-                    itemCount: items.length,
-                    itemBuilder: (context, index) {
-                      final item = items[index];
-                      return ListCardItemHome(
-                        id: item.id,
-                        imagePath: item.imagePath,
-                        title: item.title,
-                      );
-                    },
-                  ),
+
+          const SizedBox(height: 2),
+
+          // Grid de items con animación escalonada
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: GridView.builder(
+                gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                  maxCrossAxisExtent: 180,
+                  mainAxisExtent: 150,
+                  mainAxisSpacing: 16,
+                  crossAxisSpacing: 16,
                 ),
+                itemCount: items.length,
+                itemBuilder: (context, index) {
+                  final item = items[index];
+                  return FadeInUp(
+                    duration: Duration(milliseconds: 500 + (index * 100)),
+                    child: ListCardItemHome(
+                      id: item.id,
+                      imagePath: item.imagePath,
+                      title: item.title,
+                    ),
+                  );
+                },
               ),
-            ],
+            ),
           ),
         ],
       ),

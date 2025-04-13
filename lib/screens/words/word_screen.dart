@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:tekko/components/list_card_word.dart';
 import 'package:tekko/components/top_custom_title.dart';
@@ -59,7 +60,7 @@ class _WordScreenState extends State<WordScreen> {
                 child: GridView.builder(
                     gridDelegate:
                         const SliverGridDelegateWithMaxCrossAxisExtent(
-                            maxCrossAxisExtent: 200,
+                            maxCrossAxisExtent: 250,
                             mainAxisExtent: 170,
                             mainAxisSpacing: 10),
                     itemCount: filteredItems.length,
@@ -68,13 +69,15 @@ class _WordScreenState extends State<WordScreen> {
                       final isFavorite = favoriteWordIds.contains(item.idWord);
                       print('ID: ${item.idWord}, Favorito: $isFavorite');
 
-                      return ListCardWord(
-                          key: ValueKey('${item.idWord}_$isFavorite'),
-                          wordId: item.idWord,
-                          imagePath: item.imagePath,
-                          title: item.title,
-                          soundPath: item.soundPath,
-                          isFavorite: isFavorite);
+                      return FadeInUp(
+                          duration: Duration(milliseconds: 500 + (index * 100)),
+                          child: ListCardWord(
+                              key: ValueKey('${item.idWord}_$isFavorite'),
+                              wordId: item.idWord,
+                              imagePath: item.imagePath,
+                              title: item.title,
+                              soundPath: item.soundPath,
+                              isFavorite: isFavorite));
                     }),
               ))
             ],

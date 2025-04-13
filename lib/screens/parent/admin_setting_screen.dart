@@ -68,13 +68,10 @@ class _AdminSettingScreenState extends State<AdminSettingScreen> {
           // Fondo decorativo animado
           Positioned(
             top: 0,
-            child: FadeInDown(
-              duration: const Duration(milliseconds: 800),
-              child: Image.asset(
-                'assets/images/topTitleAccount.png',
-                width: size.width,
-                fit: BoxFit.cover,
-              ),
+            child: Image.asset(
+              'assets/images/topTitleAccount.png',
+              width: size.width,
+              fit: BoxFit.cover,
             ),
           ),
 

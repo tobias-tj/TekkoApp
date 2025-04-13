@@ -51,12 +51,9 @@ class _SettingScreenState extends State<SettingScreen> {
       body: Stack(
         children: [
           Positioned.fill(
-            child: FadeIn(
-              duration: const Duration(milliseconds: 1000),
-              child: Image.asset(
-                'assets/images/topTitleAccount.png',
-                fit: BoxFit.cover,
-              ),
+            child: Image.asset(
+              'assets/images/topTitleAccount.png',
+              fit: BoxFit.cover,
             ),
           ),
           SingleChildScrollView(
