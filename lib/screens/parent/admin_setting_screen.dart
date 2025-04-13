@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:tekko/screens/settings/profile_summary_screen.dart';
+import 'package:animate_do/animate_do.dart';
 import 'package:tekko/components/linear_element.dart';
 import 'package:tekko/components/profile_icon_manager.dart';
 import 'package:tekko/components/top_title_generic.dart';
@@ -29,12 +29,8 @@ class _AdminSettingScreenState extends State<AdminSettingScreen> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     context.read<SettingBloc>().stream.listen((state) {
-      if (state is SettingUpdateProfileSuccess) {
-        _getSettingData();
-      }
-    });
-    context.read<SettingBloc>().stream.listen((state) {
-      if (state is SettingUpdatePinTokenSuccess) {
+      if (state is SettingUpdateProfileSuccess ||
+          state is SettingUpdatePinTokenSuccess) {
         _getSettingData();
       }
       if (state is SettingError) {
@@ -67,197 +63,246 @@ class _AdminSettingScreenState extends State<AdminSettingScreen> {
 
     return Scaffold(
       backgroundColor: AppColors.softCream,
-      body: SingleChildScrollView(
-        child: Stack(
-          children: [
-            Container(
-              width: size.width,
-              height: size.height,
-              color: AppColors.softCream,
+      body: Stack(
+        children: [
+          // Fondo decorativo animado
+          Positioned(
+            top: 0,
+            child: FadeInDown(
+              duration: const Duration(milliseconds: 800),
+              child: Image.asset(
+                'assets/images/topTitleAccount.png',
+                width: size.width,
+                fit: BoxFit.cover,
+              ),
             ),
-            Column(
+          ),
+
+          SingleChildScrollView(
+            child: Column(
               children: [
-                TopTitleGeneric(
-                  title: "Ajustes",
+                const SizedBox(height: 20),
+
+                // Título con animación
+                FadeInRight(
+                  duration: const Duration(milliseconds: 600),
+                  child: const TopTitleGeneric(
+                    title: "Ajustes",
+                  ),
                 ),
-                SizedBox(height: 25),
-                Padding(
-                  padding: const EdgeInsets.all(15),
-                  child: Card(
-                    color: AppColors
-                        .cardBackgroundSoft, // Color del card (#C68133)
-                    shape: RoundedRectangleBorder(
-                      borderRadius:
-                          BorderRadius.circular(16.0), // Bordes redondeados
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        // Contenedor con borde redondeado y color más oscuro
-                        Column(
-                          children: [
-                            // TextButton(
-                            //     onPressed: () => _getSettingData(),
-                            //     child:
-                            //         Text('Obtener informacion del perfil..')),
-                            SizedBox(
-                                height:
-                                    10), // Texto acompañado de una imagen de volumen
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
+
+                const SizedBox(height: 25),
+
+                // Tarjeta principal con animación
+                FadeInUp(
+                  duration: const Duration(milliseconds: 700),
+                  child: Padding(
+                    padding: const EdgeInsets.all(15),
+                    child: Card(
+                      color: AppColors.cardBackgroundSoft,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16.0),
+                      ),
+                      elevation: 4,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(16),
+                            child: Column(
                               children: [
-                                FutureBuilder<String>(
-                                  future: _loadProfileIcon(),
-                                  builder: (context, snapshot) {
-                                    if (snapshot.connectionState ==
-                                        ConnectionState.waiting) {
-                                      // Muestra un ícono de carga mientras se recupera el ícono
-                                      return CircularProgressIndicator();
-                                    } else if (snapshot.hasError) {
-                                      // Muestra un ícono por defecto si hay un error
-                                      return Image.asset(
-                                        "assets/images/dogJake.png", // Ruta de un ícono por defecto
-                                        width: 80,
-                                        height: 80,
-                                      );
-                                    } else if (snapshot.hasData) {
-                                      // Muestra el ícono recuperado
-                                      return Image.asset(
-                                        snapshot.data!,
-                                        width: 80,
-                                        height: 80,
-                                      );
-                                    } else {
-                                      // Si no hay datos, muestra un ícono por defecto
-                                      return Image.asset(
-                                        "assets/images/dogJake.png",
-                                        width: 80,
-                                        height: 80,
-                                      );
-                                    }
-                                  },
+                                // Sección de perfil con animación escalonada
+                                FadeInLeft(
+                                  duration: const Duration(milliseconds: 800),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      FutureBuilder<String>(
+                                        future: _loadProfileIcon(),
+                                        builder: (context, snapshot) {
+                                          if (snapshot.connectionState ==
+                                              ConnectionState.waiting) {
+                                            return Container(
+                                              width: 80,
+                                              height: 80,
+                                              alignment: Alignment.center,
+                                              child:
+                                                  const CircularProgressIndicator(),
+                                            );
+                                          }
+                                          return Image.asset(
+                                            snapshot.data ??
+                                                "assets/images/dogJake.png",
+                                            width: 80,
+                                            height: 80,
+                                          );
+                                        },
+                                      ),
+                                      const SizedBox(width: 40),
+                                      BlocBuilder<SettingBloc, SettingState>(
+                                        builder: (context, state) {
+                                          if (state is SettingProfileSuccess) {
+                                            final profile =
+                                                state.detailsProfileDto;
+                                            return ElasticIn(
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    profile.parentName,
+                                                    style: const TextStyle(
+                                                      color: AppColors
+                                                          .chocolateNewDark,
+                                                      fontSize: 20,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                  ),
+                                                  const SizedBox(height: 8.0),
+                                                  Text(
+                                                    profile.email,
+                                                    style: const TextStyle(
+                                                      color: AppColors
+                                                          .chocolateNewDark,
+                                                      fontSize: 18,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            );
+                                          } else if (state is SettingLoading) {
+                                            return const CircularProgressIndicator();
+                                          }
+                                          return const Text(
+                                              "Sin datos de perfil.");
+                                        },
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                                SizedBox(width: 40),
-                                BlocBuilder<SettingBloc, SettingState>(
-                                    builder: (context, state) {
-                                  if (state is SettingProfileSuccess) {
-                                    final profile = state.detailsProfileDto;
-                                    return Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          profile.parentName,
-                                          style: const TextStyle(
-                                            color: AppColors.chocolateNewDark,
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold,
-                                          ),
+
+                                const SizedBox(height: 20),
+
+                                FadeInRight(
+                                  child: LinearElement(size: size),
+                                ),
+
+                                // Opciones de ajustes con animaciones escalonadas
+                                FadeInLeft(
+                                  duration: const Duration(milliseconds: 600),
+                                  child: ItemSetting(
+                                    title: "Editar Perfil",
+                                    onTap: () {
+                                      final state =
+                                          context.read<SettingBloc>().state;
+                                      if (state is SettingProfileSuccess) {
+                                        final profile = state.detailsProfileDto;
+                                        context.pushNamed('profileDetails',
+                                            extra: profile);
+                                      } else {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          const SnackBar(
+                                              content: Text(
+                                                  'Perfil no disponible.')),
+                                        );
+                                      }
+                                    },
+                                  ),
+                                ),
+
+                                FadeInRight(
+                                  duration: const Duration(milliseconds: 700),
+                                  child: ItemSetting(
+                                    title: "Cambiar Pin Padres",
+                                    onTap: () => context.pushNamed('updatePin'),
+                                  ),
+                                ),
+
+                                FadeInUp(
+                                  duration: const Duration(milliseconds: 800),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(18),
+                                    child: ElevatedButton(
+                                      onPressed: () {
+                                        context.pushReplacement(
+                                            '/splash?mode=homeUser');
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor:
+                                            AppColors.chocolateNewDark,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(12.0),
                                         ),
-                                        const SizedBox(height: 8.0),
-                                        Text(
-                                          profile.email,
-                                          style: const TextStyle(
-                                            color: AppColors.chocolateNewDark,
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold,
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 50, vertical: 8.0),
+                                        elevation: 4,
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceAround,
+                                        children: [
+                                          const Text(
+                                            "Modo Niños",
+                                            style: TextStyle(
+                                              color: AppColors.textColor,
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold,
+                                            ),
                                           ),
-                                        ),
-                                      ],
-                                    );
-                                  } else if (state is SettingLoading) {
-                                    return const CircularProgressIndicator();
-                                  } else {
-                                    return const Text("Sin datos de perfil.");
-                                  }
-                                }),
+                                          Image.asset(
+                                            "assets/images/kidsButton.png",
+                                            width: 40,
+                                            height: 40,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+
+                                const SizedBox(height: 20),
+
+                                FadeInLeft(
+                                  duration: const Duration(milliseconds: 900),
+                                  child: LinearElement(size: size),
+                                ),
+
+                                FadeInRight(
+                                  duration: const Duration(milliseconds: 1000),
+                                  child: ItemSetting(
+                                    title: "Mas información",
+                                    onTap: () =>
+                                        context.pushNamed('moreInformation'),
+                                  ),
+                                ),
+
+                                FadeInLeft(
+                                  duration: const Duration(milliseconds: 1100),
+                                  child: ItemSetting(
+                                    title: "Créditos",
+                                    onTap: () =>
+                                        context.pushNamed('creditInformation'),
+                                  ),
+                                ),
+
+                                const SizedBox(height: 20),
                               ],
                             ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            LinearElement(size: size),
-                            ItemSetting(
-                              title: "Editar Perfil",
-                              onTap: () {
-                                final state = context.read<SettingBloc>().state;
-                                if (state is SettingProfileSuccess) {
-                                  final profile = state.detailsProfileDto;
-                                  context.pushNamed('profileDetails',
-                                      extra: profile);
-                                } else {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                        content: Text('Perfil no disponible.')),
-                                  );
-                                }
-                              },
-                            ),
-                            ItemSetting(
-                              title: "Cambiar Pin Padres",
-                              onTap: (() => context.pushNamed('updatePin')),
-                            ),
-
-                            Padding(
-                              padding: const EdgeInsets.all(18),
-                              child: ElevatedButton(
-                                  onPressed: () {
-                                    context.pushReplacement(
-                                        '/splash?mode=homeUser');
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: AppColors
-                                        .chocolateNewDark, // Color del botón
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(12.0),
-                                    ),
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 50, vertical: 8.0),
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                    children: [
-                                      Text(
-                                        "Modo Niños",
-                                        style: const TextStyle(
-                                          color: AppColors.textColor,
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      Image.asset(
-                                          "assets/images/kidsButton.png",
-                                          width: 40,
-                                          height: 40),
-                                    ],
-                                  )),
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            LinearElement(size: size),
-                            ItemSetting(
-                              title: "Mas informacion",
-                              onTap: () {},
-                            ),
-                            ItemSetting(
-                              title: "Creditos",
-                              onTap: () {},
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                          ],
-                        ),
-                      ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                )
+                ),
               ],
-            )
-          ],
-        ),
+            ),
+          ),
+        ],
       ),
     );
   }

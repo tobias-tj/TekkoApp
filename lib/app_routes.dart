@@ -18,6 +18,8 @@ import 'package:tekko/screens/home_screen.dart';
 import 'package:tekko/screens/parent/admin_help_screen.dart';
 import 'package:tekko/screens/parent/admin_home_screen.dart';
 import 'package:tekko/screens/parent/admin_setting_screen.dart';
+import 'package:tekko/screens/settings/credit_screen.dart';
+import 'package:tekko/screens/settings/more_info_screen.dart';
 import 'package:tekko/screens/parent/parent_pin_screen.dart';
 import 'package:tekko/screens/settings/profile_summary_screen.dart';
 import 'package:tekko/screens/settings/setting_screen.dart';
@@ -120,6 +122,16 @@ final GoRouter appRouter = GoRouter(
         path: '/updatePin',
         pageBuilder: (context, status) =>
             NoTransitionPage(child: const UpdatePinScreen())),
+    GoRoute(
+        name: 'moreInformation',
+        path: '/moreInformation',
+        pageBuilder: (context, status) =>
+            NoTransitionPage(child: const MoreInfoScreen())),
+    GoRoute(
+        name: 'creditInformation',
+        path: '/creditInformation',
+        pageBuilder: (context, status) =>
+            NoTransitionPage(child: const CreditsScreen())),
     ShellRoute(
         builder: (context, state, child) {
           return Scaffold(
