@@ -18,7 +18,6 @@ import 'package:tekko/screens/home_screen.dart';
 import 'package:tekko/screens/parent/admin_help_screen.dart';
 import 'package:tekko/screens/parent/admin_home_screen.dart';
 import 'package:tekko/screens/parent/admin_setting_screen.dart';
-import 'package:tekko/screens/parent/donation_form_screen.dart';
 import 'package:tekko/screens/settings/credit_screen.dart';
 import 'package:tekko/screens/settings/more_info_screen.dart';
 import 'package:tekko/screens/parent/parent_pin_screen.dart';
@@ -133,15 +132,6 @@ final GoRouter appRouter = GoRouter(
         path: '/creditInformation',
         pageBuilder: (context, status) =>
             NoTransitionPage(child: const CreditsScreen())),
-    // GoRoute(
-    //     name: 'donationForm',
-    //     path: '/donationForm/:amount/:currency',
-    //     builder: (context, state) {
-    //       final amount =
-    //           int.tryParse(state.pathParameters['amount'] ?? '0') ?? 0;
-    //       final currency = state.pathParameters['currency'] ?? 'PY';
-    //       return DonationFormScreen(amount: amount, currency: currency);
-    //     }),
     ShellRoute(
         builder: (context, state, child) {
           return Scaffold(
