@@ -40,6 +40,8 @@
 	<string>Necesitamos acceso para guardar tus dibujos en la galería</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Necesitamos acceso para guardar tus dibujos en la galería</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Scan your card to add it automatically</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 	<string>sms</string>

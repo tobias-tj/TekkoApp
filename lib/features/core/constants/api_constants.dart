@@ -11,4 +11,5 @@ class ApiConstants {
   static const String getProfileDetails = '/getProfileDetails';
   static const String updateProfileDetails = '/updateProfile';
   static const String updatePinToken = '/updatePin';
+  static const String stripePaymentIntent = '/donation';
 }
