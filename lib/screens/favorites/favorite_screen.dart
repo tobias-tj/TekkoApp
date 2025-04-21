@@ -94,7 +94,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                           : GridView.builder(
                               gridDelegate:
                                   const SliverGridDelegateWithMaxCrossAxisExtent(
-                                maxCrossAxisExtent: 180,
+                                maxCrossAxisExtent: 195,
                                 mainAxisExtent: 180,
                                 mainAxisSpacing: 18,
                                 crossAxisSpacing: 16,

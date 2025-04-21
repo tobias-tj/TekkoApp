@@ -79,3 +79,11 @@ flutter:
     - assets/sounds/clima/
     - assets/images/words/objetos/
     - assets/sounds/objetos/
+    - assets/images/words/preguntas/
+    - assets/sounds/preguntas/
+    - assets/images/words/preferencias/
+    - assets/sounds/preferencias/
+    - assets/images/words/tiempo/
+    - assets/sounds/tiempo/
+    - assets/images/words/coloresTam/
+    - assets/sounds/coloresTam/

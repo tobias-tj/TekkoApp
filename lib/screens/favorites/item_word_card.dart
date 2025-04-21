@@ -61,6 +61,7 @@ class _ItemWordCardState extends State<ItemWordCard> {
                     children: [
                       Text(
                         widget.item.title,
+                        maxLines: 2,
                         style: const TextStyle(
                           color: Colors.white,
                           fontSize: 13,
@@ -70,8 +71,8 @@ class _ItemWordCardState extends State<ItemWordCard> {
                       const SizedBox(width: 1.0),
                       Image.asset(
                         'assets/images/iconSound.png',
-                        width: 20,
-                        height: 20,
+                        width: 15,
+                        height: 15,
                       ),
                     ],
                   ),

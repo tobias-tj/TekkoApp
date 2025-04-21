@@ -683,7 +683,7 @@ class ItemWordData {
               soundPath: 'sounds/preguntas/soundPuedoIr.mp3'),
           ItemWord(
               idWord: 120,
-              imagePath: 'assets/images/words/preguntas/queHaces.png',
+              imagePath: 'assets/images/words/preguntas/quehaces.png',
               title: '¿Qué haces?',
               soundPath: 'sounds/preguntas/soundQueHaces.mp3'),
           ItemWord(
@@ -756,9 +756,9 @@ class ItemWordData {
           soundPath: 'sounds/tiempo/soundAyer.mp3'),
       ItemWord(
           idWord: 133,
-          imagePath: 'assets/images/words/tiempo/maniana.png',
+          imagePath: 'assets/images/words/tiempo/manana.png',
           title: 'Mañana',
-          soundPath: 'sounds/tiempo/soundManiana.mp3'),
+          soundPath: 'sounds/tiempo/soundManana.mp3'),
       ItemWord(
           idWord: 134,
           imagePath: 'assets/images/words/tiempo/tarde.png',
@@ -766,9 +766,9 @@ class ItemWordData {
           soundPath: 'sounds/tiempo/soundTarde.mp3'),
       ItemWord(
           idWord: 135,
-          imagePath: 'assets/images/words/tiempo/manianaParte.png',
-          title: 'Mañana (parte del día)',
-          soundPath: 'sounds/tiempo/soundManianaParte.mp3'),
+          imagePath: 'assets/images/words/tiempo/mananaParte.png',
+          title: 'De Mañana',
+          soundPath: 'sounds/tiempo/soundManana.mp3'),
       ItemWord(
           idWord: 136,
           imagePath: 'assets/images/words/tiempo/noche.png',
@@ -794,44 +794,44 @@ class ItemWordData {
         listItemWord: [
           ItemWord(
               idWord: 139,
-              imagePath: 'assets/images/words/colores/rojo.png',
+              imagePath: 'assets/images/words/coloresTam/rojo.png',
               title: 'Rojo',
-              soundPath: 'sounds/colores/soundRojo.mp3'),
+              soundPath: 'sounds/coloresTam/soundRojo.mp3'),
           ItemWord(
               idWord: 140,
-              imagePath: 'assets/images/words/colores/azul.png',
+              imagePath: 'assets/images/words/coloresTam/azul.png',
               title: 'Azul',
-              soundPath: 'sounds/colores/soundAzul.mp3'),
+              soundPath: 'sounds/coloresTam/soundAzul.mp3'),
           ItemWord(
               idWord: 141,
-              imagePath: 'assets/images/words/colores/verde.png',
+              imagePath: 'assets/images/words/coloresTam/verde.png',
               title: 'Verde',
-              soundPath: 'sounds/colores/soundVerde.mp3'),
+              soundPath: 'sounds/coloresTam/soundVerde.mp3'),
           ItemWord(
               idWord: 142,
-              imagePath: 'assets/images/words/colores/amarillo.png',
+              imagePath: 'assets/images/words/coloresTam/amarillo.png',
               title: 'Amarillo',
-              soundPath: 'sounds/colores/soundAmarillo.mp3'),
+              soundPath: 'sounds/coloresTam/soundAmarillo.mp3'),
           ItemWord(
               idWord: 143,
-              imagePath: 'assets/images/words/tamanios/grande.png',
+              imagePath: 'assets/images/words/coloresTam/grande.png',
               title: 'Grande',
-              soundPath: 'sounds/tamanios/soundGrande.mp3'),
+              soundPath: 'sounds/coloresTam/soundGrande.mp3'),
           ItemWord(
               idWord: 144,
-              imagePath: 'assets/images/words/tamanios/pequenio.png',
+              imagePath: 'assets/images/words/coloresTam/pequenio.png',
               title: 'Pequeño',
-              soundPath: 'sounds/tamanios/soundPequenio.mp3'),
+              soundPath: 'sounds/coloresTam/soundPequenio.mp3'),
           ItemWord(
               idWord: 145,
-              imagePath: 'assets/images/words/tamanios/largo.png',
+              imagePath: 'assets/images/words/coloresTam/largo.png',
               title: 'Largo',
-              soundPath: 'sounds/tamanios/soundLargo.mp3'),
+              soundPath: 'sounds/coloresTam/soundLargo.mp3'),
           ItemWord(
               idWord: 146,
-              imagePath: 'assets/images/words/tamanios/corto.png',
+              imagePath: 'assets/images/words/coloresTam/corto.png',
               title: 'Corto',
-              soundPath: 'sounds/tamanios/soundCorto.mp3'),
+              soundPath: 'sounds/coloresTam/soundCorto.mp3'),
         ]
 // Finaliza nivel 4
         ),
@@ -842,42 +842,42 @@ class ItemWordData {
       level: 5,
       listItemWord: [
         ItemWord(
-            idWord: 117,
+            idWord: 147,
             imagePath: 'assets/images/words/frases/baño.png',
             title: 'Necesito ir al baño',
             soundPath: 'sounds/frases/needBathroom.mp3'),
         ItemWord(
-            idWord: 118,
+            idWord: 148,
             imagePath: 'assets/images/words/frases/frio.png',
             title: 'Tengo frío',
             soundPath: 'sounds/frases/cold.mp3'),
         ItemWord(
-            idWord: 119,
+            idWord: 149,
             imagePath: 'assets/images/words/frases/cansado.png',
             title: 'Estoy cansado',
             soundPath: 'sounds/frases/tired.mp3'),
         ItemWord(
-            idWord: 120,
+            idWord: 150,
             imagePath: 'assets/images/words/frases/mal.png',
             title: 'Me siento mal',
             soundPath: 'sounds/frases/bad.mp3'),
         ItemWord(
-            idWord: 121,
+            idWord: 151,
             imagePath: 'assets/images/words/frases/noEntiendo.png',
             title: 'No entiendo',
             soundPath: 'sounds/frases/dontUnderstand.mp3'),
         ItemWord(
-            idWord: 122,
+            idWord: 152,
             imagePath: 'assets/images/words/frases/dameEso.png',
             title: 'Dame eso, por favor',
             soundPath: 'sounds/frases/giveMeThat.mp3'),
         ItemWord(
-            idWord: 123,
+            idWord: 153,
             imagePath: 'assets/images/words/frases/roto.png',
             title: 'Está roto',
             soundPath: 'sounds/frases/broken.mp3'),
         ItemWord(
-            idWord: 124,
+            idWord: 154,
             imagePath: 'assets/images/words/frases/estaBien.png',
             title: 'Eso está bien',
             soundPath: 'sounds/frases/itsOk.mp3'),
@@ -890,37 +890,37 @@ class ItemWordData {
       level: 5,
       listItemWord: [
         ItemWord(
-            idWord: 125,
+            idWord: 155,
             imagePath: 'assets/images/words/social/jugar.png',
             title: '¿Quieres jugar?',
             soundPath: 'sounds/social/play.mp3'),
         ItemWord(
-            idWord: 126,
+            idWord: 156,
             imagePath: 'assets/images/words/social/ven.png',
             title: 'Ven conmigo',
             soundPath: 'sounds/social/comeWithMe.mp3'),
         ItemWord(
-            idWord: 127,
+            idWord: 157,
             imagePath: 'assets/images/words/social/felizContigo.png',
             title: 'Estoy feliz contigo',
             soundPath: 'sounds/social/happyWithYou.mp3'),
         ItemWord(
-            idWord: 128,
+            idWord: 158,
             imagePath: 'assets/images/words/social/meGustaEsto.png',
             title: 'Me gusta esto',
             soundPath: 'sounds/social/iLikeThis.mp3'),
         ItemWord(
-            idWord: 129,
+            idWord: 159,
             imagePath: 'assets/images/words/social/noMeGustaEso.png',
             title: 'No me gusta eso',
             soundPath: 'sounds/social/dontLikeThat.mp3'),
         ItemWord(
-            idWord: 130,
+            idWord: 160,
             imagePath: 'assets/images/words/social/loHicisteBien.png',
             title: 'Lo hiciste bien',
             soundPath: 'sounds/social/wellDone.mp3'),
         ItemWord(
-            idWord: 131,
+            idWord: 161,
             imagePath: 'assets/images/words/social/gracias.png',
             title: 'Gracias por ayudarme',
             soundPath: 'sounds/social/thanksHelp.mp3'),
@@ -933,37 +933,37 @@ class ItemWordData {
       level: 5,
       listItemWord: [
         ItemWord(
-            idWord: 132,
+            idWord: 162,
             imagePath: 'assets/images/words/tiempo/primero.png',
             title: 'Primero',
             soundPath: 'sounds/tiempo/first.mp3'),
         ItemWord(
-            idWord: 133,
+            idWord: 163,
             imagePath: 'assets/images/words/tiempo/despues.png',
             title: 'Después',
             soundPath: 'sounds/tiempo/after.mp3'),
         ItemWord(
-            idWord: 134,
+            idWord: 164,
             imagePath: 'assets/images/words/tiempo/luego.png',
             title: 'Luego',
             soundPath: 'sounds/tiempo/then.mp3'),
         ItemWord(
-            idWord: 135,
+            idWord: 165,
             imagePath: 'assets/images/words/tiempo/ahora.png',
             title: 'Ahora',
             soundPath: 'sounds/tiempo/now.mp3'),
         ItemWord(
-            idWord: 136,
+            idWord: 166,
             imagePath: 'assets/images/words/tiempo/antes.png',
             title: 'Antes',
             soundPath: 'sounds/tiempo/before.mp3'),
         ItemWord(
-            idWord: 137,
+            idWord: 167,
             imagePath: 'assets/images/words/tiempo/siempre.png',
             title: 'Siempre',
             soundPath: 'sounds/tiempo/always.mp3'),
         ItemWord(
-            idWord: 138,
+            idWord: 168,
             imagePath: 'assets/images/words/tiempo/nunca.png',
             title: 'Nunca',
             soundPath: 'sounds/tiempo/never.mp3'),
@@ -976,42 +976,42 @@ class ItemWordData {
       level: 5,
       listItemWord: [
         ItemWord(
-            idWord: 139,
+            idWord: 169,
             imagePath: 'assets/images/words/seguridad/noToques.png',
             title: 'No toques',
             soundPath: 'sounds/seguridad/dontTouch.mp3'),
         ItemWord(
-            idWord: 140,
+            idWord: 170,
             imagePath: 'assets/images/words/seguridad/cuidado.png',
             title: 'Cuidado',
             soundPath: 'sounds/seguridad/careful.mp3'),
         ItemWord(
-            idWord: 141,
+            idWord: 171,
             imagePath: 'assets/images/words/seguridad/caliente.png',
             title: 'Está caliente',
             soundPath: 'sounds/seguridad/hot.mp3'),
         ItemWord(
-            idWord: 142,
+            idWord: 172,
             imagePath: 'assets/images/words/seguridad/peligroso.png',
             title: 'Es peligroso',
             soundPath: 'sounds/seguridad/danger.mp3'),
         ItemWord(
-            idWord: 143,
+            idWord: 173,
             imagePath: 'assets/images/words/seguridad/venAqui.png',
             title: 'Ven aquí',
             soundPath: 'sounds/seguridad/comeHere.mp3'),
         ItemWord(
-            idWord: 144,
+            idWord: 174,
             imagePath: 'assets/images/words/seguridad/espera.png',
             title: 'Espera',
             soundPath: 'sounds/seguridad/wait.mp3'),
         ItemWord(
-            idWord: 145,
+            idWord: 175,
             imagePath: 'assets/images/words/seguridad/abrePuerta.png',
             title: 'Abre la puerta',
             soundPath: 'sounds/seguridad/openDoor.mp3'),
         ItemWord(
-            idWord: 146,
+            idWord: 176,
             imagePath: 'assets/images/words/seguridad/cierraPuerta.png',
             title: 'Cierra la puerta',
             soundPath: 'sounds/seguridad/closeDoor.mp3'),
