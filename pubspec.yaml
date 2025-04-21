@@ -71,3 +71,11 @@ flutter:
     - assets/sounds/transporte/
     - assets/images/words/comidas/
     - assets/sounds/comidas/
+    - assets/images/words/frases/
+    - assets/sounds/frases/
+    - assets/images/words/lugares/
+    - assets/sounds/lugares/
+    - assets/images/words/clima/
+    - assets/sounds/clima/
+    - assets/images/words/objetos/
+    - assets/sounds/objetos/

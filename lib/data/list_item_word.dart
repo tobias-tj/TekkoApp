@@ -541,9 +541,9 @@ class ItemWordData {
           soundPath: 'sounds/lugares/soundCasa.mp3'),
       ItemWord(
           idWord: 95,
-          imagePath: 'assets/images/words/lugares/baño.png',
+          imagePath: 'assets/images/words/lugares/bano.png',
           title: 'Baño',
-          soundPath: 'sounds/lugares/soundBaño.mp3'),
+          soundPath: 'sounds/lugares/soundBano.mp3'),
       ItemWord(
           idWord: 96,
           imagePath: 'assets/images/words/lugares/cocina.png',
@@ -619,7 +619,7 @@ class ItemWordData {
     ItemWordType(id: 15, typeWord: 'Objetos comunes', level: 3, listItemWord: [
       ItemWord(
           idWord: 109,
-          imagePath: 'assets/images/words/objetos/silla.png',
+          imagePath: 'assets/images/words/objetos/silla2.png',
           title: 'Silla',
           soundPath: 'sounds/objetos/soundSilla.mp3'),
       ItemWord(
