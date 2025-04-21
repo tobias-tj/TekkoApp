@@ -47,7 +47,7 @@ class _HomePageState extends State<HomePage> {
                     child: GridView.builder(
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 3,
-                        childAspectRatio: 0.8, // Más rectangulares
+                        childAspectRatio: 0.7, // Más rectangulares
                         mainAxisSpacing: 10,
                         crossAxisSpacing: 10,
                       ),

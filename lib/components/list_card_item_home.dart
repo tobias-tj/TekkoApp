@@ -24,8 +24,8 @@ class ListCardItemHome extends StatelessWidget {
         elevation: 4,
         child: ConstrainedBox(
           constraints: const BoxConstraints(
-            minWidth: 120,
-            maxWidth: 120,
+            minWidth: 150,
+            maxWidth: 150,
             minHeight: 150,
             maxHeight: 150,
           ),

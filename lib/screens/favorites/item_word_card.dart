@@ -63,7 +63,7 @@ class _ItemWordCardState extends State<ItemWordCard> {
                         widget.item.title,
                         style: const TextStyle(
                           color: Colors.white,
-                          fontSize: 14,
+                          fontSize: 13,
                           fontWeight: FontWeight.bold,
                         ),
                       ),

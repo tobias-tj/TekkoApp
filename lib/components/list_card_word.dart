@@ -105,7 +105,7 @@ class _ListCardWordState extends State<ListCardWord> {
                   Text(
                     widget.title,
                     style: TextStyle(
-                        fontSize: 18,
+                        fontSize: 14,
                         fontWeight: FontWeight.bold,
                         color: AppColors.chocolateNewDark),
                   ),
