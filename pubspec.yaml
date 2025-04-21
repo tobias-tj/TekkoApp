@@ -61,3 +61,13 @@ flutter:
     - assets/sounds/animales/
     - assets/sounds/nivel/
     - .env
+    - assets/images/words/acciones/
+    - assets/sounds/acciones/
+    - assets/images/words/emociones/
+    - assets/sounds/emociones/
+    - assets/images/words/escuela/
+    - assets/sounds/escuela/
+    - assets/images/words/transporte/
+    - assets/sounds/transporte/
+    - assets/images/words/comidas/
+    - assets/sounds/comidas/

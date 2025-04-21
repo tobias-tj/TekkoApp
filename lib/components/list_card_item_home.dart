@@ -22,25 +22,36 @@ class ListCardItemHome extends StatelessWidget {
           borderRadius: BorderRadius.circular(15.0),
         ),
         elevation: 4,
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Image.asset(
-                imagePath,
-                height: 50,
-                width: 50,
-                fit: BoxFit.cover,
-              ),
-              const SizedBox(height: 8),
-              Text(title,
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.softCream,
-                  ))
-            ],
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(
+            minWidth: 120,
+            maxWidth: 120,
+            minHeight: 150,
+            maxHeight: 150,
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Image.asset(
+                  imagePath,
+                  height: 50,
+                  width: 50,
+                  fit: BoxFit.cover,
+                ),
+                const SizedBox(height: 8),
+                Text(title,
+                    textAlign: TextAlign.center,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 2,
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.softCream,
+                    ))
+              ],
+            ),
           ),
         ),
       ),
