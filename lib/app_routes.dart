@@ -6,6 +6,7 @@ import 'package:tekko/screens/accounts/create_account_screen.dart';
 import 'package:tekko/screens/accounts/login_account_screen.dart';
 import 'package:tekko/screens/accounts/register_account_screen.dart';
 import 'package:tekko/screens/activity/activity_screen.dart';
+import 'package:tekko/screens/games/manage_task_screen.dart';
 import 'package:tekko/screens/games/task_screen.dart';
 import 'package:tekko/screens/parent/create_activity_screen.dart';
 import 'package:tekko/screens/calendar/calendar_screen.dart';
@@ -145,7 +146,7 @@ final GoRouter appRouter = GoRouter(
             name: 'adminTask',
             path: '/adminTask',
             pageBuilder: (context, state) =>
-                NoTransitionPage(child: const TaskScreen()),
+                NoTransitionPage(child: const ManageTaskScreen()),
           ),
           GoRoute(
             name: 'adminHelp',
