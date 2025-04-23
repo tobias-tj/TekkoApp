@@ -9,6 +9,7 @@ import 'package:tekko/features/api/data/bloc/donation/donation_bloc.dart';
 import 'package:tekko/features/api/data/bloc/experience/experience_bloc.dart';
 import 'package:tekko/features/api/data/bloc/security_pin/security_pin_bloc.dart';
 import 'package:tekko/features/api/data/bloc/setting/setting_bloc.dart';
+import 'package:tekko/features/api/data/bloc/task/task_bloc.dart';
 import 'package:tekko/features/api/data/datasources/auth_remote_datasource.dart';
 import 'package:tekko/features/api/data/bloc/auth_bloc.dart';
 import 'package:tekko/features/api/data/datasources/donation_remote_datasource.dart';
@@ -22,6 +23,7 @@ import 'package:tekko/features/api/data/repositories/parent_repository_impl.dart
 import 'package:tekko/features/api/data/repositories/setting_repository_impl.dart';
 import 'package:tekko/features/api/domain/usecases/create_activity.dart';
 import 'package:tekko/features/api/domain/usecases/create_payment.dart';
+import 'package:tekko/features/api/domain/usecases/create_task.dart';
 import 'package:tekko/features/api/domain/usecases/get_activities.dart';
 import 'package:tekko/features/api/domain/usecases/get_activities_by_kid.dart';
 import 'package:tekko/features/api/domain/usecases/get_experience.dart';
@@ -141,6 +143,12 @@ final class MainApp extends StatelessWidget {
               ),
             ),
           ),
+          BlocProvider(
+              create: (context) => TaskBloc(
+                  createTask: CreateTaskUseCases(
+                      repository: ParentRepositoryImpl(
+                          remoteDataSource: ParentRemoteDatasource(
+                              dio: context.read<DioClient>().dio)))))
         ],
         child: MaterialApp.router(
           debugShowCheckedModeBanner: false,

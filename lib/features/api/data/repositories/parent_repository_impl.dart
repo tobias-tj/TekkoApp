@@ -1,4 +1,5 @@
 import 'package:tekko/features/api/data/datasources/parent_remote_datasource.dart';
+import 'package:tekko/features/api/data/models/create_task_model.dart';
 import 'package:tekko/features/api/data/models/filter_activity_dto.dart';
 import 'package:tekko/features/api/data/models/form_activity_model.dart';
 import 'package:tekko/features/api/domain/repositories/parent_repository.dart';
@@ -19,5 +20,11 @@ class ParentRepositoryImpl implements ParentRepository {
       String dateFilter, int parentId, String? statusFilter) async {
     return await remoteDataSource.getActivities(
         dateFilter, parentId, statusFilter);
+  }
+
+  @override
+  Future<Map<String, dynamic>> createTask(
+      CreateTaskModel createTaskModel) async {
+    return await remoteDataSource.createTask(createTaskModel);
   }
 }

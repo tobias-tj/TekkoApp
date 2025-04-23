@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tekko/screens/games/emoji_memory_game.dart';
 import 'package:go_router/go_router.dart';
+import 'package:tekko/styles/app_colors.dart';
 
 class MemoryScreen extends StatelessWidget {
   const MemoryScreen({super.key});
@@ -14,7 +15,10 @@ class MemoryScreen extends StatelessWidget {
           context.pushReplacement('/home');
         },
         backgroundColor: Colors.orange,
-        child: const Icon(Icons.home),
+        child: const Icon(
+          Icons.home,
+          color: AppColors.textColor,
+        ),
       ),
     );
   }

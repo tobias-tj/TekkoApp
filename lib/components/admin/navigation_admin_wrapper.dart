@@ -16,8 +16,9 @@ class NavigationAdminWrapper extends StatelessWidget {
     // Mapa de nombres de rutas e índices
     final Map<String, int> routesIndex = {
       '/adminHome': 0,
-      '/adminHelp': 1,
-      '/adminSettings': 2,
+      '/adminTask': 1,
+      '/adminHelp': 2,
+      '/adminSettings': 3,
     };
 
     // Obtener el índice correspondiente al nombre de la ruta actual
@@ -32,6 +33,11 @@ class NavigationAdminWrapper extends StatelessWidget {
       items: [
         const HugeIcon(
           icon: HugeIcons.strokeRoundedHome01,
+          color: AppColors.chocolateNewDark,
+          size: 27.0,
+        ),
+        const HugeIcon(
+          icon: HugeIcons.strokeRoundedMath,
           color: AppColors.chocolateNewDark,
           size: 27.0,
         ),

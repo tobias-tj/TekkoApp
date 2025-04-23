@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:tekko/features/api/data/models/create_task_model.dart';
 import 'package:tekko/features/api/data/models/filter_activity_dto.dart';
 import 'package:tekko/features/api/data/models/form_activity_model.dart';
 import 'package:tekko/features/core/constants/api_constants.dart';
@@ -57,6 +58,24 @@ class ParentRemoteDatasource {
     } on DioException catch (e) {
       throw Exception(
           e.response?.data['message'] ?? 'Error obteniendo actividades');
+    }
+  }
+
+  Future<Map<String, dynamic>> createTask(
+      CreateTaskModel createTaskModel) async {
+    try {
+      final response = await dio.post(
+        ApiConstants.createTasksEndpoint,
+        data: createTaskModel.toJson(),
+      );
+
+      return {
+        'message': response.data['message'],
+        'taskId': response.data['data']['taskId']
+      };
+    } on DioException catch (e) {
+      throw Exception(
+          e.response?.data['message'] ?? 'Error intentando crear tarea');
     }
   }
 }

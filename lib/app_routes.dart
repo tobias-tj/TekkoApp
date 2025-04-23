@@ -6,6 +6,7 @@ import 'package:tekko/screens/accounts/create_account_screen.dart';
 import 'package:tekko/screens/accounts/login_account_screen.dart';
 import 'package:tekko/screens/accounts/register_account_screen.dart';
 import 'package:tekko/screens/activity/activity_screen.dart';
+import 'package:tekko/screens/games/task_screen.dart';
 import 'package:tekko/screens/parent/create_activity_screen.dart';
 import 'package:tekko/screens/calendar/calendar_screen.dart';
 import 'package:tekko/screens/calendar/level_up_screen.dart';
@@ -13,7 +14,6 @@ import 'package:tekko/screens/calendar/winner_screen.dart';
 import 'package:tekko/screens/favorites/favorite_screen.dart';
 import 'package:tekko/screens/games/drawing_screen.dart';
 import 'package:tekko/screens/games/memory_screen.dart';
-import 'package:tekko/screens/games/number_screen.dart';
 import 'package:tekko/screens/home_screen.dart';
 import 'package:tekko/screens/parent/admin_help_screen.dart';
 import 'package:tekko/screens/parent/admin_home_screen.dart';
@@ -74,12 +74,6 @@ final GoRouter appRouter = GoRouter(
       path: '/drawing',
       pageBuilder: (context, state) =>
           NoTransitionPage(child: const DrawingScreen()),
-    ),
-    GoRoute(
-      name: 'numbers',
-      path: '/numbers',
-      pageBuilder: (context, state) =>
-          NoTransitionPage(child: const NumberScreen()),
     ),
     GoRoute(
       name: 'memory',
@@ -146,6 +140,12 @@ final GoRouter appRouter = GoRouter(
             pageBuilder: (context, state) => NoTransitionPage(
               child: const AdminHomeScreen(),
             ),
+          ),
+          GoRoute(
+            name: 'adminTask',
+            path: '/adminTask',
+            pageBuilder: (context, state) =>
+                NoTransitionPage(child: const TaskScreen()),
           ),
           GoRoute(
             name: 'adminHelp',

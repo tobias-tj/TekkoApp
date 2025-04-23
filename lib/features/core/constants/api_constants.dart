@@ -1,5 +1,5 @@
 class ApiConstants {
-  static const String baseUrl = 'http://192.168.100.63:3000/api';
+  static const String baseUrl = 'http://localhost:3000/api';
   static const String registerEndpoint = '/register';
   static const String loginEndpoint = '/login';
   static const String experienceEndpoint = '/experience';
@@ -12,4 +12,5 @@ class ApiConstants {
   static const String updateProfileDetails = '/updateProfile';
   static const String updatePinToken = '/updatePin';
   static const String stripePaymentIntent = '/donation';
+  static const String createTasksEndpoint = '/createTask';
 }

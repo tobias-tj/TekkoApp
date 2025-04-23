@@ -18,9 +18,9 @@ class _ActivityScreenState extends State<ActivityScreen> {
       "route": "/drawing"
     },
     {
-      "title": "Numeros",
+      "title": "Actividades",
       "image": "assets/images/activities/numberIcon.png",
-      "route": "/numbers"
+      "route": "/task"
     },
     {
       "title": "Memorias",
