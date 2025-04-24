@@ -108,7 +108,6 @@ class _CreateActivityScreenState extends State<CreateActivityScreen> {
       child: Scaffold(
         backgroundColor: AppColors.softCream,
         appBar: AppBar(
-          backgroundColor: AppColors.softCream,
           elevation: 0,
           title: FadeInRight(
             child: const Text(

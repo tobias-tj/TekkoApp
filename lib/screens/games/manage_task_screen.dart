@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
+import 'package:go_router/go_router.dart';
 import 'package:tekko/styles/app_colors.dart';
 
 class ManageTaskScreen extends StatefulWidget {
@@ -81,6 +82,11 @@ class _ManageTaskScreenState extends State<ManageTaskScreen> {
 
     return Scaffold(
       backgroundColor: AppColors.softCream,
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: AppColors.chocolateNewDark,
+        onPressed: () => context.pushNamed('createTask'),
+        child: const Icon(Icons.add, color: Colors.white),
+      ),
       body: Stack(
         children: [
           // Fondo decorativo animado

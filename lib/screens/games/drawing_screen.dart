@@ -109,13 +109,14 @@ class _DrawingScreenState extends State<DrawingScreen> {
                       ),
                     ),
                     FloatingActionButton(
+                      onPressed: () {
+                        context.pushReplacement('/home');
+                      },
                       backgroundColor: AppColors.softCreamDark,
-                      heroTag: 'color-back',
                       child: const Icon(
-                        Icons.power_settings_new_rounded,
+                        Icons.home,
                         color: AppColors.chocolateNewDark,
                       ),
-                      onPressed: () => context.pushReplacement('/home'),
                     ),
                   ],
                 ),

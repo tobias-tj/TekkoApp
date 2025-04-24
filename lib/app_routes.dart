@@ -6,7 +6,9 @@ import 'package:tekko/screens/accounts/create_account_screen.dart';
 import 'package:tekko/screens/accounts/login_account_screen.dart';
 import 'package:tekko/screens/accounts/register_account_screen.dart';
 import 'package:tekko/screens/activity/activity_screen.dart';
+import 'package:tekko/screens/games/answer_task_screen.dart';
 import 'package:tekko/screens/games/manage_task_screen.dart';
+import 'package:tekko/screens/games/create_task_screen.dart';
 import 'package:tekko/screens/games/task_screen.dart';
 import 'package:tekko/screens/parent/create_activity_screen.dart';
 import 'package:tekko/screens/calendar/calendar_screen.dart';
@@ -82,6 +84,23 @@ final GoRouter appRouter = GoRouter(
       pageBuilder: (context, state) =>
           NoTransitionPage(child: const MemoryScreen()),
     ),
+    GoRoute(
+        name: 'createTask',
+        path: '/createTask',
+        pageBuilder: (context, state) =>
+            NoTransitionPage(child: const CreateTaskScreen())),
+    GoRoute(
+        name: 'tasks',
+        path: '/tasks',
+        pageBuilder: (context, state) =>
+            NoTransitionPage(child: const TasksScreen())),
+    GoRoute(
+        name: 'answerTask',
+        path: '/answerTask',
+        pageBuilder: (context, state) {
+          final task = (state.extra! as Map<String, dynamic>)['task'];
+          return NoTransitionPage(child: AnswerTaskScreen(task: task));
+        }),
     GoRoute(
       name: 'activity',
       path: '/activity',
