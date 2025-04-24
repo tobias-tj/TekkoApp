@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:tekko/features/api/data/models/create_task_model.dart';
 import 'package:tekko/features/api/data/models/filter_activity_dto.dart';
 import 'package:tekko/features/api/data/models/form_activity_model.dart';
+import 'package:tekko/features/api/data/models/get_task_dto.dart';
 import 'package:tekko/features/core/constants/api_constants.dart';
 
 class ParentRemoteDatasource {
@@ -76,6 +77,38 @@ class ParentRemoteDatasource {
     } on DioException catch (e) {
       throw Exception(
           e.response?.data['message'] ?? 'Error intentando crear tarea');
+    }
+  }
+
+  Future<GetTaskDto> getTasks(int childrenId) async {
+    try {
+      final response =
+          await dio.get('${ApiConstants.getTaskByKid}?childId=$childrenId');
+      if (response.data['success'] == true) {
+        final data = response.data['data'];
+
+        final int pendingTasks = data['pendingTasks'];
+        final List<Tasks> tasks = (data['tasks'] as List).map((task) {
+          return Tasks(
+            taskid: int.parse(task['taskid'].toString()),
+            number1: int.parse(task['number1'].toString()),
+            number2: int.parse(task['number2'].toString()),
+            operation: task['operation'],
+            correctanswer: int.parse(task['correctanswer'].toString()),
+            iscompleted: task['iscompleted'],
+            childanswer: task['childanswer'] != null
+                ? int.tryParse(task['childanswer'].toString())
+                : null,
+          );
+        }).toList();
+
+        return GetTaskDto(pendingTasks: pendingTasks, taskList: tasks);
+      } else {
+        throw Exception(response.data['message'] ?? 'Error desconocido');
+      }
+    } on DioException catch (e) {
+      throw Exception(
+          e.response?.data['message'] ?? 'No se ha logrado obtener las tareas');
     }
   }
 }

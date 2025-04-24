@@ -28,6 +28,7 @@ import 'package:tekko/features/api/domain/usecases/get_activities.dart';
 import 'package:tekko/features/api/domain/usecases/get_activities_by_kid.dart';
 import 'package:tekko/features/api/domain/usecases/get_experience.dart';
 import 'package:tekko/features/api/domain/usecases/get_profile_details.dart';
+import 'package:tekko/features/api/domain/usecases/get_task_by_kid.dart';
 import 'package:tekko/features/api/domain/usecases/login_usecase.dart';
 import 'package:tekko/features/api/domain/usecases/register_usecase.dart';
 import 'package:tekko/features/api/domain/usecases/update_activity.dart';
@@ -146,6 +147,11 @@ final class MainApp extends StatelessWidget {
           BlocProvider(
               create: (context) => TaskBloc(
                   createTask: CreateTaskUseCases(
+                    repository: ParentRepositoryImpl(
+                        remoteDataSource: ParentRemoteDatasource(
+                            dio: context.read<DioClient>().dio)),
+                  ),
+                  getTasksByKid: GetTaskByKidUseCases(
                       repository: ParentRepositoryImpl(
                           remoteDataSource: ParentRemoteDatasource(
                               dio: context.read<DioClient>().dio)))))

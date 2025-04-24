@@ -2,6 +2,7 @@ import 'package:tekko/features/api/data/datasources/parent_remote_datasource.dar
 import 'package:tekko/features/api/data/models/create_task_model.dart';
 import 'package:tekko/features/api/data/models/filter_activity_dto.dart';
 import 'package:tekko/features/api/data/models/form_activity_model.dart';
+import 'package:tekko/features/api/data/models/get_task_dto.dart';
 import 'package:tekko/features/api/domain/repositories/parent_repository.dart';
 
 class ParentRepositoryImpl implements ParentRepository {
@@ -26,5 +27,10 @@ class ParentRepositoryImpl implements ParentRepository {
   Future<Map<String, dynamic>> createTask(
       CreateTaskModel createTaskModel) async {
     return await remoteDataSource.createTask(createTaskModel);
+  }
+
+  @override
+  Future<GetTaskDto> getTasks(int childrenId) async {
+    return await remoteDataSource.getTasks(childrenId);
   }
 }

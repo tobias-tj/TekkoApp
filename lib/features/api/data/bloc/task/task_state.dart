@@ -29,3 +29,12 @@ class TaskSuccess extends TaskState {
   @override
   List<Object?> get props => [message, taskId];
 }
+
+class TaskGetSuccess extends TaskState {
+  final GetTaskDto tasks;
+
+  const TaskGetSuccess({required this.tasks});
+
+  @override
+  List<Object?> get props => [tasks];
+}

@@ -15,3 +15,12 @@ class TaskRequested extends TaskEvent {
   @override
   List<Object> get props => [taskModel];
 }
+
+class TaskGetRequested extends TaskEvent {
+  final int childrenId;
+
+  const TaskGetRequested({required this.childrenId});
+
+  @override
+  List<Object> get props => [childrenId];
+}
