@@ -38,3 +38,12 @@ class TaskGetSuccess extends TaskState {
   @override
   List<Object?> get props => [tasks];
 }
+
+class TaskUpdateSuccess extends TaskState {
+  final String message;
+
+  const TaskUpdateSuccess({required this.message});
+
+  @override
+  List<Object> get props => [message];
+}

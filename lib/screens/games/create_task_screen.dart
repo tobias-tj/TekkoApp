@@ -6,6 +6,7 @@ import 'package:tekko/features/api/data/models/create_task_model.dart';
 import 'package:tekko/features/core/utils/storage_utils.dart';
 import 'package:tekko/styles/app_colors.dart';
 import 'package:animate_do/animate_do.dart';
+import 'package:tekko/utils/get_operation_symbol.dart';
 
 class CreateTaskScreen extends StatefulWidget {
   const CreateTaskScreen({super.key});
@@ -262,7 +263,7 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 8),
                               child: Text(
-                                _getOperationSymbol(),
+                                getOperationSymbol(_selectedOperation),
                                 style: const TextStyle(
                                   fontSize: 48,
                                   color: Colors.black87,
@@ -421,21 +422,6 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
         ),
       ),
     );
-  }
-
-  String _getOperationSymbol() {
-    switch (_selectedOperation) {
-      case 'suma':
-        return '+';
-      case 'resta':
-        return '-';
-      case 'multiplicacion':
-        return '×';
-      case 'division':
-        return '÷';
-      default:
-        return '+';
-    }
   }
 
   Widget _buildOperationButton(String operation, IconData icon) {

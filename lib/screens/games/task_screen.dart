@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lottie/lottie.dart';
+import 'package:tekko/features/api/data/bloc/task/task_bloc.dart';
+import 'package:tekko/features/api/data/models/get_task_dto.dart';
+import 'package:tekko/features/core/utils/storage_utils.dart';
 import 'package:tekko/styles/app_colors.dart';
+import 'package:tekko/utils/get_operation_symbol.dart';
 
 class TasksScreen extends StatefulWidget {
   const TasksScreen({super.key});
@@ -11,96 +17,124 @@ class TasksScreen extends StatefulWidget {
 }
 
 class _TasksScreenState extends State<TasksScreen> {
-  final Map<String, dynamic> taskData = const {
-    "success": true,
-    "message": "Se encontraron 4 tareas",
-    "data": {
-      "pendingTasks": 2,
-      "tasks": [
-        {
-          "taskid": 2,
-          "number1": "10",
-          "number2": "4",
-          "operation": "resta",
-          "correctanswer": "6",
-          "iscompleted": false,
-          "childanswer": null,
-        },
-        {
-          "taskid": 4,
-          "number1": "12",
-          "number2": "3",
-          "operation": "division",
-          "correctanswer": "4",
-          "iscompleted": false,
-          "childanswer": null,
-        }
-      ]
+  @override
+  void initState() {
+    super.initState();
+    _getTaskData();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    context.read<TaskBloc>().stream.listen((state) {
+      if (state is TaskUpdateSuccess) {
+        _getTaskData();
+      }
+      if (state is TaskError) {
+        _getTaskData();
+      }
+    });
+  }
+
+  Future<void> _getTaskData() async {
+    try {
+      final childrenId = await StorageUtils.getInt('childrenId') ?? 0;
+      context.read<TaskBloc>().add(TaskGetRequested(childrenId: childrenId));
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('No se ha logrado obtener tareas')),
+      );
     }
-  };
+  }
 
   @override
   Widget build(BuildContext context) {
-    final tasks = taskData['data']['tasks']
-        .where((task) => task['iscompleted'] == false)
-        .toList();
-
     return Scaffold(
       backgroundColor: AppColors.softCream,
       appBar: AppBar(
         title: const Text('Tareas por Completar'),
         backgroundColor: AppColors.softCreamDark,
       ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            children: [
-              const SizedBox(height: 30),
-              if (tasks.isEmpty)
-                FadeIn(
-                  child: Column(
-                    children: const [
-                      Icon(Icons.celebration, size: 80, color: Colors.green),
-                      SizedBox(height: 15),
-                      Text(
-                        '¡Ya completaste todas tus tareas!',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.green,
+      body: BlocBuilder<TaskBloc, TaskState>(builder: (context, state) {
+        if (state is TaskLoading) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (state is TaskGetSuccess) {
+          final taskData = state.tasks;
+
+          List<dynamic> tasks = taskData.taskList
+              .where((task) => task.iscompleted == false)
+              .toList();
+
+          return SafeArea(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                children: [
+                  const SizedBox(height: 30),
+                  if (tasks.isEmpty)
+                    Center(
+                      child: BounceInUp(
+                        child: Card(
+                          child: Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Lottie.asset(
+                                  "assets/animations/dogChill.json",
+                                  repeat: true,
+                                  width: 180,
+                                  height: 180,
+                                ),
+                                const SizedBox(height: 30),
+                                Text(
+                                  '¡Ya completaste todas tus tareas!',
+                                  style: TextStyle(
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.bold,
+                                    color: AppColors.chocolateNewDark,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
-                        textAlign: TextAlign.center,
                       ),
-                    ],
-                  ),
-                )
-              else
-                ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: tasks.length,
-                  itemBuilder: (context, index) {
-                    final task = tasks[index];
-                    return ElasticIn(
-                      duration: Duration(milliseconds: 500 + index * 100),
-                      child: GestureDetector(
-                        onTap: () {
-                          context
-                              .pushNamed('answerTask', extra: {'task': task});
-                        },
-                        child: Container(
-                          margin: const EdgeInsets.only(bottom: 20),
-                          child: _buildTaskCard(task),
-                        ),
-                      ),
-                    );
-                  },
-                ),
-            ],
-          ),
-        ),
-      ),
+                    )
+                  else
+                    ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: tasks.length,
+                      itemBuilder: (context, index) {
+                        final task = tasks[index] as Tasks;
+                        return ElasticIn(
+                          duration: Duration(milliseconds: 500 + index * 100),
+                          child: GestureDetector(
+                            onTap: () {
+                              context.pushNamed('answerTask', extra: task);
+                            },
+                            child: Container(
+                              margin: const EdgeInsets.only(bottom: 20),
+                              child: _buildTaskCard(task),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                ],
+              ),
+            ),
+          );
+        } else if (state is TaskError) {
+          return Center(
+            child: Text('Error al cargar tareas',
+                style: TextStyle(color: Colors.red)),
+          );
+        }
+        return const SizedBox();
+      }),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           context.pushReplacement('/home');
@@ -114,8 +148,8 @@ class _TasksScreenState extends State<TasksScreen> {
     );
   }
 
-  Widget _buildTaskCard(Map<String, dynamic> task) {
-    final operation = _getOperationSymbol(task['operation']);
+  Widget _buildTaskCard(Tasks task) {
+    final operation = getOperationSymbol(task.operation);
 
     return Card(
       elevation: 6,
@@ -126,7 +160,7 @@ class _TasksScreenState extends State<TasksScreen> {
         child: Column(
           children: [
             Text(
-              '🧠 Tarea #${task['taskid']}',
+              '🧠 Tarea #${task.taskid}',
               style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
@@ -135,7 +169,7 @@ class _TasksScreenState extends State<TasksScreen> {
             ),
             const SizedBox(height: 10),
             Text(
-              '${task['number1']} $operation ${task['number2']}',
+              '${task.number1} $operation ${task.number2}',
               style: const TextStyle(
                 fontSize: 32,
                 fontWeight: FontWeight.bold,
@@ -155,20 +189,5 @@ class _TasksScreenState extends State<TasksScreen> {
         ),
       ),
     );
-  }
-
-  String _getOperationSymbol(String operation) {
-    switch (operation) {
-      case 'suma':
-        return '+';
-      case 'resta':
-        return '-';
-      case 'multiplicacion':
-        return '×';
-      case 'division':
-        return '÷';
-      default:
-        return '?';
-    }
   }
 }

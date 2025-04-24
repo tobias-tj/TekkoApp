@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tekko/components/admin/navigation_admin_wrapper.dart';
 import 'package:tekko/features/api/data/models/details_profile_dto.dart';
+import 'package:tekko/features/api/data/models/get_task_dto.dart';
 import 'package:tekko/screens/accounts/create_account_screen.dart';
 import 'package:tekko/screens/accounts/login_account_screen.dart';
 import 'package:tekko/screens/accounts/register_account_screen.dart';
@@ -98,7 +99,7 @@ final GoRouter appRouter = GoRouter(
         name: 'answerTask',
         path: '/answerTask',
         pageBuilder: (context, state) {
-          final task = (state.extra! as Map<String, dynamic>)['task'];
+          final task = state.extra as Tasks;
           return NoTransitionPage(child: AnswerTaskScreen(task: task));
         }),
     GoRoute(

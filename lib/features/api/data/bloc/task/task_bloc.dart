@@ -1,9 +1,11 @@
 import 'package:bloc/bloc.dart';
 import 'package:tekko/features/api/data/models/create_task_model.dart';
 import 'package:tekko/features/api/data/models/get_task_dto.dart';
+import 'package:tekko/features/api/data/models/update_task_status_dto.dart';
 import 'package:tekko/features/api/domain/usecases/create_task.dart';
 import 'package:equatable/equatable.dart';
 import 'package:tekko/features/api/domain/usecases/get_task_by_kid.dart';
+import 'package:tekko/features/api/domain/usecases/update_status_task.dart';
 
 part 'task_event.dart';
 part 'task_state.dart';
@@ -11,11 +13,16 @@ part 'task_state.dart';
 class TaskBloc extends Bloc<TaskEvent, TaskState> {
   final CreateTaskUseCases createTask;
   final GetTaskByKidUseCases getTasksByKid;
+  final UpdateStatusTask updateStatusTask;
 
-  TaskBloc({required this.createTask, required this.getTasksByKid})
+  TaskBloc(
+      {required this.createTask,
+      required this.getTasksByKid,
+      required this.updateStatusTask})
       : super(TaskInitial()) {
     on<TaskRequested>(_onTaskRequested);
     on<TaskGetRequested>(_onTaskGetRequested);
+    on<TaskUpdateRequested>(_onTaskUpdateRequested);
   }
 
   Future<void> _onTaskRequested(
@@ -54,6 +61,22 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
           message: e.toString().contains('Exception:')
               ? e.toString().split('Exception:')[1].trim()
               : 'Failed to load activities'));
+    }
+  }
+
+  Future<void> _onTaskUpdateRequested(
+      TaskUpdateRequested event, Emitter<TaskState> emit) async {
+    emit(TaskLoading());
+
+    try {
+      await updateStatusTask(event.updateTaskStatusDto);
+      emit(TaskUpdateSuccess(message: 'Actividad actualizada con éxito'));
+    } catch (e) {
+      emit(TaskError(
+        message: e.toString().contains('Exception:')
+            ? e.toString().split('Exception:')[1].trim()
+            : 'Error al actualizar la actividad',
+      ));
     }
   }
 }

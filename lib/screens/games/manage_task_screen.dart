@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lottie/lottie.dart';
 import 'package:tekko/features/api/data/bloc/task/task_bloc.dart';
 import 'package:tekko/features/api/data/models/get_task_dto.dart';
 import 'package:tekko/features/core/utils/storage_utils.dart';
@@ -65,7 +66,7 @@ class _ManageTaskScreenState extends State<ManageTaskScreen> {
             return const Center(child: CircularProgressIndicator());
           } else if (state is TaskGetSuccess) {
             final taskData = state.tasks;
-            final pendingTasks = taskData.pendingTasks ?? 0;
+            final pendingTasks = taskData.pendingTasks;
             final totalTasks = (taskData.taskList).length;
             final completedTasks = totalTasks - pendingTasks;
 
@@ -180,23 +181,29 @@ class _ManageTaskScreenState extends State<ManageTaskScreen> {
                       // Lista de tareas
                       if (filteredTasks.isEmpty)
                         FadeIn(
-                          child: Center(
-                            child: Column(
-                              children: [
-                                Icon(
-                                  Icons.assignment_outlined,
-                                  size: 60,
-                                  color: Colors.grey.shade400,
+                          child: Card(
+                            child: Center(
+                              child: Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Column(
+                                  children: [
+                                    Lottie.asset(
+                                      "assets/animations/dogChill.json",
+                                      repeat: true,
+                                      width: 180,
+                                      height: 180,
+                                    ),
+                                    const SizedBox(height: 30),
+                                    Text(
+                                      'No se encontraron tareas pendientes',
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        color: Colors.grey.shade600,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                const SizedBox(height: 15),
-                                Text(
-                                  'No se encontraron tareas',
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    color: Colors.grey.shade600,
-                                  ),
-                                ),
-                              ],
+                              ),
                             ),
                           ),
                         )

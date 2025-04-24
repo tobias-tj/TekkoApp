@@ -1,6 +1,7 @@
 import 'package:tekko/features/api/data/datasources/kids_remote_datasource.dart';
 import 'package:tekko/features/api/data/models/activity_kid_dto.dart';
 import 'package:tekko/features/api/data/models/experience_dto.dart';
+import 'package:tekko/features/api/data/models/update_task_status_dto.dart';
 import 'package:tekko/features/api/domain/repositories/kids_repository.dart';
 
 class KidsRepositoryImpl implements KidsRepository {
@@ -31,6 +32,15 @@ class KidsRepositoryImpl implements KidsRepository {
   Future<void> updateActivity(int activityId) async {
     try {
       return await remoteDataSource.updateActivity(activityId);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> updateTask(UpdateTaskStatusDto updateTask) async {
+    try {
+      return await remoteDataSource.updateTaskStatus(updateTask);
     } catch (e) {
       rethrow;
     }

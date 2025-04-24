@@ -25,6 +25,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
     _selectedDate = DateTime.now();
     _getActivityData();
   }
+// TODO: falta subscribirte al evento cuando se crea una nueva actividad
 
   Future<void> _getActivityData() async {
     try {

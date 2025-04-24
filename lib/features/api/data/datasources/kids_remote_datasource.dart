@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:tekko/features/api/data/models/activity_kid_dto.dart';
 import 'package:tekko/features/api/data/models/experience_dto.dart';
+import 'package:tekko/features/api/data/models/update_task_status_dto.dart';
 import 'package:tekko/features/core/constants/api_constants.dart';
 
 class KidsRemoteDatasource {
@@ -83,6 +84,24 @@ class KidsRemoteDatasource {
         } else {
           throw Exception('Respuesta inesperada del servidor');
         }
+      } else {
+        throw Exception('Error al actualizar la actividad');
+      }
+    } on DioException catch (e) {
+      throw Exception(
+        e.response?.data['message'] ??
+            'Error de red al actualizar la actividad',
+      );
+    }
+  }
+
+  Future<void> updateTaskStatus(UpdateTaskStatusDto updateTask) async {
+    try {
+      final response = await dio.put(ApiConstants.updateTaskStatus,
+          data: updateTask.toJson());
+
+      if (response.statusCode == 200) {
+        return;
       } else {
         throw Exception('Error al actualizar la actividad');
       }

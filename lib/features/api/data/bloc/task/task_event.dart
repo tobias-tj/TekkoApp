@@ -24,3 +24,12 @@ class TaskGetRequested extends TaskEvent {
   @override
   List<Object> get props => [childrenId];
 }
+
+class TaskUpdateRequested extends TaskEvent {
+  final UpdateTaskStatusDto updateTaskStatusDto;
+
+  const TaskUpdateRequested({required this.updateTaskStatusDto});
+
+  @override
+  List<Object> get props => [updateTaskStatusDto];
+}

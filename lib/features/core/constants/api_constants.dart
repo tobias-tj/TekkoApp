@@ -14,4 +14,5 @@ class ApiConstants {
   static const String stripePaymentIntent = '/donation';
   static const String createTasksEndpoint = '/createTask';
   static const String getTaskByKid = '/getTaskByKid';
+  static const String updateTaskStatus = '/updateStatusTask';
 }
