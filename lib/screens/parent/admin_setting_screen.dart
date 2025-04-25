@@ -162,7 +162,7 @@ class _AdminSettingScreenState extends State<AdminSettingScreen> {
                                                     style: const TextStyle(
                                                       color: AppColors
                                                           .chocolateNewDark,
-                                                      fontSize: 18,
+                                                      fontSize: 15,
                                                       fontWeight:
                                                           FontWeight.bold,
                                                     ),

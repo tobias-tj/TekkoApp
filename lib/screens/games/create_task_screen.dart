@@ -128,7 +128,7 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
     return ElasticIn(
       delay: Duration(milliseconds: delay),
       child: Container(
-        width: 100,
+        width: 80,
         height: 80,
         decoration: BoxDecoration(
           color: Colors.white,
@@ -431,7 +431,7 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
       child: GestureDetector(
         onTap: () => _onOperationChanged(operation),
         child: Container(
-          padding: const EdgeInsets.all(15),
+          padding: const EdgeInsets.all(5),
           decoration: BoxDecoration(
             color: isSelected ? Colors.orange : Colors.white,
             borderRadius: BorderRadius.circular(15),
