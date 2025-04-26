@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:go_router/go_router.dart';
+import 'package:tekko/features/core/utils/storage_utils.dart';
 import 'package:tekko/styles/app_colors.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -23,9 +24,18 @@ class _SplashScreenState extends State<SplashScreen> {
       } else if (widget.mode == 'homeUser') {
         context.pushReplacement('/home');
       } else {
-        context.pushReplacement('/welcome');
+        _checkSession();
       }
     });
+  }
+
+  Future<void> _checkSession() async {
+    final token = await StorageUtils.getString('token');
+    if (token != null && token.isNotEmpty) {
+      context.pushReplacement('/home');
+    } else {
+      context.pushReplacement('/welcome');
+    }
   }
 
   @override
