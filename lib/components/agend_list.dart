@@ -40,13 +40,13 @@ class _AgendListState extends State<AgendList> {
 
   Future<void> _getActivityData(DateTime selectedDate) async {
     try {
-      final kidId = await StorageUtils.getInt('childrenId') ?? 0;
+      final token = await StorageUtils.getString('token');
       final dateFilter =
           DateFormat('yyyy-MM-dd').format(selectedDate).toString();
 
       context
           .read<ActivityBloc>()
-          .add(ActivityLoadKidRequested(dateFilter: dateFilter, kidId: kidId));
+          .add(ActivityLoadKidRequested(dateFilter: dateFilter, token: token!));
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error: ${e.toString()}')),
@@ -56,9 +56,11 @@ class _AgendListState extends State<AgendList> {
 
   Future<void> _updateActivityStatus(int activityId) async {
     try {
-      context
-          .read<ActivityBloc>()
-          .add(ActivityUpdateLoadRequested(activityId: activityId));
+      final token = await StorageUtils.getString('token');
+
+      context.read<ActivityBloc>().add(
+          ActivityUpdateLoadRequested(activityId: activityId, token: token!));
+      _getActivityData(widget.selectedDate!);
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error: ${e.toString()}')),

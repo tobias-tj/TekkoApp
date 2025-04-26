@@ -54,7 +54,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     emit(TaskLoading());
 
     try {
-      final result = await getTasksByKid(event.childrenId);
+      final result = await getTasksByKid(event.token);
       emit(TaskGetSuccess(tasks: result));
     } catch (e) {
       emit(TaskError(

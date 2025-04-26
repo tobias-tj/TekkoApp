@@ -29,10 +29,9 @@ class _ParentPinScreenState extends State<ParentPinScreen> {
 
     setState(() => _isLoading = true);
 
-    final parentId = await StorageUtils.getInt('parentId') ?? 0;
+    final token = await StorageUtils.getString('token');
 
-    final accessParent =
-        SecurityModel(pin: _pinController.text, parentId: parentId);
+    final accessParent = SecurityModel(pin: _pinController.text, token: token!);
     context
         .read<SecurityPinBloc>()
         .add(SecurityPinRequested(securityModel: accessParent));

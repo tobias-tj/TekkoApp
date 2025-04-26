@@ -9,10 +9,15 @@ class KidsRemoteDatasource {
 
   KidsRemoteDatasource({required this.dio});
 
-  Future<ExperienceDto> getExperienceData(int childrenId) async {
+  Future<ExperienceDto> getExperienceData(String token) async {
     try {
       final response = await dio.get(
-        '${ApiConstants.experienceEndpoint}/?childrenId=$childrenId',
+        ApiConstants.experienceEndpoint,
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $token',
+          },
+        ),
       );
 
       if (response.data['success'] == true) {
@@ -35,10 +40,15 @@ class KidsRemoteDatasource {
   }
 
   Future<List<ActivityKidDto>> getActivitiesByKid(
-      String dateFilter, int kidId) async {
+      String dateFilter, String token) async {
     try {
       final response = await dio.get(
-        '${ApiConstants.getActivityKidEndpoint}/?dateFilter=$dateFilter&kidId=$kidId',
+        '${ApiConstants.getActivityKidEndpoint}/?dateFilter=$dateFilter',
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $token',
+          },
+        ),
       );
 
       if (response.data['success'] == true) {
@@ -67,23 +77,22 @@ class KidsRemoteDatasource {
     }
   }
 
-  Future<void> updateActivity(int activityId) async {
+  Future<void> updateActivity(int activityId, String token) async {
     try {
       final response = await dio.put(
         ApiConstants.updateActivity,
         data: {
           'activityId': activityId,
         },
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $token',
+          },
+        ),
       );
 
       if (response.statusCode == 200 || response.statusCode == 204) {
-        final data = response.data;
-
-        if (data != null && data['data'] == 'Actividad actualizado con Exito') {
-          return;
-        } else {
-          throw Exception('Respuesta inesperada del servidor');
-        }
+        return;
       } else {
         throw Exception('Error al actualizar la actividad');
       }
@@ -97,8 +106,15 @@ class KidsRemoteDatasource {
 
   Future<void> updateTaskStatus(UpdateTaskStatusDto updateTask) async {
     try {
-      final response = await dio.put(ApiConstants.updateTaskStatus,
-          data: updateTask.toJson());
+      final response = await dio.put(
+        ApiConstants.updateTaskStatus,
+        data: updateTask.toJson(),
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer ${updateTask.token}',
+          },
+        ),
+      );
 
       if (response.statusCode == 200) {
         return;

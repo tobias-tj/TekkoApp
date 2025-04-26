@@ -75,8 +75,7 @@ class _RegisterAccountState extends State<RegisterAccount> {
     return BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state is AuthSuccess) {
-            StorageUtils.setInt('parentId', state.parentId ?? 0);
-            StorageUtils.setInt('childrenId', state.childrenId ?? 0);
+            StorageUtils.setString('token', state.token);
 
             // await showSuccessAnimation();
 

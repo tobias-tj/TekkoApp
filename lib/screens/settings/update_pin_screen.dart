@@ -75,12 +75,12 @@ class _UpdatePinScreenState extends State<UpdatePinScreen> {
       return;
     }
 
-    final parentId = await StorageUtils.getInt('parentId');
+    final token = await StorageUtils.getString('token');
 
     setState(() => _isLoading = true);
 
     context.read<SettingBloc>().add(SettingUpdatePinTokenRequested(
-          parentId: parentId!,
+          token: token!,
           pinToken: _confirmPinController.text,
           oldToken: _currentPinController.text,
         ));

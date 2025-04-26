@@ -30,11 +30,9 @@ class _SettingScreenState extends State<SettingScreen> {
 
   Future<void> _getSettingData() async {
     try {
-      final parentId = await StorageUtils.getInt('parentId') ?? 0;
-      final childrenId = await StorageUtils.getInt('childrenId') ?? 0;
+      final token = await StorageUtils.getString('token');
 
-      context.read<SettingBloc>().add(
-          SettingProfileRequested(parentId: parentId, childrenId: childrenId));
+      context.read<SettingBloc>().add(SettingProfileRequested(token: token!));
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error: ${e.toString()}')),

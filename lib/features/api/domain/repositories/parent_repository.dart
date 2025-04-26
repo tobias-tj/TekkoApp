@@ -7,7 +7,7 @@ abstract class ParentRepository {
   Future<Map<String, dynamic>> createActivity(
       FormActivityModel formActivityModel);
   Future<List<FilterActivityDto>> getActivities(
-      String dateFilter, int parentId, String? statusFilter);
+      String dateFilter, String token, String? statusFilter);
   Future<Map<String, dynamic>> createTask(CreateTaskModel createTaskModel);
-  Future<GetTaskDto> getTasks(int childrenId);
+  Future<GetTaskDto> getTasks(String token);
 }

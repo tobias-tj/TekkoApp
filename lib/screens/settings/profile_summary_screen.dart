@@ -81,10 +81,10 @@ class _ProfileSummaryScreenState extends State<ProfileSummaryScreen> {
       }
 
       setState(() => _isLoading = true);
+      final token = await StorageUtils.getString('token');
 
       final updateProfileData = UpdateProfileDto(
-        parentId: parentId,
-        childrenId: childrenId,
+        token: token!,
         nameParent: _parentNameController.text,
         nameChildren: _childrenNameController.text,
         age: age,

@@ -21,7 +21,7 @@ class ExperienceBloc extends Bloc<ExperienceEvent, ExperienceState> {
     emit(ExperienceLoading());
 
     try {
-      final experience = await getExperience.execute(event.childrenId);
+      final experience = await getExperience.execute(event.token);
       emit(ExperienceLoaded(experience));
     } catch (e) {
       emit(ExperienceError(e.toString()));

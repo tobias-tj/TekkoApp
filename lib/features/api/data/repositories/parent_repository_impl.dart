@@ -18,9 +18,9 @@ class ParentRepositoryImpl implements ParentRepository {
 
   @override
   Future<List<FilterActivityDto>> getActivities(
-      String dateFilter, int parentId, String? statusFilter) async {
+      String dateFilter, String token, String? statusFilter) async {
     return await remoteDataSource.getActivities(
-        dateFilter, parentId, statusFilter);
+        dateFilter, token, statusFilter);
   }
 
   @override
@@ -30,7 +30,7 @@ class ParentRepositoryImpl implements ParentRepository {
   }
 
   @override
-  Future<GetTaskDto> getTasks(int childrenId) async {
-    return await remoteDataSource.getTasks(childrenId);
+  Future<GetTaskDto> getTasks(String token) async {
+    return await remoteDataSource.getTasks(token);
   }
 }

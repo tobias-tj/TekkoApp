@@ -8,10 +8,10 @@ abstract class ExperienceEvent extends Equatable {
 }
 
 class FetchExperienceEvent extends ExperienceEvent {
-  final int childrenId;
+  final String token;
 
-  const FetchExperienceEvent(this.childrenId);
+  const FetchExperienceEvent(this.token);
 
   @override
-  List<Object> get props => [childrenId];
+  List<Object> get props => [token];
 }

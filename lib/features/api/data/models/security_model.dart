@@ -1,8 +1,8 @@
 class SecurityModel {
   final String pin;
-  final int parentId;
+  final String token;
 
-  SecurityModel({required this.pin, required this.parentId});
+  SecurityModel({required this.pin, required this.token});
 
-  Map<String, dynamic> toJson() => {'pinSecurity': pin, 'parentId': parentId};
+  Map<String, dynamic> toJson() => {'pinSecurity': pin};
 }

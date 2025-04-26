@@ -7,7 +7,7 @@ class GetActivitiesUseCases {
   GetActivitiesUseCases({required this.repository});
 
   Future<List<FilterActivityDto>> call(
-      String dateFilter, int parentId, String? statusFilter) async {
-    return await repository.getActivities(dateFilter, parentId, statusFilter);
+      String dateFilter, String token, String? statusFilter) async {
+    return await repository.getActivities(dateFilter, token, statusFilter);
   }
 }

@@ -68,7 +68,7 @@ class ActivityBloc extends Bloc<ActivityEvent, ActivityState> {
 
     try {
       final activities = await getActivities(
-          event.dateFilter, event.parentId, event.statusFilter);
+          event.dateFilter, event.token, event.statusFilter);
       emit(ActivitiesLoadSuccess(activities: activities));
     } catch (e) {
       emit(ActivityError(
@@ -87,7 +87,7 @@ class ActivityBloc extends Bloc<ActivityEvent, ActivityState> {
 
     try {
       final activities =
-          await getActivitiesByKid(event.dateFilter, event.kidId);
+          await getActivitiesByKid(event.dateFilter, event.token);
       emit(ActivitiesKidLoadSuccess(activities: activities));
     } catch (e) {
       emit(ActivityError(
@@ -104,7 +104,7 @@ class ActivityBloc extends Bloc<ActivityEvent, ActivityState> {
     emit(ActivityLoading());
 
     try {
-      await updateActivity(event.activityId);
+      await updateActivity(event.activityId, event.token);
       emit(ActivityUpdateSuccess(message: 'Actividad actualizada con éxito'));
     } catch (e) {
       emit(ActivityError(

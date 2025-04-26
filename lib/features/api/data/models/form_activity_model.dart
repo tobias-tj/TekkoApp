@@ -1,18 +1,14 @@
 class FormActivityModel {
   final Detail detail;
-  final int childrenId;
-  final int parentId;
+  final String token;
 
   FormActivityModel({
     required this.detail,
-    required this.childrenId,
-    required this.parentId,
+    required this.token,
   });
 
   Map<String, dynamic> toJson() => {
         'detail': detail.toJson(),
-        'children_id': childrenId,
-        'parent_id': parentId,
       };
 }
 

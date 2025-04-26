@@ -82,19 +82,6 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
       return;
     }
 
-    final childrenId = await StorageUtils.getInt('childrenId') ?? 0;
-    final parentId = await StorageUtils.getInt('parentId') ?? 0;
-
-    if (childrenId == 0 || parentId == 0) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('⚠️ No se pudo identificar el usuario'),
-          backgroundColor: Colors.orange,
-        ),
-      );
-      return;
-    }
-
     // Mostrar mensaje
     final scaffoldMessenger = ScaffoldMessenger.of(context);
 
@@ -103,9 +90,10 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
     });
 
     try {
+      final token = await StorageUtils.getString('token');
+
       final formModel = CreateTaskModel(
-        childrenId: childrenId,
-        parentId: parentId,
+        token: token!,
         number1: number1,
         number2: number2,
         operation: _selectedOperation,

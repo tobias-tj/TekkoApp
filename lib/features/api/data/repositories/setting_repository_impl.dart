@@ -9,9 +9,8 @@ class SettingRepositoryImpl implements SettingRepository {
   SettingRepositoryImpl({required this.remoteDataSource});
 
   @override
-  Future<DetailsProfileDto> getProfileDetails(
-      int parentId, int childrenId) async {
-    return await remoteDataSource.getProfileDetails(parentId, childrenId);
+  Future<DetailsProfileDto> getProfileDetails(String token) async {
+    return await remoteDataSource.getProfileDetails(token);
   }
 
   @override
@@ -20,7 +19,7 @@ class SettingRepositoryImpl implements SettingRepository {
   }
 
   @override
-  Future<void> updatePin(int parentId, String pinToken, String oldToken) async {
-    return await remoteDataSource.updatePinToken(parentId, pinToken, oldToken);
+  Future<void> updatePin(String token, String pinToken, String oldToken) async {
+    return await remoteDataSource.updatePinToken(token, pinToken, oldToken);
   }
 }

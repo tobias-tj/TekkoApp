@@ -6,7 +6,7 @@ class GetTaskByKidUseCases {
 
   GetTaskByKidUseCases({required this.repository});
 
-  Future<GetTaskDto> call(int childrenId) async {
-    return await repository.getTasks(childrenId);
+  Future<GetTaskDto> call(String token) async {
+    return await repository.getTasks(token);
   }
 }

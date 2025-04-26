@@ -8,12 +8,20 @@ class DonationRemoteDatasource {
   DonationRemoteDatasource({required this.dio});
 
   Future<String> createPaymentIntent(Donation donation) async {
-    final response = await dio.post(ApiConstants.stripePaymentIntent, data: {
-      'amount': donation.amount,
-      'currency': donation.currency,
-      'fullName': donation.fullName,
-      'email': donation.email
-    });
+    final response = await dio.post(
+      ApiConstants.stripePaymentIntent,
+      data: {
+        'amount': donation.amount,
+        'currency': donation.currency,
+        'fullName': donation.fullName,
+        'email': donation.email
+      },
+      options: Options(
+        headers: {
+          'Authorization': 'Bearer ${donation.token}',
+        },
+      ),
+    );
 
     return response.data['clientSecret'];
   }

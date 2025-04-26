@@ -5,6 +5,7 @@ import 'package:lottie/lottie.dart';
 import 'package:tekko/features/api/data/bloc/task/task_bloc.dart';
 import 'package:tekko/features/api/data/models/get_task_dto.dart';
 import 'package:tekko/features/api/data/models/update_task_status_dto.dart';
+import 'package:tekko/features/core/utils/storage_utils.dart';
 import 'package:tekko/styles/app_colors.dart';
 import 'package:tekko/utils/get_operation_symbol.dart';
 
@@ -55,8 +56,10 @@ class _AnswerTaskScreenState extends State<AnswerTaskScreen> {
       _isSaving = true;
     });
     try {
-      final updateTaskModel =
-          UpdateTaskStatusDto(childAnswer: childAnswer, taskId: taskId);
+      final token = await StorageUtils.getString('token');
+
+      final updateTaskModel = UpdateTaskStatusDto(
+          token: token!, childAnswer: childAnswer, taskId: taskId);
 
       context
           .read<TaskBloc>()

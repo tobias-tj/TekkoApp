@@ -26,8 +26,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     try {
       final response = await registerUseCase(event.authModel);
       emit(AuthSuccess(
-        parentId: response['parentId'],
-        childrenId: response['childrenId'],
+        token: response['token'],
       ));
     } catch (e) {
       emit(AuthFailure(error: e.toString()));
@@ -42,8 +41,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     try {
       final response = await loginUsecase(event.loginModel);
       emit(AuthSuccess(
-        parentId: response['parentId'],
-        childrenId: response['childrenId'],
+        token: response['token'],
       ));
     } catch (e) {
       emit(AuthFailure(error: e.toString()));

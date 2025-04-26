@@ -38,8 +38,9 @@ class _ManageTaskScreenState extends State<ManageTaskScreen> {
 
   Future<void> _getTaskData() async {
     try {
-      final childrenId = await StorageUtils.getInt('childrenId') ?? 0;
-      context.read<TaskBloc>().add(TaskGetRequested(childrenId: childrenId));
+      final token = await StorageUtils.getString('token');
+
+      context.read<TaskBloc>().add(TaskGetRequested(token: token!));
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('No se ha logrado obtener tareas')),

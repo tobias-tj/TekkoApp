@@ -20,4 +20,9 @@ class StorageUtils {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setInt(key, value);
   }
+
+  static Future<void> setString(String key, String value) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(key, value);
+  }
 }

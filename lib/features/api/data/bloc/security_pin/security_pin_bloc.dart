@@ -29,7 +29,6 @@ class SecurityPinBloc extends Bloc<SecurityPinEvent, SecurityPinState> {
 
       if (result['success'] == true) {
         emit(SecurityPinSuccess(
-          parentId: result['parentId'] as int,
           fullName: result['fullName'] as String,
         ));
       } else {

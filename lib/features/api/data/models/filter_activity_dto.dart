@@ -6,8 +6,6 @@ class FilterActivityDto {
   final String descriptionActivity;
   final int experienceActivity;
   final int activityId;
-  final int childrenId;
-  final int parentId;
   final String status;
 
   FilterActivityDto(
@@ -18,8 +16,6 @@ class FilterActivityDto {
       required this.descriptionActivity,
       required this.experienceActivity,
       required this.activityId,
-      required this.childrenId,
-      required this.parentId,
       required this.status});
 
   Map<String, dynamic> toJson() => {
@@ -30,8 +26,6 @@ class FilterActivityDto {
         'description_activity': descriptionActivity,
         'experience_activity': experienceActivity,
         'activity_id': activityId,
-        'children_id': childrenId,
-        'parent_id': parentId,
         'status': status
       };
 }

@@ -6,7 +6,7 @@ class GetExperience {
 
   GetExperience(this.repository);
 
-  Future<ExperienceDto> execute(int childrenId) async {
-    return await repository.getExperienceData(childrenId);
+  Future<ExperienceDto> execute(String token) async {
+    return await repository.getExperienceData(token);
   }
 }

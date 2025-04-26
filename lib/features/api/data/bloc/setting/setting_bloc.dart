@@ -31,10 +31,7 @@ class SettingBloc extends Bloc<SettingEvent, SettingState> {
     emit(SettingLoading());
 
     try {
-      final profile = await getProfileDetails(
-        event.parentId,
-        event.childrenId,
-      );
+      final profile = await getProfileDetails(event.token);
 
       emit(SettingProfileSuccess(detailsProfileDto: profile));
     } catch (e) {
@@ -73,7 +70,7 @@ class SettingBloc extends Bloc<SettingEvent, SettingState> {
     emit(SettingLoading());
 
     try {
-      await updatePinDetails(event.parentId, event.pinToken, event.oldToken);
+      await updatePinDetails(event.token, event.pinToken, event.oldToken);
       emit(SettingUpdatePinTokenSuccess(
           message: 'PIN actualizado correctamente'));
     } catch (e) {

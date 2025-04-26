@@ -12,13 +12,12 @@ class AuthInitial extends AuthState {}
 class AuthLoading extends AuthState {}
 
 class AuthSuccess extends AuthState {
-  final int? parentId;
-  final int? childrenId;
+  final String token;
 
-  const AuthSuccess({this.parentId, this.childrenId});
+  const AuthSuccess({required this.token});
 
   @override
-  List<Object> get props => [parentId ?? 0, childrenId ?? 0];
+  List<Object> get props => [token];
 }
 
 class AuthFailure extends AuthState {

@@ -15,6 +15,11 @@ class ParentRemoteDatasource {
       final response = await dio.post(
         ApiConstants.createActivityEndpoint,
         data: model.toJson(),
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer ${model.token}',
+          },
+        ),
       );
 
       return {
@@ -29,11 +34,17 @@ class ParentRemoteDatasource {
   }
 
   Future<List<FilterActivityDto>> getActivities(
-      String dateFilter, int parentId, String? statusFilter) async {
+      String dateFilter, String token, String? statusFilter) async {
     try {
-      final response = await dio.get(statusFilter != null
-          ? '${ApiConstants.getActivityEndpoint}/?dateFilter=$dateFilter&parentId=$parentId&statusFilter=$statusFilter'
-          : '${ApiConstants.getActivityEndpoint}/?dateFilter=$dateFilter&parentId=$parentId');
+      final response = await dio.get(
+          statusFilter != null
+              ? ('${ApiConstants.getActivityEndpoint}/?dateFilter=$dateFilter&statusFilter=$statusFilter')
+              : ('${ApiConstants.getActivityEndpoint}/?dateFilter=$dateFilter'),
+          options: Options(
+            headers: {
+              'Authorization': 'Bearer $token',
+            },
+          ));
 
       if (response.data['success'] == true) {
         final List<dynamic> dataList = response.data['data'];
@@ -48,8 +59,6 @@ class ParentRemoteDatasource {
                   descriptionActivity: data['description_activity'] as String,
                   experienceActivity: data['experience_activity'] as int,
                   activityId: data['activity_id'] as int,
-                  childrenId: data['children_id'] as int,
-                  parentId: data['parent_id'] as int,
                   status: data['status'] as String,
                 ))
             .toList();
@@ -68,6 +77,11 @@ class ParentRemoteDatasource {
       final response = await dio.post(
         ApiConstants.createTasksEndpoint,
         data: createTaskModel.toJson(),
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer ${createTaskModel.token}',
+          },
+        ),
       );
 
       return {
@@ -80,10 +94,16 @@ class ParentRemoteDatasource {
     }
   }
 
-  Future<GetTaskDto> getTasks(int childrenId) async {
+  Future<GetTaskDto> getTasks(String token) async {
     try {
-      final response =
-          await dio.get('${ApiConstants.getTaskByKid}?childId=$childrenId');
+      final response = await dio.get(
+        ApiConstants.getTaskByKid,
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $token',
+          },
+        ),
+      );
       if (response.data['success'] == true) {
         final data = response.data['data'];
 

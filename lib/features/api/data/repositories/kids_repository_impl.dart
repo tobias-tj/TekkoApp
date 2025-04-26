@@ -10,9 +10,9 @@ class KidsRepositoryImpl implements KidsRepository {
   KidsRepositoryImpl({required this.remoteDataSource});
 
   @override
-  Future<ExperienceDto> getExperienceData(int childrenId) async {
+  Future<ExperienceDto> getExperienceData(String token) async {
     try {
-      return await remoteDataSource.getExperienceData(childrenId);
+      return await remoteDataSource.getExperienceData(token);
     } catch (e) {
       rethrow;
     }
@@ -20,18 +20,18 @@ class KidsRepositoryImpl implements KidsRepository {
 
   @override
   Future<List<ActivityKidDto>> getActivitiesByKid(
-      String dateFilter, int kidId) async {
+      String dateFilter, String token) async {
     try {
-      return await remoteDataSource.getActivitiesByKid(dateFilter, kidId);
+      return await remoteDataSource.getActivitiesByKid(dateFilter, token);
     } catch (e) {
       rethrow;
     }
   }
 
   @override
-  Future<void> updateActivity(int activityId) async {
+  Future<void> updateActivity(int activityId, String token) async {
     try {
-      return await remoteDataSource.updateActivity(activityId);
+      return await remoteDataSource.updateActivity(activityId, token);
     } catch (e) {
       rethrow;
     }

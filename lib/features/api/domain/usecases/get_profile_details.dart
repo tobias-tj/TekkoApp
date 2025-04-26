@@ -6,7 +6,7 @@ class GetProfileDetailsUseCases {
 
   GetProfileDetailsUseCases({required this.repository});
 
-  Future<DetailsProfileDto> call(int parentId, int kidId) async {
-    return await repository.getProfileDetails(parentId, kidId);
+  Future<DetailsProfileDto> call(String token) async {
+    return await repository.getProfileDetails(token);
   }
 }

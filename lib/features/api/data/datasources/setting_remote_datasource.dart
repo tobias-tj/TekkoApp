@@ -8,11 +8,15 @@ class SettingRemoteDatasource {
 
   SettingRemoteDatasource({required this.dio});
 
-  Future<DetailsProfileDto> getProfileDetails(
-      int parentId, int childrenId) async {
+  Future<DetailsProfileDto> getProfileDetails(String token) async {
     try {
       final response = await dio.get(
-        '${ApiConstants.getProfileDetails}/?children_id=$childrenId&parent_id=$parentId',
+        ApiConstants.getProfileDetails,
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $token',
+          },
+        ),
       );
 
       if (response.data['success'] == true) {
@@ -43,8 +47,15 @@ class SettingRemoteDatasource {
 
   Future<void> updateProfile(UpdateProfileDto updatedProfile) async {
     try {
-      final response = await dio.put(ApiConstants.updateProfileDetails,
-          data: updatedProfile.toJson());
+      final response = await dio.put(
+        ApiConstants.updateProfileDetails,
+        data: updatedProfile.toJson(),
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer ${updatedProfile.token}',
+          },
+        ),
+      );
 
       if (response.data['success'] == true) {
         return;
@@ -59,13 +70,20 @@ class SettingRemoteDatasource {
   }
 
   Future<void> updatePinToken(
-      int parentId, String pinToken, String oldToken) async {
+      String token, String pinToken, String oldToken) async {
     try {
-      final response = await dio.put(ApiConstants.updatePinToken, data: {
-        'parentId': parentId,
-        'pinToken': pinToken,
-        'oldToken': oldToken,
-      });
+      final response = await dio.put(
+        ApiConstants.updatePinToken,
+        data: {
+          'pinToken': pinToken,
+          'oldToken': oldToken,
+        },
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $token',
+          },
+        ),
+      );
 
       if (response.data['success'] == true) {
         return;

@@ -5,7 +5,7 @@ class UpdateActivityUseCases {
 
   UpdateActivityUseCases({required this.repository});
 
-  Future<void> call(int activityId) async {
-    await repository.updateActivity(activityId);
+  Future<void> call(int activityId, String token) async {
+    await repository.updateActivity(activityId, token);
   }
 }

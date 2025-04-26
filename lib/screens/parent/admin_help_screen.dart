@@ -11,6 +11,7 @@ import 'package:tekko/features/api/data/bloc/donation/donation_event.dart';
 import 'package:tekko/features/api/data/bloc/donation/donation_state.dart';
 import 'package:tekko/features/api/data/bloc/setting/setting_bloc.dart';
 import 'package:tekko/features/api/data/models/donation.dart';
+import 'package:tekko/features/core/utils/storage_utils.dart';
 import 'package:tekko/styles/app_colors.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/material.dart' as material;
@@ -46,8 +47,10 @@ class _AdminHelpScreenState extends State<AdminHelpScreen> {
   }
 
   Future<void> _processDonation(int amount) async {
+    final token = await StorageUtils.getString('token');
     context.read<DonationBloc>().add(
           StartDonationEvent(Donation(
+              token: token!,
               amount: amount,
               fullName: userName ?? 'Nombre Vacio',
               email: userEmail!)),

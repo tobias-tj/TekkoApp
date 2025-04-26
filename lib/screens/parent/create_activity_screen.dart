@@ -47,8 +47,8 @@ class _CreateActivityScreenState extends State<CreateActivityScreen> {
   }
 
   void _submitForm() async {
-    final childrenId = await StorageUtils.getInt('childrenId') ?? 0;
-    final parentId = await StorageUtils.getInt('parentId') ?? 0;
+    final token = await StorageUtils.getString('token');
+
     if (_formKey.currentState!.validate() &&
         _startTime != null &&
         _endTime != null) {
@@ -60,11 +60,7 @@ class _CreateActivityScreenState extends State<CreateActivityScreen> {
         experienceActivity: _selectedExperience ?? 0,
       );
 
-      final formModel = FormActivityModel(
-        detail: detail,
-        childrenId: childrenId,
-        parentId: parentId,
-      );
+      final formModel = FormActivityModel(detail: detail, token: token!);
 
       context
           .read<ActivityBloc>()

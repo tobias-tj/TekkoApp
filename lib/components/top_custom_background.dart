@@ -40,10 +40,9 @@ class _TopCustomBackgroundState extends State<TopCustomBackground> {
 
   Future<void> _getExperienceData() async {
     try {
-      final childrenId = await StorageUtils.getInt('childrenId') ?? 0;
-      if (childrenId > 0) {
-        context.read<ExperienceBloc>().add(FetchExperienceEvent(childrenId));
-      }
+      final token = await StorageUtils.getString('token');
+
+      context.read<ExperienceBloc>().add(FetchExperienceEvent(token!));
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error: ${e.toString()}')),

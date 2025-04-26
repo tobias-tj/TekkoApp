@@ -5,7 +5,7 @@ class UpdatePinUseCases {
 
   UpdatePinUseCases({required this.repository});
 
-  Future<void> call(int parentId, String pinToken, String oldToken) async {
-    await repository.updatePin(parentId, pinToken, oldToken);
+  Future<void> call(String token, String pinToken, String oldToken) async {
+    await repository.updatePin(token, pinToken, oldToken);
   }
 }

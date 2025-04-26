@@ -18,31 +18,33 @@ class ActivityRequested extends ActivityEvent {
 
 class ActivitiesLoadRequested extends ActivityEvent {
   final String dateFilter;
-  final int parentId;
+  final String token;
   final String? statusFilter;
 
   const ActivitiesLoadRequested(
-      {required this.dateFilter, required this.parentId, this.statusFilter});
+      {required this.dateFilter, required this.token, this.statusFilter});
 
   @override
-  List<Object> get props => [dateFilter, parentId];
+  List<Object> get props => [dateFilter, token];
 }
 
 class ActivityLoadKidRequested extends ActivityEvent {
   final String dateFilter;
-  final int kidId;
+  final String token;
 
   const ActivityLoadKidRequested(
-      {required this.dateFilter, required this.kidId});
+      {required this.dateFilter, required this.token});
 
   @override
-  List<Object> get props => [dateFilter, kidId];
+  List<Object> get props => [dateFilter, token];
 }
 
 class ActivityUpdateLoadRequested extends ActivityEvent {
   final int activityId;
+  final String token;
 
-  const ActivityUpdateLoadRequested({required this.activityId});
+  const ActivityUpdateLoadRequested(
+      {required this.activityId, required this.token});
 
   @override
   List<Object> get props => ([activityId]);

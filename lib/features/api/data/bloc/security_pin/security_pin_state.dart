@@ -12,13 +12,12 @@ class SecurityPinInitial extends SecurityPinState {}
 class SecurityPinLoading extends SecurityPinState {}
 
 class SecurityPinSuccess extends SecurityPinState {
-  final int parentId;
   final String fullName;
 
-  const SecurityPinSuccess({required this.parentId, required this.fullName});
+  const SecurityPinSuccess({required this.fullName});
 
   @override
-  List<Object> get props => [parentId, fullName];
+  List<Object> get props => [fullName];
 }
 
 class SecurityPinError extends SecurityPinState {

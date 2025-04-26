@@ -29,13 +29,13 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
 
   Future<void> _getActivityData() async {
     try {
-      final parentId = await StorageUtils.getInt('parentId') ?? 0;
+      final token = await StorageUtils.getString('token');
       final dateFilter = DateFormat('yyyy-MM-dd').format(_selectedDate!);
 
       context.read<ActivityBloc>().add(
             ActivitiesLoadRequested(
               dateFilter: dateFilter,
-              parentId: parentId,
+              token: token!,
               statusFilter: _filter == 'All' ? null : _filter,
             ),
           );

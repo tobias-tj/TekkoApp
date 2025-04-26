@@ -17,12 +17,12 @@ class TaskRequested extends TaskEvent {
 }
 
 class TaskGetRequested extends TaskEvent {
-  final int childrenId;
+  final String token;
 
-  const TaskGetRequested({required this.childrenId});
+  const TaskGetRequested({required this.token});
 
   @override
-  List<Object> get props => [childrenId];
+  List<Object> get props => [token];
 }
 
 class TaskUpdateRequested extends TaskEvent {

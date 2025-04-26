@@ -6,7 +6,7 @@ class GetActivitiesByKidUseCases {
 
   GetActivitiesByKidUseCases({required this.repository});
 
-  Future<List<ActivityKidDto>> call(String dateFilter, int kidId) async {
-    return await repository.getActivitiesByKid(dateFilter, kidId);
+  Future<List<ActivityKidDto>> call(String dateFilter, String token) async {
+    return await repository.getActivitiesByKid(dateFilter, token);
   }
 }

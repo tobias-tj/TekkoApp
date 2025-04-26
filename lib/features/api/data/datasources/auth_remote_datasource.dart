@@ -16,8 +16,7 @@ class AuthRemoteDataSource {
         data: authModel.toJson(),
       );
       return {
-        'parentId': response.data['data']['parentId'],
-        'childrenId': response.data['data']['childrenId'],
+        'token': response.data['data']['token'],
       };
     } on DioException catch (e) {
       throw Exception(e.response?.data['message'] ?? 'Error en el registro');
@@ -31,8 +30,7 @@ class AuthRemoteDataSource {
         data: loginModel.toJson(),
       );
       return {
-        'parentId': response.data['data']['parentId'],
-        'childrenId': response.data['data']['childrenId'],
+        'token': response.data['data']['token'],
       };
     } on DioException catch (e) {
       throw Exception(e.response?.data['message'] ?? 'Error en el login');
@@ -45,17 +43,15 @@ class AuthRemoteDataSource {
       final response = await dio.post(
         ApiConstants.pinEndpoint,
         data: securityModel.toJson(),
-        options: Options(responseType: ResponseType.json),
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer ${securityModel.token}',
+          },
+        ),
       );
-
-      // Verifica que la respuesta sea un Map
-      if (response.data is! Map<String, dynamic>) {
-        throw Exception('Invalid response format: ${response.data}');
-      }
 
       return {
         'success': response.data['success'],
-        'parentId': response.data['parentInfo']['parentId'],
         'fullName': response.data['parentInfo']['fullName']
       };
     } on DioException catch (e) {
