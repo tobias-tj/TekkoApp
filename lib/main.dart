@@ -7,6 +7,7 @@ import 'package:tekko/app_routes.dart';
 import 'package:tekko/features/api/data/bloc/activity/activity_bloc.dart';
 import 'package:tekko/features/api/data/bloc/donation/donation_bloc.dart';
 import 'package:tekko/features/api/data/bloc/experience/experience_bloc.dart';
+import 'package:tekko/features/api/data/bloc/maps/map_bloc.dart';
 import 'package:tekko/features/api/data/bloc/security_pin/security_pin_bloc.dart';
 import 'package:tekko/features/api/data/bloc/setting/setting_bloc.dart';
 import 'package:tekko/features/api/data/bloc/task/task_bloc.dart';
@@ -14,14 +15,17 @@ import 'package:tekko/features/api/data/datasources/auth_remote_datasource.dart'
 import 'package:tekko/features/api/data/bloc/auth_bloc.dart';
 import 'package:tekko/features/api/data/datasources/donation_remote_datasource.dart';
 import 'package:tekko/features/api/data/datasources/kids_remote_datasource.dart';
+import 'package:tekko/features/api/data/datasources/maps_remote_datasource.dart';
 import 'package:tekko/features/api/data/datasources/parent_remote_datasource.dart';
 import 'package:tekko/features/api/data/datasources/setting_remote_datasource.dart';
 import 'package:tekko/features/api/data/repositories/auth_repository_impl.dart';
 import 'package:tekko/features/api/data/repositories/donation_repository_impl.dart';
 import 'package:tekko/features/api/data/repositories/kids_repository_impl.dart';
+import 'package:tekko/features/api/data/repositories/map_repository_impl.dart';
 import 'package:tekko/features/api/data/repositories/parent_repository_impl.dart';
 import 'package:tekko/features/api/data/repositories/setting_repository_impl.dart';
 import 'package:tekko/features/api/domain/usecases/create_activity.dart';
+import 'package:tekko/features/api/domain/usecases/create_map_info.dart';
 import 'package:tekko/features/api/domain/usecases/create_payment.dart';
 import 'package:tekko/features/api/domain/usecases/create_task.dart';
 import 'package:tekko/features/api/domain/usecases/get_activities.dart';
@@ -78,6 +82,12 @@ final class MainApp extends StatelessWidget {
               ),
             ),
           ),
+          BlocProvider(
+              create: (context) => MapBloc(
+                  createMapInfo: CreateMapInfoUseCases(
+                      repository: MapRepositoryImpl(
+                          remoteDatasource: MapsRemoteDatasource(
+                              dio: context.read<DioClient>().dio))))),
           BlocProvider(
             create: (context) => ExperienceBloc(
               getExperience: GetExperience(
