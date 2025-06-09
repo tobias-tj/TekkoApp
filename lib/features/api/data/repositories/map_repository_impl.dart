@@ -1,5 +1,6 @@
 import 'package:tekko/features/api/data/datasources/maps_remote_datasource.dart';
 import 'package:tekko/features/api/data/models/create_list_map_dto.dart';
+import 'package:tekko/features/api/data/models/get_maps_dto.dart';
 import 'package:tekko/features/api/domain/repositories/map_repository.dart';
 
 class MapRepositoryImpl implements MapRepository {
@@ -11,6 +12,15 @@ class MapRepositoryImpl implements MapRepository {
   Future<void> createMapInfo(CreateListMapDto mapDetails) async {
     try {
       return await remoteDatasource.createMapsDetails(mapDetails);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<List<GetMapsDto>> getMapInfo(String token) async {
+    try {
+      return await remoteDatasource.getMapsDetails(token);
     } catch (e) {
       rethrow;
     }

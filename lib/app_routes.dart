@@ -13,6 +13,8 @@ import 'package:tekko/screens/games/manage_task_screen.dart';
 import 'package:tekko/screens/games/create_task_screen.dart';
 import 'package:tekko/screens/games/task_screen.dart';
 import 'package:tekko/screens/loading_screen.dart';
+import 'package:tekko/screens/maps/maps_screen.dart';
+import 'package:tekko/screens/maps/qr_maps_screen.dart';
 import 'package:tekko/screens/parent/create_activity_screen.dart';
 import 'package:tekko/screens/calendar/calendar_screen.dart';
 import 'package:tekko/screens/calendar/level_up_screen.dart';
@@ -64,6 +66,14 @@ final GoRouter appRouter = GoRouter(
         name: 'maps',
         path: '/maps',
         builder: (context, state) => const MapsAccountScreen()),
+    GoRoute(
+        name: 'qrMaps',
+        path: '/qrMaps',
+        builder: (context, state) {
+          final lat = (state.extra as Map<String, dynamic>)['lat'] as double;
+          final lng = (state.extra as Map<String, dynamic>)['lng'] as double;
+          return QrMapsScreen(latitude: lat, longitude: lng);
+        }),
     GoRoute(
         name: 'loading',
         path: '/loading',
@@ -222,6 +232,11 @@ final GoRouter appRouter = GoRouter(
             child: const CalendarScreen(),
           ),
         ),
+        GoRoute(
+            name: 'mapsInformation',
+            path: '/mapsInformation',
+            pageBuilder: (context, state) =>
+                NoTransitionPage(child: const MapsScreen())),
         GoRoute(
           name: 'favorites',
           path: '/favorites',

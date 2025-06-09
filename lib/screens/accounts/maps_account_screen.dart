@@ -79,6 +79,7 @@ class _MapsAccountScreenState extends State<MapsAccountScreen> {
         const SnackBar(
             content: Text('Debes registrar al menos la ubicación del Hogar')),
       );
+      return;
     }
 
     // print('Ubicaciones seleccionadas: $_selectedLocations');

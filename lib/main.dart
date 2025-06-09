@@ -31,6 +31,7 @@ import 'package:tekko/features/api/domain/usecases/create_task.dart';
 import 'package:tekko/features/api/domain/usecases/get_activities.dart';
 import 'package:tekko/features/api/domain/usecases/get_activities_by_kid.dart';
 import 'package:tekko/features/api/domain/usecases/get_experience.dart';
+import 'package:tekko/features/api/domain/usecases/get_map_info.dart';
 import 'package:tekko/features/api/domain/usecases/get_profile_details.dart';
 import 'package:tekko/features/api/domain/usecases/get_task_by_kid.dart';
 import 'package:tekko/features/api/domain/usecases/login_usecase.dart';
@@ -85,6 +86,11 @@ final class MainApp extends StatelessWidget {
           BlocProvider(
               create: (context) => MapBloc(
                   createMapInfo: CreateMapInfoUseCases(
+                    repository: MapRepositoryImpl(
+                        remoteDatasource: MapsRemoteDatasource(
+                            dio: context.read<DioClient>().dio)),
+                  ),
+                  getMapInfo: GetMapInfoUseCases(
                       repository: MapRepositoryImpl(
                           remoteDatasource: MapsRemoteDatasource(
                               dio: context.read<DioClient>().dio))))),

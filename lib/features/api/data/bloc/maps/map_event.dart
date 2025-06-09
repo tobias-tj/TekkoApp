@@ -15,3 +15,12 @@ class MapCreatedRequested extends MapEvent {
   @override
   List<Object> get props => [createMapDto];
 }
+
+class MapGetRequested extends MapEvent {
+  final String token;
+
+  const MapGetRequested({required this.token});
+
+  @override
+  List<Object> get props => [token];
+}

@@ -28,3 +28,12 @@ class MapCreateInfoSuccess extends MapState {
   @override
   List<Object> get props => [message];
 }
+
+class MapGetInfoSuccess extends MapState {
+  final List<GetMapsDto> getMapInfo;
+
+  const MapGetInfoSuccess({required this.getMapInfo});
+
+  @override
+  List<Object> get props => [getMapInfo];
+}
