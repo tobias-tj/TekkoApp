@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:tekko/features/api/data/models/create_list_map_dto.dart';
 import 'package:tekko/features/api/data/models/get_maps_dto.dart';
+import 'package:tekko/features/api/data/models/update_map_dto.dart';
 import 'package:tekko/features/core/constants/api_constants.dart';
 
 class MapsRemoteDatasource {
@@ -54,6 +55,27 @@ class MapsRemoteDatasource {
     } on DioException catch (e) {
       throw Exception(
           e.response?.data['message'] ?? 'Error obteniendo actividades');
+    }
+  }
+
+  Future<void> updateMapsDetails(UpdateMapDto updateMap) async {
+    try {
+      final response = await dio.put(ApiConstants.updateMapsDetails,
+          data: updateMap.toJson(),
+          options: Options(headers: {
+            'Authorization': 'Bearer ${updateMap.token}',
+          }));
+      if (response.data['success'] == true) {
+        return;
+      } else {
+        throw Exception(
+            response.data['message'] ?? 'Error al actualizar la ubicacion');
+      }
+    } on DioException catch (e) {
+      throw Exception(
+        e.response?.data['message'] ??
+            'Error de red al guardar detalles de la ubicacion',
+      );
     }
   }
 }

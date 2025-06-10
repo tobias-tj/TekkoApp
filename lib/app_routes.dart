@@ -13,6 +13,7 @@ import 'package:tekko/screens/games/manage_task_screen.dart';
 import 'package:tekko/screens/games/create_task_screen.dart';
 import 'package:tekko/screens/games/task_screen.dart';
 import 'package:tekko/screens/loading_screen.dart';
+import 'package:tekko/screens/maps/admin_maps_screen.dart';
 import 'package:tekko/screens/maps/maps_screen.dart';
 import 'package:tekko/screens/maps/qr_maps_screen.dart';
 import 'package:tekko/screens/parent/create_activity_screen.dart';
@@ -188,6 +189,12 @@ final GoRouter appRouter = GoRouter(
             path: '/adminTask',
             pageBuilder: (context, state) =>
                 NoTransitionPage(child: const ManageTaskScreen()),
+          ),
+          GoRoute(
+            name: 'adminMaps',
+            path: '/adminMaps',
+            pageBuilder: (context, state) =>
+                NoTransitionPage(child: const AdminMapsScreen()),
           ),
           GoRoute(
             name: 'adminHelp',

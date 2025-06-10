@@ -37,3 +37,12 @@ class MapGetInfoSuccess extends MapState {
   @override
   List<Object> get props => [getMapInfo];
 }
+
+class MapUpdateInfoSuccess extends MapState {
+  final String message;
+
+  const MapUpdateInfoSuccess({required this.message});
+
+  @override
+  List<Object> get props => [message];
+}

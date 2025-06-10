@@ -37,6 +37,7 @@ import 'package:tekko/features/api/domain/usecases/get_task_by_kid.dart';
 import 'package:tekko/features/api/domain/usecases/login_usecase.dart';
 import 'package:tekko/features/api/domain/usecases/register_usecase.dart';
 import 'package:tekko/features/api/domain/usecases/update_activity.dart';
+import 'package:tekko/features/api/domain/usecases/update_map_info.dart';
 import 'package:tekko/features/api/domain/usecases/update_pin.dart';
 import 'package:tekko/features/api/domain/usecases/update_profile.dart';
 import 'package:tekko/features/api/domain/usecases/update_status_task.dart';
@@ -91,6 +92,10 @@ final class MainApp extends StatelessWidget {
                             dio: context.read<DioClient>().dio)),
                   ),
                   getMapInfo: GetMapInfoUseCases(
+                      repository: MapRepositoryImpl(
+                          remoteDatasource: MapsRemoteDatasource(
+                              dio: context.read<DioClient>().dio))),
+                  updateMapInfo: UpdateMapInfoUseCases(
                       repository: MapRepositoryImpl(
                           remoteDatasource: MapsRemoteDatasource(
                               dio: context.read<DioClient>().dio))))),

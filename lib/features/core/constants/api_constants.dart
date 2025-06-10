@@ -17,4 +17,5 @@ class ApiConstants {
   static const String updateTaskStatus = '/updateStatusTask';
   static const String createMapsDetails = '/createMaps';
   static const String getMapsDetails = '/getMapByParent';
+  static const String updateMapsDetails = '/updateMaps';
 }

@@ -24,3 +24,12 @@ class MapGetRequested extends MapEvent {
   @override
   List<Object> get props => [token];
 }
+
+class MapUpdateRequested extends MapEvent {
+  final UpdateMapDto updateMapDto;
+
+  const MapUpdateRequested({required this.updateMapDto});
+
+  @override
+  List<Object> get props => [updateMapDto];
+}
