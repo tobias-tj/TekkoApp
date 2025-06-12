@@ -17,8 +17,9 @@ class NavigationWrapper extends StatelessWidget {
     final Map<String, int> routesIndex = {
       '/home': 0,
       '/calendar': 1,
-      '/favorites': 2,
-      '/settings': 3,
+      '/mapsInformation': 2,
+      '/favorites': 3,
+      '/settings': 4,
     };
 
     // Obtener el índice correspondiente al nombre de la ruta actual
@@ -41,6 +42,10 @@ class NavigationWrapper extends StatelessWidget {
           color: AppColors.chocolateNewDark,
           size: 27.0,
         ),
+        HugeIcon(
+            icon: HugeIcons.strokeRoundedMapsGlobal01,
+            color: AppColors.chocolateNewDark,
+            size: 27.0),
         HugeIcon(
           icon: HugeIcons.strokeRoundedFavourite,
           color: AppColors.chocolateNewDark,

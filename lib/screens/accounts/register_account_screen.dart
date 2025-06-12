@@ -80,7 +80,7 @@ class _RegisterAccountState extends State<RegisterAccount> {
             // await showSuccessAnimation();
 
             if (mounted) {
-              context.goNamed('home');
+              context.pushReplacement('/loading');
             }
           } else if (state is AuthFailure) {
             setState(() => _isLoading = false);
