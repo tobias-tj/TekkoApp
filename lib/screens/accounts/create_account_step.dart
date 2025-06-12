@@ -72,6 +72,7 @@ class _CreateAccountStepState extends State<CreateAccountStep> {
       );
     } else if (_currentStep == 3) {
       // Redirigir a RegisterAccount después de completar el paso 4
+      // context.go('/register');
       context.go('/register');
     }
   }

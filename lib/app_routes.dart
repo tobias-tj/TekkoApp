@@ -5,12 +5,17 @@ import 'package:tekko/features/api/data/models/details_profile_dto.dart';
 import 'package:tekko/features/api/data/models/get_task_dto.dart';
 import 'package:tekko/screens/accounts/create_account_screen.dart';
 import 'package:tekko/screens/accounts/login_account_screen.dart';
+import 'package:tekko/screens/accounts/maps_account_screen.dart';
 import 'package:tekko/screens/accounts/register_account_screen.dart';
 import 'package:tekko/screens/activity/activity_screen.dart';
 import 'package:tekko/screens/games/answer_task_screen.dart';
 import 'package:tekko/screens/games/manage_task_screen.dart';
 import 'package:tekko/screens/games/create_task_screen.dart';
 import 'package:tekko/screens/games/task_screen.dart';
+import 'package:tekko/screens/loading_screen.dart';
+import 'package:tekko/screens/maps/admin_maps_screen.dart';
+import 'package:tekko/screens/maps/maps_screen.dart';
+import 'package:tekko/screens/maps/qr_maps_screen.dart';
 import 'package:tekko/screens/parent/create_activity_screen.dart';
 import 'package:tekko/screens/calendar/calendar_screen.dart';
 import 'package:tekko/screens/calendar/level_up_screen.dart';
@@ -58,6 +63,23 @@ final GoRouter appRouter = GoRouter(
       path: '/register',
       builder: (context, state) => const RegisterAccount(),
     ),
+    GoRoute(
+        name: 'maps',
+        path: '/maps',
+        builder: (context, state) => const MapsAccountScreen()),
+    GoRoute(
+        name: 'qrMaps',
+        path: '/qrMaps',
+        builder: (context, state) {
+          final lat = (state.extra as Map<String, dynamic>)['lat'] as double;
+          final lng = (state.extra as Map<String, dynamic>)['lng'] as double;
+          return QrMapsScreen(latitude: lat, longitude: lng);
+        }),
+    GoRoute(
+        name: 'loading',
+        path: '/loading',
+        pageBuilder: (context, state) =>
+            NoTransitionPage(child: const LoadingScreen())),
     GoRoute(
       name: 'login',
       path: '/login',
@@ -169,6 +191,12 @@ final GoRouter appRouter = GoRouter(
                 NoTransitionPage(child: const ManageTaskScreen()),
           ),
           GoRoute(
+            name: 'adminMaps',
+            path: '/adminMaps',
+            pageBuilder: (context, state) =>
+                NoTransitionPage(child: const AdminMapsScreen()),
+          ),
+          GoRoute(
             name: 'adminHelp',
             path: '/adminHelp',
             pageBuilder: (context, state) => NoTransitionPage(
@@ -211,6 +239,11 @@ final GoRouter appRouter = GoRouter(
             child: const CalendarScreen(),
           ),
         ),
+        GoRoute(
+            name: 'mapsInformation',
+            path: '/mapsInformation',
+            pageBuilder: (context, state) =>
+                NoTransitionPage(child: const MapsScreen())),
         GoRoute(
           name: 'favorites',
           path: '/favorites',
