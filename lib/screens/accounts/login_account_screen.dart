@@ -26,6 +26,11 @@ class _LoginAccountState extends State<LoginAccount> {
     context.goNamed('register');
   }
 
+  void _goToRecoveryAccount() {
+    // Lógica para redirigir al Recovery Account
+    context.goNamed('recovery');
+  }
+
   @override
   void dispose() {
     _emailController.dispose();
@@ -134,7 +139,7 @@ class _LoginAccountState extends State<LoginAccount> {
                             ),
                             const SizedBox(height: 10),
                             TextButton(
-                              onPressed: () => {},
+                              onPressed: _goToRecoveryAccount,
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [

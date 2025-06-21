@@ -81,6 +81,16 @@ class _ParentPinScreenState extends State<ParentPinScreen> {
                   keyboardType: TextInputType.text,
                   textAlign: TextAlign.center,
                 ),
+                const SizedBox(height: 10),
+                const Text(
+                  '🔒 ¿Es tu primer ingreso?\nRevisá tu correo electrónico asociado.\nTu PIN fue enviado cuando se creó tu cuenta.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.black54,
+                  ),
+                ),
+                const SizedBox(height: 20),
                 const SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: _accessParent,

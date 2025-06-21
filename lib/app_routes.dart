@@ -6,6 +6,7 @@ import 'package:tekko/features/api/data/models/get_task_dto.dart';
 import 'package:tekko/screens/accounts/create_account_screen.dart';
 import 'package:tekko/screens/accounts/login_account_screen.dart';
 import 'package:tekko/screens/accounts/maps_account_screen.dart';
+import 'package:tekko/screens/accounts/recovery_account_screen.dart';
 import 'package:tekko/screens/accounts/register_account_screen.dart';
 import 'package:tekko/screens/activity/activity_screen.dart';
 import 'package:tekko/screens/games/answer_task_screen.dart';
@@ -84,6 +85,11 @@ final GoRouter appRouter = GoRouter(
       name: 'login',
       path: '/login',
       builder: (context, state) => const LoginAccount(),
+    ),
+    GoRoute(
+      name: 'recovery',
+      path: '/recovery',
+      builder: (constext, state) => const RecoveryAccount(),
     ),
     GoRoute(
       name: 'word-screen',
