@@ -133,7 +133,7 @@ class _AdminSettingScreenState extends State<AdminSettingScreen> {
                                           );
                                         },
                                       ),
-                                      const SizedBox(width: 40),
+                                      const SizedBox(width: 10),
                                       BlocBuilder<SettingBloc, SettingState>(
                                         builder: (context, state) {
                                           if (state is SettingProfileSuccess) {
@@ -160,9 +160,7 @@ class _AdminSettingScreenState extends State<AdminSettingScreen> {
                                                     style: const TextStyle(
                                                       color: AppColors
                                                           .chocolateNewDark,
-                                                      fontSize: 15,
-                                                      fontWeight:
-                                                          FontWeight.bold,
+                                                      fontSize: 12,
                                                     ),
                                                   ),
                                                 ],

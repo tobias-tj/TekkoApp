@@ -122,7 +122,7 @@ class _SettingScreenState extends State<SettingScreen> {
                                       );
                                     },
                                   ),
-                                  const SizedBox(width: 20),
+                                  const SizedBox(width: 10),
                                   BlocBuilder<SettingBloc, SettingState>(
                                     builder: (context, state) {
                                       if (state is SettingProfileSuccess) {
@@ -139,7 +139,7 @@ class _SettingScreenState extends State<SettingScreen> {
                                                 style: const TextStyle(
                                                   color: AppColors
                                                       .chocolateNewDark,
-                                                  fontSize: 24,
+                                                  fontSize: 20,
                                                   fontWeight: FontWeight.bold,
                                                 ),
                                               ),
@@ -149,7 +149,7 @@ class _SettingScreenState extends State<SettingScreen> {
                                                 style: const TextStyle(
                                                   color: AppColors
                                                       .chocolateNewDark,
-                                                  fontSize: 18,
+                                                  fontSize: 11,
                                                 ),
                                               ),
                                             ],

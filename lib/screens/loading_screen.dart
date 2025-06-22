@@ -60,7 +60,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final waveHeight = size.height * 0.4; // Calcula la altura del límite
+    final waveHeight = size.height * 0.3; // Calcula la altura del límite
 
     return Scaffold(
       backgroundColor: AppColors.softCream,
@@ -127,6 +127,9 @@ class _LoadingScreenState extends State<LoadingScreen> {
                     ),
                   ),
                   const SizedBox(height: 10),
+                  Lottie.asset("assets/animations/loadingFrame.json",
+                      width: 100, height: 100),
+                  const SizedBox(height: 5),
                   AnimatedSwitcher(
                     duration: const Duration(milliseconds: 500),
                     transitionBuilder: (child, anim) =>
@@ -142,10 +145,6 @@ class _LoadingScreenState extends State<LoadingScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 10),
-                  Lottie.asset("assets/animations/loadingFrame.json",
-                      width: 100, height: 100),
-                  const SizedBox(height: 10),
                 ],
               ),
             ),
