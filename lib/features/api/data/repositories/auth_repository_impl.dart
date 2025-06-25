@@ -24,4 +24,14 @@ class AuthRepositoryImpl implements AuthRepository {
       SecurityModel securityModel) async {
     return await remoteDataSource.accessParentPin(securityModel);
   }
+
+  @override
+  Future<void> recoveryAccount(String email) {
+    return remoteDataSource.recoveryAccount(email);
+  }
+
+  @override
+  Future<void> sendPinByEmail(String token) {
+    return remoteDataSource.sendPinByEmail(token);
+  }
 }

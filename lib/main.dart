@@ -8,7 +8,9 @@ import 'package:tekko/features/api/data/bloc/activity/activity_bloc.dart';
 import 'package:tekko/features/api/data/bloc/donation/donation_bloc.dart';
 import 'package:tekko/features/api/data/bloc/experience/experience_bloc.dart';
 import 'package:tekko/features/api/data/bloc/maps/map_bloc.dart';
+import 'package:tekko/features/api/data/bloc/recovery/recovery_bloc.dart';
 import 'package:tekko/features/api/data/bloc/security_pin/security_pin_bloc.dart';
+import 'package:tekko/features/api/data/bloc/send_pin/send_pin_bloc.dart';
 import 'package:tekko/features/api/data/bloc/setting/setting_bloc.dart';
 import 'package:tekko/features/api/data/bloc/task/task_bloc.dart';
 import 'package:tekko/features/api/data/datasources/auth_remote_datasource.dart';
@@ -35,7 +37,9 @@ import 'package:tekko/features/api/domain/usecases/get_map_info.dart';
 import 'package:tekko/features/api/domain/usecases/get_profile_details.dart';
 import 'package:tekko/features/api/domain/usecases/get_task_by_kid.dart';
 import 'package:tekko/features/api/domain/usecases/login_usecase.dart';
+import 'package:tekko/features/api/domain/usecases/recovery_account.dart';
 import 'package:tekko/features/api/domain/usecases/register_usecase.dart';
+import 'package:tekko/features/api/domain/usecases/send_pin_by_email.dart';
 import 'package:tekko/features/api/domain/usecases/update_activity.dart';
 import 'package:tekko/features/api/domain/usecases/update_map_info.dart';
 import 'package:tekko/features/api/domain/usecases/update_pin.dart';
@@ -83,6 +87,19 @@ final class MainApp extends StatelessWidget {
                 ),
               ),
             ),
+          ),
+          BlocProvider(
+              create: (context) => RecoveryBloc(
+                  recoveryAccount: RecoveryAccount(
+                      repository: AuthRepositoryImpl(
+                          remoteDataSource: AuthRemoteDataSource(
+                              dio: context.read<DioClient>().dio))))),
+          BlocProvider(
+            create: (context) => SendPinBloc(
+                sendPinByEmail: SendPinByEmail(
+                    authRepository: AuthRepositoryImpl(
+                        remoteDataSource: AuthRemoteDataSource(
+                            dio: context.read<DioClient>().dio)))),
           ),
           BlocProvider(
               create: (context) => MapBloc(
