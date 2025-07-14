@@ -329,8 +329,9 @@ class _AdminMapsScreenState extends State<AdminMapsScreen> {
                                       children: [
                                         TileLayer(
                                           urlTemplate:
-                                              "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                                              "https://api.maptiler.com/maps/streets/{z}/{x}/{y}.png?key=N1UuPpbGdpT4O1xEFQB1",
                                           subdomains: const ['a', 'b', 'c'],
+                                          userAgentPackageName: 'com.tekko.app',
                                         ),
                                         MarkerLayer(
                                           markers: [

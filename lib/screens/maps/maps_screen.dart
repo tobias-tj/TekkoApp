@@ -205,8 +205,9 @@ class _MapsScreenState extends State<MapsScreen> {
                                   children: [
                                     TileLayer(
                                       urlTemplate:
-                                          "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-                                      subdomains: const ['a', 'b', 'c'],
+                                          "https://api.maptiler.com/maps/streets/{z}/{x}/{y}.png?key=N1UuPpbGdpT4O1xEFQB1",
+                                      tileProvider: NetworkTileProvider(),
+                                      userAgentPackageName: 'com.tekko.app',
                                     ),
                                     MarkerLayer(
                                       markers: [
