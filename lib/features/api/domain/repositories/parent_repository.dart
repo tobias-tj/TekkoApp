@@ -10,4 +10,5 @@ abstract class ParentRepository {
       String dateFilter, String token, String? statusFilter);
   Future<Map<String, dynamic>> createTask(CreateTaskModel createTaskModel);
   Future<GetTaskDto> getTasks(String token);
+  Future<void> deleteTaskByKid(String token);
 }

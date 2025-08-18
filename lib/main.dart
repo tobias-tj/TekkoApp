@@ -30,6 +30,7 @@ import 'package:tekko/features/api/domain/usecases/create_activity.dart';
 import 'package:tekko/features/api/domain/usecases/create_map_info.dart';
 import 'package:tekko/features/api/domain/usecases/create_payment.dart';
 import 'package:tekko/features/api/domain/usecases/create_task.dart';
+import 'package:tekko/features/api/domain/usecases/delete_task_by_kid.dart';
 import 'package:tekko/features/api/domain/usecases/get_activities.dart';
 import 'package:tekko/features/api/domain/usecases/get_activities_by_kid.dart';
 import 'package:tekko/features/api/domain/usecases/get_experience.dart';
@@ -184,20 +185,25 @@ final class MainApp extends StatelessWidget {
             ),
           ),
           BlocProvider(
-              create: (context) => TaskBloc(
-                  createTask: CreateTaskUseCases(
+            create: (context) => TaskBloc(
+                createTask: CreateTaskUseCases(
+                  repository: ParentRepositoryImpl(
+                      remoteDataSource: ParentRemoteDatasource(
+                          dio: context.read<DioClient>().dio)),
+                ),
+                getTasksByKid: GetTaskByKidUseCases(
                     repository: ParentRepositoryImpl(
                         remoteDataSource: ParentRemoteDatasource(
-                            dio: context.read<DioClient>().dio)),
-                  ),
-                  getTasksByKid: GetTaskByKidUseCases(
-                      repository: ParentRepositoryImpl(
-                          remoteDataSource: ParentRemoteDatasource(
-                              dio: context.read<DioClient>().dio))),
-                  updateStatusTask: UpdateStatusTask(
-                      repository: KidsRepositoryImpl(
-                          remoteDataSource: KidsRemoteDatasource(
-                              dio: context.read<DioClient>().dio)))))
+                            dio: context.read<DioClient>().dio))),
+                updateStatusTask: UpdateStatusTask(
+                    repository: KidsRepositoryImpl(
+                        remoteDataSource: KidsRemoteDatasource(
+                            dio: context.read<DioClient>().dio))),
+                deleteTaskByKid: DeleteTaskByKidUseCases(
+                    repository: ParentRepositoryImpl(
+                        remoteDataSource: ParentRemoteDatasource(
+                            dio: context.read<DioClient>().dio)))),
+          )
         ],
         child: MaterialApp.router(
           debugShowCheckedModeBanner: false,
