@@ -33,4 +33,9 @@ class ParentRepositoryImpl implements ParentRepository {
   Future<GetTaskDto> getTasks(String token) async {
     return await remoteDataSource.getTasks(token);
   }
+
+  @override
+  Future<void> deleteTaskByKid(String token) async {
+    return await remoteDataSource.deleteTaskByKid(token);
+  }
 }

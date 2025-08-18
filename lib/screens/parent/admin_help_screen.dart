@@ -58,6 +58,8 @@ class _AdminHelpScreenState extends State<AdminHelpScreen> {
   }
 
   void _showDonationDialog(int amount) {
+    final screenSize = MediaQuery.of(context).size;
+
     showDialog(
       context: context,
       builder: (context) => FadeInUp(
@@ -66,33 +68,55 @@ class _AdminHelpScreenState extends State<AdminHelpScreen> {
           title: const Text(
             "Confirmar Donación",
             style: TextStyle(
-                color: AppColors.textColor, fontWeight: FontWeight.bold),
+              color: AppColors.textColor,
+              fontWeight: FontWeight.bold,
+            ),
           ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text("Estás a punto de donar:"),
-              const SizedBox(height: 10),
-              Text(
-                "\$$amount USD",
-                style: const TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.chocolateNewDark,
-                ),
+          content: ConstrainedBox(
+            constraints: BoxConstraints(
+              minWidth: screenSize.width * 0.9, // 40% del ancho
+              maxWidth: screenSize.width * 0.9, // 50% del ancho
+              maxHeight: screenSize.height * 0.8, // 60% del alto
+            ),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    "Estás a punto de donar:",
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    "\$$amount USD",
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.chocolateNewDark,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  const Text(
+                    "Gracias por apoyar a Tekko.",
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  const Text(
+                    "Tu contribución nos ayuda a:",
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  const SizedBox(height: 10),
+                  const BuildDialogInfoItem(
+                    text: "Mantener los servidores activos y estables",
+                  ),
+                  const BuildDialogInfoItem(
+                    text: "Desarrollar y lanzar nuevas funcionalidades",
+                  ),
+                  const BuildDialogInfoItem(
+                    text: "Mejorar la experiencia y seguridad de la app",
+                  ),
+                ],
               ),
-              const SizedBox(height: 20),
-              const Text(
-                "Gracias por apoyar a Tekko y a la fundación EPA. "
-                "Tu contribución nos ayuda a:",
-                style: TextStyle(fontSize: 14),
-              ),
-              const SizedBox(height: 10),
-              BuildDialogInfoItem(text: "Mantener los servidores activos"),
-              BuildDialogInfoItem(text: "Desarrollar nuevas funcionalidades"),
-              BuildDialogInfoItem(text: "Apoyar a la fundación EPA (10%)"),
-            ],
+            ),
           ),
           actions: [
             TextButton(
@@ -113,7 +137,9 @@ class _AdminHelpScreenState extends State<AdminHelpScreen> {
               child: const Text(
                 "Confirmar Donación",
                 style: TextStyle(
-                    color: AppColors.textColor, fontWeight: FontWeight.bold),
+                  color: AppColors.textColor,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ],
@@ -141,15 +167,6 @@ class _AdminHelpScreenState extends State<AdminHelpScreen> {
         duration: const Duration(seconds: 3),
       ),
     );
-  }
-
-  Future<void> _launchEPASite() async {
-    const url = 'https://autismo.com.py/';
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      _showPaymentError('No se pudo abrir el enlace');
-    }
   }
 
   @override
@@ -250,12 +267,12 @@ class _AdminHelpScreenState extends State<AdminHelpScreen> {
                               ),
                               BuildInfoItem(
                                 icon: HugeIcons.strokeRoundedHeartCheck,
-                                text: "Apoyar a la fundación EPA",
+                                text: "Optimizar la app y corregir errores",
                               ),
                               const SizedBox(height: 20),
                               const Text(
-                                "Además, el 10% de cada donación va directamente a la fundación "
-                                "'Esperanza para el Autismo (EPA)' para apoyar su labor.",
+                                "Cada donación nos permite mantener la app actualizada, estable y segura, "
+                                "además de desarrollar nuevas funcionalidades para mejorar tu experiencia.",
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontSize: 14,
@@ -263,18 +280,6 @@ class _AdminHelpScreenState extends State<AdminHelpScreen> {
                                 ),
                               ),
                               const SizedBox(height: 10),
-                              FadeInUp(
-                                child: InkWell(
-                                  onTap: _launchEPASite,
-                                  child: const Text(
-                                    "Conoce más sobre EPA",
-                                    style: TextStyle(
-                                      color: Colors.blue,
-                                      decoration: TextDecoration.underline,
-                                    ),
-                                  ),
-                                ),
-                              ),
                             ],
                           ),
                         ),

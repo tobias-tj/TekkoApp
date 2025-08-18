@@ -33,3 +33,12 @@ class TaskUpdateRequested extends TaskEvent {
   @override
   List<Object> get props => [updateTaskStatusDto];
 }
+
+class TaskDeleteRequested extends TaskEvent {
+  final String token;
+
+  const TaskDeleteRequested({required this.token});
+
+  @override
+  List<Object> get props => [token];
+}

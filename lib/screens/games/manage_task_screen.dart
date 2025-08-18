@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hugeicons/hugeicons.dart';
 import 'package:lottie/lottie.dart';
 import 'package:tekko/features/api/data/bloc/task/task_bloc.dart';
 import 'package:tekko/features/api/data/models/get_task_dto.dart';
@@ -44,6 +45,18 @@ class _ManageTaskScreenState extends State<ManageTaskScreen> {
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('No se ha logrado obtener tareas')),
+      );
+    }
+  }
+
+  Future<void> _deleteTaskData() async {
+    try {
+      final token = await StorageUtils.getString('token');
+
+      context.read<TaskBloc>().add(TaskDeleteRequested(token: token!));
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('No se ha logrado eliminar las tareas')),
       );
     }
   }
@@ -119,6 +132,32 @@ class _ManageTaskScreenState extends State<ManageTaskScreen> {
                                 fontSize: 16,
                                 color: AppColors.softCream,
                               ),
+                            ),
+                            const SizedBox(height: 10),
+                            ElevatedButton.icon(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: AppColors.chocolateNewDark,
+                                foregroundColor: AppColors.chocolateDark,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 12, vertical: 8),
+                                elevation: 3,
+                              ),
+                              icon: Icon(HugeIcons.strokeRoundedDelete02,
+                                  color: Colors.redAccent, size: 22),
+                              label: Text(
+                                'Borrar todo',
+                                style: TextStyle(
+                                    color: AppColors.textColor,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              onPressed: () {
+                                // Acción para borrar todas las tareas
+                                _deleteTaskData();
+                              },
                             ),
                           ],
                         ),

@@ -131,4 +131,25 @@ class ParentRemoteDatasource {
           e.response?.data['message'] ?? 'No se ha logrado obtener las tareas');
     }
   }
+
+  Future<void> deleteTaskByKid(String token) async {
+    try {
+      final response = await dio.delete(
+        ApiConstants.deleteTaskByKid,
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $token',
+          },
+        ),
+      );
+
+      if (response.data['success'] != true) {
+        throw Exception(
+            response.data['message'] ?? 'Error al eliminar la tarea');
+      }
+    } on DioException catch (e) {
+      throw Exception(
+          e.response?.data['message'] ?? 'Error al eliminar la tarea');
+    }
+  }
 }

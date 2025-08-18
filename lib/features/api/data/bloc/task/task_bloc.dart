@@ -4,6 +4,7 @@ import 'package:tekko/features/api/data/models/get_task_dto.dart';
 import 'package:tekko/features/api/data/models/update_task_status_dto.dart';
 import 'package:tekko/features/api/domain/usecases/create_task.dart';
 import 'package:equatable/equatable.dart';
+import 'package:tekko/features/api/domain/usecases/delete_task_by_kid.dart';
 import 'package:tekko/features/api/domain/usecases/get_task_by_kid.dart';
 import 'package:tekko/features/api/domain/usecases/update_status_task.dart';
 
@@ -14,15 +15,18 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
   final CreateTaskUseCases createTask;
   final GetTaskByKidUseCases getTasksByKid;
   final UpdateStatusTask updateStatusTask;
+  final DeleteTaskByKidUseCases deleteTaskByKid;
 
   TaskBloc(
       {required this.createTask,
       required this.getTasksByKid,
-      required this.updateStatusTask})
+      required this.updateStatusTask,
+      required this.deleteTaskByKid})
       : super(TaskInitial()) {
     on<TaskRequested>(_onTaskRequested);
     on<TaskGetRequested>(_onTaskGetRequested);
     on<TaskUpdateRequested>(_onTaskUpdateRequested);
+    on<TaskDeleteRequested>(_onTaskDeleteRequested);
   }
 
   Future<void> _onTaskRequested(
@@ -76,6 +80,22 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
         message: e.toString().contains('Exception:')
             ? e.toString().split('Exception:')[1].trim()
             : 'Error al actualizar la actividad',
+      ));
+    }
+  }
+
+  Future<void> _onTaskDeleteRequested(
+      TaskDeleteRequested event, Emitter<TaskState> emit) async {
+    emit(TaskLoading());
+
+    try {
+      await deleteTaskByKid(event.token);
+      emit(TaskDeleteSuccess(message: 'Todas las tareas fueron eliminadas'));
+    } catch (e) {
+      emit(TaskError(
+        message: e.toString().contains('Exception:')
+            ? e.toString().split('Exception:')[1].trim()
+            : 'Error al eliminar la tarea',
       ));
     }
   }
