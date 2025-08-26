@@ -49,12 +49,14 @@ import 'package:tekko/features/api/domain/usecases/update_status_task.dart';
 import 'package:tekko/features/api/domain/usecases/verify_security_pin.dart';
 import 'package:tekko/features/core/network/dio_client.dart';
 import 'package:tekko/styles/app_colors.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 void main() async {
   await initializeDateFormatting('es');
   await dotenv.load(fileName: ".env");
   Stripe.publishableKey = dotenv.env['STRIPE_PUBLISHABLE_KEY']!;
   await Stripe.instance.applySettings();
+  await Firebase.initializeApp();
   runApp(const MainApp());
 }
 

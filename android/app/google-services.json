@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "746910990367",
+    "project_id": "yvagacore-1731203758689",
+    "storage_bucket": "yvagacore-1731203758689.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:746910990367:android:075a224374a831cf71552a",
+        "android_client_info": {
+          "package_name": "com.yvagacore.tekko"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDzSzaq-G-EwiXZJ_mvYyKlr_ZyQTYebVk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
