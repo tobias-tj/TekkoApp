@@ -5,7 +5,6 @@ import 'package:tekko/components/list_card_item_home.dart';
 import 'package:tekko/components/top_custom_background.dart';
 import 'package:tekko/data/list_item_home.dart';
 import 'package:tekko/features/api/data/bloc/experience/experience_bloc.dart';
-import 'package:tekko/features/core/utils/storage_utils.dart';
 import 'package:tekko/styles/app_colors.dart';
 
 class HomePage extends StatefulWidget {
@@ -21,8 +20,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-
     return Scaffold(
       backgroundColor: AppColors.softCream,
       body: Column(
