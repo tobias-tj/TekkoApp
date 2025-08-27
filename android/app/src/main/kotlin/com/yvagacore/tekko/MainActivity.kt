@@ -1,4 +1,4 @@
-package com.example.tekko
+package com.yvagacore.tekko
 
 import io.flutter.embedding.android.FlutterFragmentActivity
 

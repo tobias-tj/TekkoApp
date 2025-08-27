@@ -1,7 +1,9 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:tekko/app_routes.dart';
 import 'package:tekko/features/api/data/bloc/activity/activity_bloc.dart';
@@ -49,17 +51,25 @@ import 'package:tekko/features/api/domain/usecases/update_status_task.dart';
 import 'package:tekko/features/api/domain/usecases/verify_security_pin.dart';
 import 'package:tekko/features/core/network/dio_client.dart';
 import 'package:tekko/styles/app_colors.dart';
+import 'package:firebase_core/firebase_core.dart';
+
+final FirebaseAnalytics analytics = FirebaseAnalytics.instance;
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await initializeDateFormatting('es');
   await dotenv.load(fileName: ".env");
   Stripe.publishableKey = dotenv.env['STRIPE_PUBLISHABLE_KEY']!;
   await Stripe.instance.applySettings();
-  runApp(const MainApp());
+  await Firebase.initializeApp();
+  await MobileAds.instance.initialize();
+  runApp(MainApp(analytics: analytics));
 }
 
 final class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+  final FirebaseAnalytics analytics;
+
+  const MainApp({super.key, required this.analytics});
 
   @override
   Widget build(BuildContext context) {
@@ -100,7 +110,8 @@ final class MainApp extends StatelessWidget {
                 sendPinByEmail: SendPinByEmail(
                     authRepository: AuthRepositoryImpl(
                         remoteDataSource: AuthRemoteDataSource(
-                            dio: context.read<DioClient>().dio)))),
+                            dio: context.read<DioClient>().dio))),
+                analytics: analytics),
           ),
           BlocProvider(
               create: (context) => MapBloc(
@@ -156,7 +167,8 @@ final class MainApp extends StatelessWidget {
                 updateActivity: UpdateActivityUseCases(
                     repository: KidsRepositoryImpl(
                         remoteDataSource: KidsRemoteDatasource(
-                            dio: context.read<DioClient>().dio)))),
+                            dio: context.read<DioClient>().dio))),
+                analytics: analytics),
           ),
           BlocProvider(
               create: (context) => SettingBloc(
@@ -202,7 +214,8 @@ final class MainApp extends StatelessWidget {
                 deleteTaskByKid: DeleteTaskByKidUseCases(
                     repository: ParentRepositoryImpl(
                         remoteDataSource: ParentRemoteDatasource(
-                            dio: context.read<DioClient>().dio)))),
+                            dio: context.read<DioClient>().dio))),
+                analytics: analytics),
           )
         ],
         child: MaterialApp.router(

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:tekko/features/api/data/models/activity_kid_dto.dart';
 import 'package:tekko/features/api/data/models/filter_activity_dto.dart';
 import 'package:tekko/features/api/data/models/form_activity_model.dart';
@@ -17,12 +18,14 @@ class ActivityBloc extends Bloc<ActivityEvent, ActivityState> {
   final GetActivitiesUseCases getActivities;
   final GetActivitiesByKidUseCases getActivitiesByKid;
   final UpdateActivityUseCases updateActivity;
+  final FirebaseAnalytics analytics;
 
   ActivityBloc(
       {required this.createActivity,
       required this.getActivities,
       required this.getActivitiesByKid,
-      required this.updateActivity})
+      required this.updateActivity,
+      required this.analytics})
       : super(ActivityInitial()) {
     on<ActivityRequested>(_onActivityRequested);
     on<ActivitiesLoadRequested>(_onActivitiesLoadRequested);
@@ -41,6 +44,15 @@ class ActivityBloc extends Bloc<ActivityEvent, ActivityState> {
 
       if (result.containsKey('activityId') &&
           result.containsKey('activityDetailId')) {
+        /// 🔹 Track en Firebase
+        await analytics.logEvent(
+          name: 'activity_created',
+          parameters: {
+            'activity_id': result['activityId'],
+            'detail_id': result['activityDetailId'],
+            'timestamp': DateTime.now().toIso8601String(),
+          },
+        );
         emit(ActivitySuccess(
           message: result['message'] as String,
           activityId: result['activityId'] as int,
