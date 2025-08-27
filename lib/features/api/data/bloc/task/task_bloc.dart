@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:tekko/features/api/data/models/create_task_model.dart';
 import 'package:tekko/features/api/data/models/get_task_dto.dart';
 import 'package:tekko/features/api/data/models/update_task_status_dto.dart';
@@ -16,12 +17,14 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
   final GetTaskByKidUseCases getTasksByKid;
   final UpdateStatusTask updateStatusTask;
   final DeleteTaskByKidUseCases deleteTaskByKid;
+  final FirebaseAnalytics analytics;
 
   TaskBloc(
       {required this.createTask,
       required this.getTasksByKid,
       required this.updateStatusTask,
-      required this.deleteTaskByKid})
+      required this.deleteTaskByKid,
+      required this.analytics})
       : super(TaskInitial()) {
     on<TaskRequested>(_onTaskRequested);
     on<TaskGetRequested>(_onTaskGetRequested);
@@ -41,6 +44,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
       if (result.containsKey('taskId')) {
         emit(TaskSuccess(
             message: result['message'], taskId: result['taskId'] as int));
+        await analytics.logEvent(name: "create_task", parameters: {});
       } else {
         emit(TaskError(
             message: result['message']?.toString() ?? 'Failed to create task'));

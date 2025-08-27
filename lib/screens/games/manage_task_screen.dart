@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:lottie/lottie.dart';
 import 'package:tekko/features/api/data/bloc/task/task_bloc.dart';
 import 'package:tekko/features/api/data/models/get_task_dto.dart';
 import 'package:tekko/features/core/utils/storage_utils.dart';
 import 'package:tekko/styles/app_colors.dart';
+import 'package:tekko/utils/ad_helper.dart';
 import 'package:tekko/utils/get_operation_symbol.dart';
 
 class ManageTaskScreen extends StatefulWidget {
@@ -18,6 +20,35 @@ class ManageTaskScreen extends StatefulWidget {
 }
 
 class _ManageTaskScreenState extends State<ManageTaskScreen> {
+  InterstitialAd? _interstitialAd;
+
+  void _loadInterstitial() {
+    InterstitialAd.load(
+      adUnitId: AdHelper.interstitialAdUnitId,
+      request: const AdRequest(),
+      adLoadCallback: InterstitialAdLoadCallback(
+        onAdLoaded: (ad) {
+          _interstitialAd = ad;
+          _interstitialAd?.setImmersiveMode(true);
+          _interstitialAd?.show();
+
+          _interstitialAd?.fullScreenContentCallback =
+              FullScreenContentCallback(
+            onAdDismissedFullScreenContent: (ad) {
+              ad.dispose();
+            },
+            onAdFailedToShowFullScreenContent: (ad, error) {
+              ad.dispose();
+            },
+          );
+        },
+        onAdFailedToLoad: (error) {
+          debugPrint('Failed to load interstitial ad: $error');
+        },
+      ),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -54,6 +85,8 @@ class _ManageTaskScreenState extends State<ManageTaskScreen> {
       final token = await StorageUtils.getString('token');
 
       context.read<TaskBloc>().add(TaskDeleteRequested(token: token!));
+      // 👉 Mostrar Interstitial
+      _loadInterstitial();
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('No se ha logrado eliminar las tareas')),
