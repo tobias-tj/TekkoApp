@@ -1,20 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_stripe/flutter_stripe.dart';
-import 'package:hugeicons/hugeicons.dart';
-import 'package:lottie/lottie.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:animate_do/animate_do.dart';
-import 'package:tekko/components/donation/build_dialog_info_item.dart';
+import 'package:lottie/lottie.dart';
+import 'package:hugeicons/hugeicons.dart';
 import 'package:tekko/components/donation/build_info_item.dart';
-import 'package:tekko/features/api/data/bloc/donation/donation_bloc.dart';
-import 'package:tekko/features/api/data/bloc/donation/donation_event.dart';
-import 'package:tekko/features/api/data/bloc/donation/donation_state.dart';
 import 'package:tekko/features/api/data/bloc/setting/setting_bloc.dart';
-import 'package:tekko/features/api/data/models/donation.dart';
-import 'package:tekko/features/core/utils/storage_utils.dart';
 import 'package:tekko/styles/app_colors.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:flutter/material.dart' as material;
+import 'package:tekko/utils/ad_helper.dart';
 
 class AdminHelpScreen extends StatefulWidget {
   const AdminHelpScreen({super.key});
@@ -24,435 +17,238 @@ class AdminHelpScreen extends StatefulWidget {
 }
 
 class _AdminHelpScreenState extends State<AdminHelpScreen> {
-  final List<Map<String, dynamic>> _donationOptions = [
-    {'amount': 5, 'icon': HugeIcons.strokeRoundedCoins01},
-    {'amount': 10, 'icon': HugeIcons.strokeRoundedMoneyAdd01},
-    {'amount': 20, 'icon': HugeIcons.strokeRoundedMoneyBag01},
-    {'amount': 50, 'icon': HugeIcons.strokeRoundedMoney03},
-  ];
+  InterstitialAd? _interstitialAd;
+  BannerAd? _bannerAd;
 
   String? userName;
-  String? userEmail;
 
   @override
   void initState() {
     super.initState();
 
-    // Suscribirse al bloc para guardar los datos
+    // Obtener nombre de usuario desde el SettingBloc
     final settingState = context.read<SettingBloc>().state;
     if (settingState is SettingProfileSuccess) {
       userName = settingState.detailsProfileDto.parentName;
-      userEmail = settingState.detailsProfileDto.email;
+    }
+
+    _loadBannerAd();
+    _loadInterstitialAd();
+  }
+
+  void _loadBannerAd() {
+    _bannerAd = BannerAd(
+      adUnitId: AdHelper.bannerAdUnitId,
+      size: AdSize.banner,
+      request: const AdRequest(),
+      listener: BannerAdListener(
+        onAdLoaded: (_) => setState(() {}),
+        onAdFailedToLoad: (ad, error) {
+          ad.dispose();
+          debugPrint('Failed to load banner ad: $error');
+        },
+      ),
+    )..load();
+  }
+
+  void _loadInterstitialAd() {
+    InterstitialAd.load(
+      adUnitId: AdHelper.interstitialAdUnitId,
+      request: const AdRequest(),
+      adLoadCallback: InterstitialAdLoadCallback(
+        onAdLoaded: (ad) {
+          _interstitialAd = ad;
+          _interstitialAd?.setImmersiveMode(true);
+
+          _interstitialAd?.fullScreenContentCallback =
+              FullScreenContentCallback(
+            onAdDismissedFullScreenContent: (ad) {
+              ad.dispose();
+
+              // 🎉 Mostrar SnackBar de agradecimiento
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Row(
+                    children: [
+                      const Icon(Icons.emoji_events, color: Colors.yellow),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Text(
+                          userName != null
+                              ? "¡Gracias $userName! 🌟 Tekko sigue gratuita gracias a ti."
+                              : "¡Gracias! 🌟 Tekko sigue gratuita gracias a tu apoyo.",
+                          style: const TextStyle(
+                              fontSize: 14, color: AppColors.chocolateNewDark),
+                        ),
+                      ),
+                    ],
+                  ),
+                  backgroundColor: AppColors.textColor,
+                  behavior: SnackBarBehavior.floating,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  duration: const Duration(seconds: 3),
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                ),
+              );
+
+              _loadInterstitialAd(); // recargar para siguiente uso
+            },
+            onAdFailedToShowFullScreenContent: (ad, error) {
+              ad.dispose();
+              _loadInterstitialAd();
+            },
+          );
+        },
+        onAdFailedToLoad: (error) {
+          debugPrint('Failed to load interstitial ad: $error');
+        },
+      ),
+    );
+  }
+
+  void _showInterstitialAd() {
+    if (_interstitialAd != null) {
+      _interstitialAd!.show();
+      _interstitialAd = null;
+    } else {
+      debugPrint("Interstitial ad not ready yet");
     }
   }
 
-  Future<void> _processDonation(int amount) async {
-    final token = await StorageUtils.getString('token');
-    context.read<DonationBloc>().add(
-          StartDonationEvent(Donation(
-              token: token!,
-              amount: amount,
-              fullName: userName ?? 'Nombre Vacio',
-              email: userEmail!)),
-        );
-  }
-
-  void _showDonationDialog(int amount) {
-    final screenSize = MediaQuery.of(context).size;
-
-    showDialog(
-      context: context,
-      builder: (context) => FadeInUp(
-        child: AlertDialog(
-          backgroundColor: AppColors.cardBackgroundSoft,
-          title: const Text(
-            "Confirmar Donación",
-            style: TextStyle(
-              color: AppColors.textColor,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          content: ConstrainedBox(
-            constraints: BoxConstraints(
-              minWidth: screenSize.width * 0.9, // 40% del ancho
-              maxWidth: screenSize.width * 0.9, // 50% del ancho
-              maxHeight: screenSize.height * 0.8, // 60% del alto
-            ),
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    "Estás a punto de donar:",
-                    style: TextStyle(fontSize: 16),
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    "\$$amount USD",
-                    style: const TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.chocolateNewDark,
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  const Text(
-                    "Gracias por apoyar a Tekko.",
-                    style: TextStyle(fontSize: 16),
-                  ),
-                  const Text(
-                    "Tu contribución nos ayuda a:",
-                    style: TextStyle(fontSize: 16),
-                  ),
-                  const SizedBox(height: 10),
-                  const BuildDialogInfoItem(
-                    text: "Mantener los servidores activos y estables",
-                  ),
-                  const BuildDialogInfoItem(
-                    text: "Desarrollar y lanzar nuevas funcionalidades",
-                  ),
-                  const BuildDialogInfoItem(
-                    text: "Mejorar la experiencia y seguridad de la app",
-                  ),
-                ],
-              ),
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text(
-                "Cancelar",
-                style: TextStyle(color: AppColors.chocolateNewDark),
-              ),
-            ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.chocolateNewDark,
-              ),
-              onPressed: () {
-                Navigator.pop(context);
-                _processDonation(amount * 100);
-              },
-              child: const Text(
-                "Confirmar Donación",
-                style: TextStyle(
-                  color: AppColors.textColor,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  void _showThankYouMessage() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text(
-            "¡Gracias por tu donación! Tu apoyo es invaluable para nosotros."),
-        backgroundColor: Colors.green,
-        duration: Duration(seconds: 3),
-      ),
-    );
-  }
-
-  void _showPaymentError(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text("Error: $message"),
-        backgroundColor: Colors.red,
-        duration: const Duration(seconds: 3),
-      ),
-    );
+  @override
+  void dispose() {
+    _bannerAd?.dispose();
+    _interstitialAd?.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
-    return BlocListener<DonationBloc, DonationState>(
-      listener: (context, state) async {
-        if (state is DonationClientSecretReady) {
-          await Stripe.instance.initPaymentSheet(
-            paymentSheetParameters: SetupPaymentSheetParameters(
-                paymentIntentClientSecret: state.clientSecret,
-                merchantDisplayName: 'Tekko',
-                billingDetails: BillingDetails(
-                  email: "Raulnose@gmail.com",
-                  name: 'Raul Salcedo',
-                )),
-          );
-          await Stripe.instance.presentPaymentSheet();
-          _showThankYouMessage();
-        }
-      },
-      child: Scaffold(
-        backgroundColor: AppColors.softCream,
-        body: Stack(
-          children: [
-            // Fondo decorativo animado
-            Positioned(
-              top: 0,
-              child: FadeInDown(
-                duration: const Duration(milliseconds: 800),
-                child: Image.asset(
-                  'assets/images/topTitleAccount.png',
-                  width: size.width,
-                  fit: BoxFit.cover,
-                ),
+    return Scaffold(
+      backgroundColor: AppColors.softCream,
+      body: Stack(
+        alignment: Alignment.center,
+        children: [
+          Positioned(
+            top: 0,
+            child: FadeInDown(
+              duration: const Duration(milliseconds: 800),
+              child: Image.asset(
+                'assets/images/topTitleAccount.png',
+                width: size.width,
+                fit: BoxFit.cover,
               ),
             ),
-
-            // Contenido principal
-            SingleChildScrollView(
-              child: Column(
-                children: [
-                  const SizedBox(height: 80),
-
-                  // Encabezado con animación
-                  FadeIn(
-                    duration: const Duration(milliseconds: 1000),
-                    child: Center(
-                      child: SizedBox(
-                        height: 200,
-                        child: Lottie.asset(
-                          "assets/animations/dogHome1.json",
-                          repeat: true,
-                        ),
-                      ),
+          ),
+          SingleChildScrollView(
+            child: Column(
+              children: [
+                const SizedBox(height: 80),
+                FadeIn(
+                  duration: const Duration(milliseconds: 1000),
+                  child: SizedBox(
+                    height: 200,
+                    child: Lottie.asset(
+                      "assets/animations/dogHome1.json",
+                      repeat: true,
                     ),
                   ),
-
-                  const SizedBox(height: 20),
-
-                  // Tarjeta de información
-                  FadeInLeft(
-                    duration: const Duration(milliseconds: 600),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: material.Card(
-                        elevation: 4,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(20),
-                          child: Column(
-                            children: [
-                              const Text(
-                                "Apoya a Tekko",
-                                style: TextStyle(
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.bold,
-                                  color: AppColors.chocolateNewDark,
-                                ),
-                              ),
-                              const SizedBox(height: 15),
-                              const Text(
-                                "Tekko es un proyecto sin fines de lucro. Cada donación nos ayuda a:",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(fontSize: 16),
-                              ),
-                              const SizedBox(height: 15),
-                              BuildInfoItem(
-                                icon: HugeIcons.strokeRoundedCloudServer,
-                                text: "Mantener los servidores activos",
-                              ),
-                              BuildInfoItem(
-                                icon: HugeIcons.strokeRoundedCode,
-                                text: "Desarrollar nuevas funcionalidades",
-                              ),
-                              BuildInfoItem(
-                                icon: HugeIcons.strokeRoundedHeartCheck,
-                                text: "Optimizar la app y corregir errores",
-                              ),
-                              const SizedBox(height: 20),
-                              const Text(
-                                "Cada donación nos permite mantener la app actualizada, estable y segura, "
-                                "además de desarrollar nuevas funcionalidades para mejorar tu experiencia.",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontStyle: FontStyle.italic,
-                                ),
-                              ),
-                              const SizedBox(height: 10),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-
-                  const SizedBox(height: 30),
-
-                  // Opciones de donación
-                  FadeInRight(
-                    duration: const Duration(milliseconds: 600),
-                    child: const Text(
-                      "Selecciona un monto para donar",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.chocolateNewDark,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 15),
-
-                  // Grid de opciones de donación con animaciones escalonadas
-                  Padding(
+                ),
+                const SizedBox(height: 20),
+                FadeInLeft(
+                  duration: const Duration(milliseconds: 600),
+                  child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: GridView.count(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      crossAxisCount: 2,
-                      childAspectRatio: 2,
-                      crossAxisSpacing: 15,
-                      mainAxisSpacing: 15,
-                      children: List.generate(_donationOptions.length, (index) {
-                        final option = _donationOptions[index];
-                        return FadeInUp(
-                          duration: Duration(milliseconds: 600 + (index * 100)),
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColors.cardBackgroundSoft,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
+                    child: Card(
+                      elevation: 4,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15)),
+                      child: Padding(
+                        padding: const EdgeInsets.all(20),
+                        child: Column(
+                          children: [
+                            const Text(
+                              "Apoya a Tekko",
+                              style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.chocolateNewDark,
                               ),
-                              elevation: 2,
                             ),
-                            onPressed: () =>
-                                _showDonationDialog(option['amount']),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                HugeIcon(
-                                  icon: option['icon'],
-                                  color: AppColors.chocolateNewDark,
-                                  size: 30,
+                            SizedBox(height: 5),
+                            Text(
+                              userName != null
+                                  ? "¡Hola $userName! 🌟 Gracias a tu apoyo, Tekko sigue gratuita. Ver anuncios nos ayuda a apoyar a más familias."
+                                  : "¡Gracias por tu apoyo! 🌟 Tekko sigue gratuita. Cada anuncio ayuda a más familias.",
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                fontSize: 17,
+                                fontWeight: FontWeight.w600,
+                                height: 1.4,
+                                color: AppColors.chocolateNewDark,
+                              ),
+                            ),
+                            const SizedBox(height: 15),
+                            Column(
+                              children: const [
+                                BuildInfoItem(
+                                  icon: HugeIcons.strokeRoundedSchool,
+                                  text:
+                                      "Crear herramientas educativas accesibles",
                                 ),
-                                const SizedBox(height: 5),
-                                Text(
-                                  "\$${option['amount']}",
-                                  style: const TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    color: AppColors.chocolateNewDark,
-                                  ),
+                                BuildInfoItem(
+                                  icon: HugeIcons.strokeRoundedHealtcare,
+                                  text:
+                                      "Brindar apoyo a niños y niñas con autismo",
+                                ),
+                                BuildInfoItem(
+                                  icon: HugeIcons.strokeRoundedHeartCheck,
+                                  text:
+                                      "Mantener la app gratuita para todas las familias",
                                 ),
                               ],
                             ),
-                          ),
-                        );
-                      }),
-                    ),
-                  ),
-
-                  // Opción de monto personalizado
-                  FadeInUp(
-                    duration: const Duration(milliseconds: 1000),
-                    child: Padding(
-                      padding: const EdgeInsets.all(20),
-                      child: ElevatedButton.icon(
-                        icon: HugeIcon(
-                          icon: HugeIcons.strokeRoundedPencilEdit02,
-                          color: Colors.white,
-                          size: 20,
+                          ],
                         ),
-                        label: const Text(
-                          "Otro monto",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.chocolateNewDark,
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 15, horizontal: 30),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          shadowColor: Colors.black.withOpacity(0.2),
-                          elevation: 5,
-                        ),
-                        onPressed: () => _showCustomAmountDialog(),
                       ),
                     ),
                   ),
-
-                  const SizedBox(height: 30),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  void _showCustomAmountDialog() {
-    final TextEditingController _amountController = TextEditingController();
-
-    showDialog(
-      context: context,
-      builder: (context) => FadeInUp(
-        child: AlertDialog(
-          backgroundColor: AppColors.cardBackgroundSoft,
-          title: const Text(
-            "Donación Personalizada",
-            style: TextStyle(
-                color: AppColors.textColor, fontWeight: FontWeight.bold),
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                controller: _amountController,
-                keyboardType: TextInputType.number,
-                decoration: const InputDecoration(
-                  labelText: "Monto en USD",
-                  prefixText: "\$",
-                  border: OutlineInputBorder(),
                 ),
-              ),
-              const SizedBox(height: 15),
-              const Text(
-                "Ingresa el monto que deseas donar. Recuerda que el 10% irá a la fundación EPA.",
-                style: TextStyle(fontSize: 13),
-              ),
-            ],
+                const SizedBox(height: 30),
+                if (_bannerAd != null)
+                  Container(
+                    alignment: Alignment.center,
+                    width: _bannerAd!.size.width.toDouble(),
+                    height: _bannerAd!.size.height.toDouble(),
+                    child: AdWidget(ad: _bannerAd!),
+                  ),
+                const SizedBox(height: 20),
+                ElevatedButton.icon(
+                  onPressed: _showInterstitialAd,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.chocolateNewDark,
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 15, horizontal: 20),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                  ),
+                  icon: const Icon(Icons.play_arrow, color: Colors.white),
+                  label: const Text(
+                    "Apoya viendo un anuncio 🎬",
+                    style: TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                const SizedBox(height: 30),
+              ],
+            ),
           ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text(
-                "Cancelar",
-                style: TextStyle(color: AppColors.chocolateNewDark),
-              ),
-            ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.chocolateNewDark,
-              ),
-              onPressed: () {
-                final enteredAmount = int.tryParse(_amountController.text);
-                if (enteredAmount != null && enteredAmount > 0) {
-                  Navigator.pop(context); // cerrar diálogo
-                  _showDonationDialog(enteredAmount); // mostrar confirmación
-                } else {
-                  _showPaymentError("Por favor ingresa un monto válido");
-                }
-              },
-              child: const Text(
-                "Continuar",
-                style: TextStyle(
-                    color: AppColors.textColor, fontWeight: FontWeight.bold),
-              ),
-            ),
-          ],
-        ),
+        ],
       ),
     );
   }
