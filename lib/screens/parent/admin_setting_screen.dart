@@ -140,30 +140,39 @@ class _AdminSettingScreenState extends State<AdminSettingScreen> {
                                             final profile =
                                                 state.detailsProfileDto;
                                             return ElasticIn(
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    profile.parentName,
-                                                    style: const TextStyle(
-                                                      color: AppColors
-                                                          .chocolateNewDark,
-                                                      fontSize: 20,
-                                                      fontWeight:
-                                                          FontWeight.bold,
+                                              child: SizedBox(
+                                                width: size.width * 0.5,
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      profile.parentName,
+                                                      style: const TextStyle(
+                                                        color: AppColors
+                                                            .chocolateNewDark,
+                                                        fontSize: 20,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      maxLines: 1,
                                                     ),
-                                                  ),
-                                                  const SizedBox(height: 8.0),
-                                                  Text(
-                                                    profile.email,
-                                                    style: const TextStyle(
-                                                      color: AppColors
-                                                          .chocolateNewDark,
-                                                      fontSize: 12,
+                                                    const SizedBox(height: 8.0),
+                                                    Text(
+                                                      profile.email,
+                                                      style: const TextStyle(
+                                                        color: AppColors
+                                                            .chocolateNewDark,
+                                                        fontSize: 18,
+                                                      ),
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      maxLines: 1,
                                                     ),
-                                                  ),
-                                                ],
+                                                  ],
+                                                ),
                                               ),
                                             );
                                           } else if (state is SettingLoading) {

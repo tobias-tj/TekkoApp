@@ -52,7 +52,11 @@ class _TasksScreenState extends State<TasksScreen> {
     return Scaffold(
       backgroundColor: AppColors.softCream,
       appBar: AppBar(
-        title: const Text('Tareas por Completar'),
+        title: const Text(
+          'Tareas por Completar',
+          style: TextStyle(
+              color: AppColors.textColor, fontWeight: FontWeight.bold),
+        ),
         backgroundColor: AppColors.softCreamDark,
       ),
       body: BlocBuilder<TaskBloc, TaskState>(builder: (context, state) {

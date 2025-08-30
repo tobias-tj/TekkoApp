@@ -359,49 +359,52 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
               FadeInUp(
                 delay: const Duration(milliseconds: 800),
                 child: ElasticIn(
-                  child: ElevatedButton(
-                    onPressed: _isSaving ? null : _saveTask,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: _isSaving
-                          ? Colors.orange.withOpacity(0.7)
-                          : Colors.orange,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 40,
-                        vertical: 18,
+                  child: SafeArea(
+                    top: false,
+                    child: ElevatedButton(
+                      onPressed: _isSaving ? null : _saveTask,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: _isSaving
+                            ? Colors.orange.withOpacity(0.7)
+                            : Colors.orange,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 40,
+                          vertical: 18,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        elevation: 10,
+                        shadowColor: Colors.orange.withOpacity(0.5),
                       ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      elevation: 10,
-                      shadowColor: Colors.orange.withOpacity(0.5),
-                    ),
-                    child: _isSaving
-                        ? const SizedBox(
-                            width: 20,
-                            height: 20,
-                            child: CircularProgressIndicator(
-                              color: Colors.white,
-                              strokeWidth: 2,
+                      child: _isSaving
+                          ? const SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                                strokeWidth: 2,
+                              ),
+                            )
+                          : const Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  Icons.save,
+                                  size: 24,
+                                  color: AppColors.textColor,
+                                ),
+                                SizedBox(width: 10),
+                                Text(
+                                  'Guardar Tarea',
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: AppColors.textColor),
+                                ),
+                              ],
                             ),
-                          )
-                        : const Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(
-                                Icons.save,
-                                size: 24,
-                                color: AppColors.textColor,
-                              ),
-                              SizedBox(width: 10),
-                              Text(
-                                'Guardar Tarea',
-                                style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    color: AppColors.textColor),
-                              ),
-                            ],
-                          ),
+                    ),
                   ),
                 ),
               ),

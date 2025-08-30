@@ -130,29 +130,38 @@ class _SettingScreenState extends State<SettingScreen> {
                                         return ElasticIn(
                                           duration:
                                               const Duration(milliseconds: 800),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                profile.childName,
-                                                style: const TextStyle(
-                                                  color: AppColors
-                                                      .chocolateNewDark,
-                                                  fontSize: 20,
-                                                  fontWeight: FontWeight.bold,
+                                          child: SizedBox(
+                                            width: size.width * 0.5,
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  profile.childName,
+                                                  style: const TextStyle(
+                                                    color: AppColors
+                                                        .chocolateNewDark,
+                                                    fontSize: 20,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  maxLines: 1,
                                                 ),
-                                              ),
-                                              const SizedBox(height: 8),
-                                              Text(
-                                                profile.email,
-                                                style: const TextStyle(
-                                                  color: AppColors
-                                                      .chocolateNewDark,
-                                                  fontSize: 11,
+                                                const SizedBox(height: 8),
+                                                Text(
+                                                  profile.email,
+                                                  style: const TextStyle(
+                                                    color: AppColors
+                                                        .chocolateNewDark,
+                                                    fontSize: 18,
+                                                  ),
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  maxLines: 1,
                                                 ),
-                                              ),
-                                            ],
+                                              ],
+                                            ),
                                           ),
                                         );
                                       } else if (state is SettingLoading) {
