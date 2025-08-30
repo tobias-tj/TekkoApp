@@ -261,23 +261,26 @@ class _ProfileSummaryScreenState extends State<ProfileSummaryScreen> {
         ),
         bottomNavigationBar: _isEditing
             ? FadeInUp(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: ElevatedButton(
-                    onPressed: _hasChanges() ? _saveChanges : null,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.chocolateNewDark,
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                child: SafeArea(
+                  top: false,
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: ElevatedButton(
+                      onPressed: _hasChanges() ? _saveChanges : null,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.chocolateNewDark,
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
                       ),
-                    ),
-                    child: Text(
-                      _isLoading ? 'Guardando...' : 'Guardar Cambios',
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
+                      child: Text(
+                        _isLoading ? 'Guardando...' : 'Guardar Cambios',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),

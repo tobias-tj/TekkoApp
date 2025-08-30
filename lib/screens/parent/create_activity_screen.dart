@@ -152,8 +152,24 @@ class _CreateActivityScreenState extends State<CreateActivityScreen> {
             ),
           );
 
-          // 👉 Mostrar Interstitial
-          _loadInterstitial();
+          Future.delayed(const Duration(milliseconds: 500), () async {
+            if (mounted) {
+              // Manejo de contador
+              int count = await StorageUtils.getInt('activity_counter') ?? 0;
+              count++;
+
+              if (count >= 3) {
+                // Mostrar publicidad
+                _loadInterstitial();
+                count = 0; // reiniciar
+              }
+
+              // Guardar nuevo valor
+              await StorageUtils.setInt('activity_counter', count);
+
+              context.goNamed('adminHome');
+            }
+          });
         } else if (state is ActivityError) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
