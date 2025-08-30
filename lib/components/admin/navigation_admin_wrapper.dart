@@ -25,41 +25,44 @@ class NavigationAdminWrapper extends StatelessWidget {
     // Obtener el índice correspondiente al nombre de la ruta actual
     final currentIndex = routesIndex[currentRouteName] ?? 0;
 
-    return CurvedNavigationBar(
-      backgroundColor: AppColors.softCream,
-      color: AppColors.softCreamDark,
-      buttonBackgroundColor: Colors.white,
-      animationDuration: const Duration(milliseconds: 300),
-      index: currentIndex, // Índice de la ruta actual
-      items: [
-        const HugeIcon(
-          icon: HugeIcons.strokeRoundedHome01,
-          color: AppColors.chocolateNewDark,
-          size: 27.0,
-        ),
-        const HugeIcon(
-          icon: HugeIcons.strokeRoundedMath,
-          color: AppColors.chocolateNewDark,
-          size: 27.0,
-        ),
-        HugeIcon(
-            icon: HugeIcons.strokeRoundedMapsGlobal01,
+    return SafeArea(
+      top: false,
+      child: CurvedNavigationBar(
+        backgroundColor: AppColors.softCream,
+        color: AppColors.softCreamDark,
+        buttonBackgroundColor: Colors.white,
+        animationDuration: const Duration(milliseconds: 300),
+        index: currentIndex, // Índice de la ruta actual
+        items: [
+          const HugeIcon(
+            icon: HugeIcons.strokeRoundedHome01,
             color: AppColors.chocolateNewDark,
-            size: 27.0),
-        HugeIcon(
-            icon: HugeIcons.strokeRoundedHealtcare,
+            size: 27.0,
+          ),
+          const HugeIcon(
+            icon: HugeIcons.strokeRoundedMath,
             color: AppColors.chocolateNewDark,
-            size: 27.0),
-        HugeIcon(
-            icon: HugeIcons.strokeRoundedSettings01,
-            color: AppColors.chocolateNewDark,
-            size: 27.0),
-      ],
-      onTap: (index) {
-        // Lista de rutas por índice
-        final routes = routesIndex.keys.toList();
-        context.go(routes[index]); // Navegar a la ruta correspondiente
-      },
+            size: 27.0,
+          ),
+          HugeIcon(
+              icon: HugeIcons.strokeRoundedMapsGlobal01,
+              color: AppColors.chocolateNewDark,
+              size: 27.0),
+          HugeIcon(
+              icon: HugeIcons.strokeRoundedHealtcare,
+              color: AppColors.chocolateNewDark,
+              size: 27.0),
+          HugeIcon(
+              icon: HugeIcons.strokeRoundedSettings01,
+              color: AppColors.chocolateNewDark,
+              size: 27.0),
+        ],
+        onTap: (index) {
+          // Lista de rutas por índice
+          final routes = routesIndex.keys.toList();
+          context.go(routes[index]); // Navegar a la ruta correspondiente
+        },
+      ),
     );
   }
 }

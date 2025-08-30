@@ -50,7 +50,11 @@ class _DrawingScreenState extends State<DrawingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Dibujo Libre'),
+        title: const Text(
+          'Dibujo Libre',
+          style: TextStyle(
+              color: AppColors.textColor, fontWeight: FontWeight.bold),
+        ),
         backgroundColor: AppColors.softCreamDark,
       ),
       body: Stack(
@@ -60,67 +64,70 @@ class _DrawingScreenState extends State<DrawingScreen> {
             bottom: 20,
             left: 10,
             right: 10,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    FloatingActionButton(
-                      heroTag: 'color-red',
-                      backgroundColor: Colors.red,
-                      onPressed: () =>
-                          setState(() => _game.changeColor(Colors.red)),
-                    ),
-                    FloatingActionButton(
-                      heroTag: 'color-blue',
-                      backgroundColor: Colors.blue,
-                      onPressed: () =>
-                          setState(() => _game.changeColor(Colors.blue)),
-                    ),
-                    FloatingActionButton(
-                      heroTag: 'color-green',
-                      backgroundColor: Colors.green,
-                      onPressed: () =>
-                          setState(() => _game.changeColor(Colors.green)),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    FloatingActionButton(
-                      backgroundColor: AppColors.softCreamDark,
-                      heroTag: 'color-clear',
-                      child: const Icon(
-                        Icons.delete,
-                        color: AppColors.chocolateNewDark,
+            child: SafeArea(
+              top: false,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      FloatingActionButton(
+                        heroTag: 'color-red',
+                        backgroundColor: Colors.red,
+                        onPressed: () =>
+                            setState(() => _game.changeColor(Colors.red)),
                       ),
-                      onPressed: () => setState(() => _game.clearCanvas()),
-                    ),
-                    FloatingActionButton(
-                      backgroundColor: AppColors.softCreamDark,
-                      heroTag: 'color-save',
-                      onPressed: _saveDrawing,
-                      child: const Icon(
-                        Icons.save,
-                        color: AppColors.chocolateNewDark,
+                      FloatingActionButton(
+                        heroTag: 'color-blue',
+                        backgroundColor: Colors.blue,
+                        onPressed: () =>
+                            setState(() => _game.changeColor(Colors.blue)),
                       ),
-                    ),
-                    FloatingActionButton(
-                      onPressed: () {
-                        context.pushReplacement('/home');
-                      },
-                      backgroundColor: AppColors.softCreamDark,
-                      child: const Icon(
-                        Icons.home,
-                        color: AppColors.chocolateNewDark,
+                      FloatingActionButton(
+                        heroTag: 'color-green',
+                        backgroundColor: Colors.green,
+                        onPressed: () =>
+                            setState(() => _game.changeColor(Colors.green)),
                       ),
-                    ),
-                  ],
-                ),
-              ],
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      FloatingActionButton(
+                        backgroundColor: AppColors.softCreamDark,
+                        heroTag: 'color-clear',
+                        child: const Icon(
+                          Icons.delete,
+                          color: AppColors.chocolateNewDark,
+                        ),
+                        onPressed: () => setState(() => _game.clearCanvas()),
+                      ),
+                      FloatingActionButton(
+                        backgroundColor: AppColors.softCreamDark,
+                        heroTag: 'color-save',
+                        onPressed: _saveDrawing,
+                        child: const Icon(
+                          Icons.save,
+                          color: AppColors.chocolateNewDark,
+                        ),
+                      ),
+                      FloatingActionButton(
+                        onPressed: () {
+                          context.pushReplacement('/home');
+                        },
+                        backgroundColor: AppColors.softCreamDark,
+                        child: const Icon(
+                          Icons.home,
+                          color: AppColors.chocolateNewDark,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ],

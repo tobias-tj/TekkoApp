@@ -25,7 +25,6 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
     _selectedDate = DateTime.now();
     _getActivityData();
   }
-// TODO: falta subscribirte al evento cuando se crea una nueva actividad
 
   Future<void> _getActivityData() async {
     try {
@@ -166,6 +165,9 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
               Expanded(
                 child: BlocBuilder<ActivityBloc, ActivityState>(
                   builder: (context, state) {
+                    if (state is ActivitySuccess) {
+                      _getActivityData();
+                    }
                     if (state is ActivitiesLoadSuccess) {
                       if (state.activities.isEmpty) {
                         return const Center(
