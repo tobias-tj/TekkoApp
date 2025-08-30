@@ -7,6 +7,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:tekko/features/api/data/bloc/activity/activity_bloc.dart';
 import 'package:tekko/features/api/data/models/form_activity_model.dart';
+import 'package:tekko/features/core/utils/format_date.dart';
 import 'package:tekko/features/core/utils/storage_utils.dart';
 import 'package:tekko/styles/app_colors.dart';
 import 'package:tekko/utils/ad_helper.dart';
@@ -69,8 +70,24 @@ class _CreateActivityScreenState extends State<CreateActivityScreen> {
         setState(() {
           if (isStart) {
             _startTime = date;
+
+            // 👇 Si ya había un endTime y quedó inválido, lo reseteamos
+            if (_endTime != null && _endTime!.isBefore(_startTime!)) {
+              _endTime = null;
+            }
           } else {
-            _endTime = date;
+            if (_startTime != null && date.isBefore(_startTime!)) {
+              // 👇 Aviso visual
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text(
+                      'La fecha de vencimiento debe ser mayor que la de inicio'),
+                  backgroundColor: Colors.red,
+                ),
+              );
+            } else {
+              _endTime = date;
+            }
           }
         });
       },
@@ -83,6 +100,18 @@ class _CreateActivityScreenState extends State<CreateActivityScreen> {
     if (_formKey.currentState!.validate() &&
         _startTime != null &&
         _endTime != null) {
+      if (_endTime!.isBefore(_startTime!) ||
+          _endTime!.isAtSameMomentAs(_startTime!)) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+                'La fecha de vencimiento debe ser posterior a la fecha de inicio'),
+            backgroundColor: Colors.red,
+          ),
+        );
+        return;
+      }
+
       final detail = Detail(
         startActivityTime: _startTime!,
         expirationActivityTime: _endTime!,
@@ -365,7 +394,7 @@ class _CreateActivityScreenState extends State<CreateActivityScreen> {
                           ListTile(
                             title: Text(
                               _startTime != null
-                                  ? 'Inicio: ${_startTime!.toLocal()}'
+                                  ? 'Inicio: ${formatDateTimePretty(_startTime!)}'
                                   : 'Seleccionar fecha y hora',
                               style: TextStyle(
                                 color: _startTime != null
@@ -422,7 +451,7 @@ class _CreateActivityScreenState extends State<CreateActivityScreen> {
                           ListTile(
                             title: Text(
                               _endTime != null
-                                  ? 'Vencimiento: ${_endTime!.toLocal()}'
+                                  ? 'Vencimiento: ${formatDateTimePretty(_endTime!)}'
                                   : 'Seleccionar fecha y hora',
                               style: TextStyle(
                                 color: _endTime != null
@@ -446,53 +475,56 @@ class _CreateActivityScreenState extends State<CreateActivityScreen> {
                 // Botones de acción
                 FadeInUp(
                   delay: const Duration(milliseconds: 500),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: ElevatedButton(
-                          onPressed: _submitForm,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.chocolateNewDark,
-                            padding: const EdgeInsets.symmetric(vertical: 16),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
+                  child: SafeArea(
+                    top: false,
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: _submitForm,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: AppColors.chocolateNewDark,
+                              padding: const EdgeInsets.symmetric(vertical: 16),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
                             ),
-                          ),
-                          child: const Text(
-                            'Crear Actividad',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: TextButton(
-                          onPressed: () => context.goNamed('adminHome'),
-                          style: TextButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(vertical: 16),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              side: BorderSide(
-                                color: AppColors.chocolateNewDark,
-                                width: 2,
+                            child: const Text(
+                              'Crear Actividad',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
                           ),
-                          child: const Text(
-                            'Cancelar',
-                            style: TextStyle(
-                              color: AppColors.chocolateNewDark,
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: TextButton(
+                            onPressed: () => context.goNamed('adminHome'),
+                            style: TextButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(vertical: 16),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                side: BorderSide(
+                                  color: AppColors.chocolateNewDark,
+                                  width: 2,
+                                ),
+                              ),
+                            ),
+                            child: const Text(
+                              'Cancelar',
+                              style: TextStyle(
+                                color: AppColors.chocolateNewDark,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ],

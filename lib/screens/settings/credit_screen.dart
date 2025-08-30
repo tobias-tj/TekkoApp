@@ -214,17 +214,20 @@ class CreditsScreen extends StatelessWidget {
 
             // Nota Legal
             FadeInUp(
-              child: const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8),
-                child: Text(
-                  'Nota: Todos los recursos externos mencionados son utilizados por Tekko '
-                  'bajo las respectivas licencias de uso. YvagaCore reconoce y agradece '
-                  'el trabajo de estos creadores.',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontStyle: FontStyle.italic,
+              child: SafeArea(
+                top: false,
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8),
+                  child: Text(
+                    'Nota: Todos los recursos externos mencionados son utilizados por Tekko '
+                    'bajo las respectivas licencias de uso. YvagaCore reconoce y agradece '
+                    'el trabajo de estos creadores.',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontStyle: FontStyle.italic,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                  textAlign: TextAlign.center,
                 ),
               ),
             ),

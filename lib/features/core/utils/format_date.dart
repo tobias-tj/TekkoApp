@@ -24,3 +24,10 @@ String formatDatePretty(String dateStr) {
     return dateStr; // fallback
   }
 }
+
+String formatDateTimePretty(DateTime date) {
+  final dateFormat =
+      DateFormat('EEEE d \'de\' MMMM', 'es'); // ejemplo: Sábado 30 de agosto
+  final timeFormat = DateFormat('HH:mm', 'es'); // ejemplo: 09:00
+  return '${dateFormat.format(date)} - ${timeFormat.format(date)}';
+}
