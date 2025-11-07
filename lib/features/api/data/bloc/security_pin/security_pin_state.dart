@@ -28,3 +28,21 @@ class SecurityPinError extends SecurityPinState {
   @override
   List<Object> get props => [message];
 }
+
+class SendPinSecuritySuccess extends SecurityPinState {
+  final String message;
+
+  const SendPinSecuritySuccess({required this.message});
+
+  @override
+  List<Object> get props => [message];
+}
+
+class SendPinSecurityError extends SecurityPinState {
+  final String message;
+
+  const SendPinSecurityError({required this.message});
+
+  @override
+  List<Object> get props => [message];
+}

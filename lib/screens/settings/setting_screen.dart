@@ -17,6 +17,8 @@ class SettingScreen extends StatefulWidget {
 }
 
 class _SettingScreenState extends State<SettingScreen> {
+  String? emailFinal;
+
   @override
   void initState() {
     super.initState();
@@ -31,7 +33,6 @@ class _SettingScreenState extends State<SettingScreen> {
   Future<void> _getSettingData() async {
     try {
       final token = await StorageUtils.getString('token');
-
       context.read<SettingBloc>().add(SettingProfileRequested(token: token!));
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -58,18 +59,11 @@ class _SettingScreenState extends State<SettingScreen> {
             child: Column(
               children: [
                 const SizedBox(height: 20),
-
-                // Título con animación de rebote
                 BounceInDown(
                   duration: const Duration(milliseconds: 800),
-                  child: const TopTitleGeneric(
-                    title: "Mis Ajustes",
-                  ),
+                  child: const TopTitleGeneric(title: "Mis Ajustes"),
                 ),
-
                 const SizedBox(height: 25),
-
-                // Tarjeta principal con efecto de aparición
                 ElasticIn(
                   duration: const Duration(milliseconds: 900),
                   child: Padding(
@@ -84,7 +78,6 @@ class _SettingScreenState extends State<SettingScreen> {
                         padding: const EdgeInsets.all(16.0),
                         child: Column(
                           children: [
-                            // Avatar y datos del niño con animación escalonada
                             FadeInLeft(
                               duration: const Duration(milliseconds: 600),
                               child: Row(
@@ -123,52 +116,70 @@ class _SettingScreenState extends State<SettingScreen> {
                                     },
                                   ),
                                   const SizedBox(width: 10),
-                                  BlocBuilder<SettingBloc, SettingState>(
-                                    builder: (context, state) {
+
+                                  // 👇 solo muestra los datos del perfil
+                                  BlocListener<SettingBloc, SettingState>(
+                                    listener: (context, state) {
                                       if (state is SettingProfileSuccess) {
-                                        final profile = state.detailsProfileDto;
-                                        return ElasticIn(
-                                          duration:
-                                              const Duration(milliseconds: 800),
-                                          child: SizedBox(
-                                            width: size.width * 0.5,
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  profile.childName,
-                                                  style: const TextStyle(
-                                                    color: AppColors
-                                                        .chocolateNewDark,
-                                                    fontSize: 20,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  maxLines: 1,
-                                                ),
-                                                const SizedBox(height: 8),
-                                                Text(
-                                                  profile.email,
-                                                  style: const TextStyle(
-                                                    color: AppColors
-                                                        .chocolateNewDark,
-                                                    fontSize: 18,
-                                                  ),
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  maxLines: 1,
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        );
-                                      } else if (state is SettingLoading) {
-                                        return const CircularProgressIndicator();
+                                        setState(() {
+                                          emailFinal =
+                                              state.detailsProfileDto.email;
+                                        });
                                       }
-                                      return const Text("Mis datos");
                                     },
+                                    child:
+                                        BlocBuilder<SettingBloc, SettingState>(
+                                      builder: (context, state) {
+                                        if (state is SettingProfileSuccess) {
+                                          final profile =
+                                              state.detailsProfileDto;
+                                          return ElasticIn(
+                                            duration: const Duration(
+                                                milliseconds: 800),
+                                            child: SizedBox(
+                                              width: size.width * 0.5,
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    profile.childName,
+                                                    style: const TextStyle(
+                                                      color: AppColors
+                                                          .chocolateNewDark,
+                                                      fontSize: 20,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    maxLines: 1,
+                                                  ),
+                                                  const SizedBox(height: 8),
+                                                  Text(
+                                                    profile.email,
+                                                    style: const TextStyle(
+                                                      color: AppColors
+                                                          .chocolateNewDark,
+                                                      fontSize: 18,
+                                                    ),
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    maxLines: 1,
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          );
+                                        } else if (state is SettingLoading) {
+                                          return const Padding(
+                                            padding: EdgeInsets.all(8.0),
+                                            child: CircularProgressIndicator(),
+                                          );
+                                        }
+                                        return const Text("Mis datos");
+                                      },
+                                    ),
                                   ),
                                 ],
                               ),
@@ -176,7 +187,6 @@ class _SettingScreenState extends State<SettingScreen> {
 
                             const SizedBox(height: 20),
 
-                            // Línea divisora animada
                             Swing(
                               duration: const Duration(milliseconds: 1200),
                               child: LinearElement(size: size),
@@ -184,16 +194,23 @@ class _SettingScreenState extends State<SettingScreen> {
 
                             const SizedBox(height: 20),
 
-                            // Botón de modo padres con animación llamativa
+                            // 👇 ahora el botón se mantiene en su posición original
                             Pulse(
                               duration: const Duration(milliseconds: 1500),
                               infinite: false,
                               child: ElevatedButton(
-                                onPressed: () {
-                                  context.pushReplacement('/parentModePin');
-                                },
+                                onPressed: emailFinal == null
+                                    ? null
+                                    : () {
+                                        context.pushNamed(
+                                          'parentModePin',
+                                          extra: emailFinal,
+                                        );
+                                      },
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: AppColors.chocolateNewDark,
+                                  backgroundColor: emailFinal == null
+                                      ? Colors.grey
+                                      : AppColors.chocolateNewDark,
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(15.0),
                                   ),
@@ -207,9 +224,11 @@ class _SettingScreenState extends State<SettingScreen> {
                                 child: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    const Text(
-                                      "Modo Papás",
-                                      style: TextStyle(
+                                    Text(
+                                      emailFinal == null
+                                          ? "Cargando..."
+                                          : "Modo Papás",
+                                      style: const TextStyle(
                                         color: Colors.white,
                                         fontSize: 20,
                                         fontWeight: FontWeight.bold,

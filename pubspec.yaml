@@ -18,6 +18,7 @@ dependencies:
   equatable: ^2.0.7
   firebase_analytics: ^12.0.0
   firebase_core: ^4.0.0
+  firebase_messaging: ^16.0.4
   flame: ^1.24.0
   flutter:
     sdk: flutter
@@ -25,6 +26,7 @@ dependencies:
   flutter_datetime_picker_plus: ^2.2.0
   flutter_dotenv: ^5.2.1
   flutter_hooks: ^0.21.2
+  flutter_local_notifications: ^19.5.0
   flutter_map: ^8.1.1
   flutter_stripe: ^9.4.0
   gal: ^2.3.1

@@ -220,8 +220,10 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       name: 'parentModePin',
       path: '/parentModePin',
-      pageBuilder: (context, state) =>
-          NoTransitionPage(child: const ParentPinScreen()),
+      pageBuilder: (context, state) {
+        final email = state.extra as String;
+        return NoTransitionPage(child: ParentPinScreen(email: email));
+      },
     ),
     ShellRoute(
       builder: (context, state, child) {

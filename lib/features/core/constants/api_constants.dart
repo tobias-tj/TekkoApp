@@ -1,5 +1,6 @@
 class ApiConstants {
   static const String baseUrl = 'http://localhost:3000/api';
+  //Version Prod -->  https://tekko-api.yvagacore.com/api
   static const String registerEndpoint = '/register';
   static const String loginEndpoint = '/login';
   static const String experienceEndpoint = '/experience';

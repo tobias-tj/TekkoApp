@@ -50,6 +50,7 @@ import 'package:tekko/features/api/domain/usecases/update_profile.dart';
 import 'package:tekko/features/api/domain/usecases/update_status_task.dart';
 import 'package:tekko/features/api/domain/usecases/verify_security_pin.dart';
 import 'package:tekko/features/core/network/dio_client.dart';
+import 'package:tekko/features/services/firebase_message.dart';
 import 'package:tekko/styles/app_colors.dart';
 import 'package:firebase_core/firebase_core.dart';
 
@@ -62,6 +63,7 @@ void main() async {
   Stripe.publishableKey = dotenv.env['STRIPE_PUBLISHABLE_KEY']!;
   await Stripe.instance.applySettings();
   await Firebase.initializeApp();
+  await FirebaseMessageService.initialize();
   await MobileAds.instance.initialize();
   runApp(MainApp(analytics: analytics));
 }
@@ -148,6 +150,13 @@ final class MainApp extends StatelessWidget {
                   ),
                 ),
               ),
+              sendPinByEmail: SendPinByEmail(
+                authRepository: AuthRepositoryImpl(
+                  remoteDataSource:
+                      AuthRemoteDataSource(dio: context.read<DioClient>().dio),
+                ),
+              ),
+              analytics: analytics,
             ),
           ),
           BlocProvider(
