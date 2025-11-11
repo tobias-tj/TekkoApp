@@ -188,6 +188,7 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
         }
       },
       child: Scaffold(
+        resizeToAvoidBottomInset: true,
         backgroundColor: AppColors.softCream,
         appBar: AppBar(
           backgroundColor: AppColors.softCream,

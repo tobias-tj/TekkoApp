@@ -187,7 +187,7 @@ class MoreInfoScreen extends StatelessWidget {
                             const SizedBox(height: 10),
                             InkWell(
                               onTap: () =>
-                                  _launchURL('https://www.yvagacore.tech/'),
+                                  _launchURL('https://www.yvagacore.com/'),
                               child: Row(
                                 children: [
                                   Icon(
@@ -197,7 +197,7 @@ class MoreInfoScreen extends StatelessWidget {
                                   ),
                                   const SizedBox(width: 5),
                                   const Text(
-                                    'www.yvagacore.tech',
+                                    'www.yvagacore.com',
                                     style: TextStyle(
                                       color: Colors.blue,
                                       decoration: TextDecoration.underline,

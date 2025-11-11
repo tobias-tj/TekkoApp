@@ -97,6 +97,17 @@ class _ManageTaskScreenState extends State<ManageTaskScreen> {
   // Estados para el filtrado
   String _filter = 'todas'; // 'todas', 'completadas', 'pendientes'
 
+  String _getEmptyMessage() {
+    switch (_filter) {
+      case 'completadas':
+        return 'No se encontraron tareas completadas';
+      case 'pendientes':
+        return 'No se encontraron tareas pendientes';
+      default:
+        return 'No se encontraron tareas registradas';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -268,7 +279,7 @@ class _ManageTaskScreenState extends State<ManageTaskScreen> {
                                     ),
                                     const SizedBox(height: 30),
                                     Text(
-                                      'No se encontraron tareas pendientes',
+                                      _getEmptyMessage(),
                                       style: TextStyle(
                                         fontSize: 18,
                                         color: Colors.grey.shade600,

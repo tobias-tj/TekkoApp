@@ -1,4 +1,5 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -58,6 +59,8 @@ final FirebaseAnalytics analytics = FirebaseAnalytics.instance;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  FirebaseMessaging.onBackgroundMessage(
+      FirebaseMessageService.firebaseMessagingBackgroundHandler);
   await initializeDateFormatting('es');
   await dotenv.load(fileName: ".env");
   Stripe.publishableKey = dotenv.env['STRIPE_PUBLISHABLE_KEY']!;

@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:tekko/components/admin/navigation_admin_wrapper.dart';
 import 'package:tekko/features/api/data/models/details_profile_dto.dart';
 import 'package:tekko/features/api/data/models/get_task_dto.dart';
+import 'package:tekko/features/services/firebase_message.dart';
 import 'package:tekko/screens/accounts/create_account_screen.dart';
 import 'package:tekko/screens/accounts/login_account_screen.dart';
 import 'package:tekko/screens/accounts/maps_account_screen.dart';
@@ -41,6 +42,7 @@ import 'package:tekko/screens/words/word_screen.dart';
 
 final GoRouter appRouter = GoRouter(
   initialLocation: '/splash',
+  navigatorKey: navigatorKey,
   routes: [
     GoRoute(
       name: 'splash',
