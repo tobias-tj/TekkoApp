@@ -39,6 +39,11 @@ class TaskGetSuccess extends TaskState {
   List<Object?> get props => [tasks];
 }
 
+class TaskGetHomeSuccess extends TaskState {
+  final GetTaskDto tasks;
+  const TaskGetHomeSuccess({required this.tasks});
+}
+
 class TaskUpdateSuccess extends TaskState {
   final String message;
 

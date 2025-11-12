@@ -30,6 +30,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     on<TaskGetRequested>(_onTaskGetRequested);
     on<TaskUpdateRequested>(_onTaskUpdateRequested);
     on<TaskDeleteRequested>(_onTaskDeleteRequested);
+    on<TaskGetFromHomeRequested>(_onTaskGetFromHomeRequested);
   }
 
   Future<void> _onTaskRequested(
@@ -100,6 +101,24 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
         message: e.toString().contains('Exception:')
             ? e.toString().split('Exception:')[1].trim()
             : 'Error al eliminar la tarea',
+      ));
+    }
+  }
+
+  Future<void> _onTaskGetFromHomeRequested(
+    TaskGetFromHomeRequested event,
+    Emitter<TaskState> emit,
+  ) async {
+    emit(TaskLoading());
+
+    try {
+      final result = await getTasksByKid(event.token);
+      emit(TaskGetHomeSuccess(tasks: result));
+    } catch (e) {
+      emit(TaskError(
+        message: e.toString().contains('Exception:')
+            ? e.toString().split('Exception:')[1].trim()
+            : 'Failed to load tasks from home',
       ));
     }
   }

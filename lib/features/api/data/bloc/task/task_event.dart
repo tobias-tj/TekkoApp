@@ -25,6 +25,13 @@ class TaskGetRequested extends TaskEvent {
   List<Object> get props => [token];
 }
 
+class TaskGetFromHomeRequested extends TaskEvent {
+  final String token;
+  const TaskGetFromHomeRequested({required this.token});
+  @override
+  List<Object> get props => [token];
+}
+
 class TaskUpdateRequested extends TaskEvent {
   final UpdateTaskStatusDto updateTaskStatusDto;
 

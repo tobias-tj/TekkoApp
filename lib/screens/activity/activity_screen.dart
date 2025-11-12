@@ -5,7 +5,6 @@ import 'package:tekko/components/top_custom_title.dart';
 import 'package:tekko/features/api/data/bloc/activity/activity_bloc.dart';
 import 'package:tekko/features/api/data/bloc/task/task_bloc.dart';
 import 'package:tekko/features/core/utils/storage_utils.dart';
-import 'package:tekko/features/services/firebase_message.dart';
 import 'package:tekko/styles/app_colors.dart';
 
 class ActivityScreen extends StatefulWidget {
@@ -76,13 +75,6 @@ class _ActivityScreenState extends State<ActivityScreen> {
           } else if (state is TaskGetSuccess) {
             final taskData = state.tasks;
             incompleteTaskCount = taskData.pendingTasks;
-            if (taskData.pendingTasks > 0) {
-              FirebaseMessageService.showLocalNotification(
-                title: 'Hora de jugar y aprender! 🎉',
-                body: 'Hay una tarea esperándote en la sección de actividades.',
-                payload: 'tasks',
-              );
-            }
             return Column(
               children: [
                 TopCustomTitle(title: 'Actividades'),
