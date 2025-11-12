@@ -92,11 +92,20 @@ class _HomePageState extends State<HomePage> {
             listener: (context, state) {
               if (state is ActivitiesKidLoadSuccess &&
                   state.activities.isNotEmpty) {
-                FirebaseMessageService.showLocalNotification(
-                  title: '¡Tienes actividades para hoy! 🎉',
-                  body: 'Ve al calendario y completa tus desafíos.',
-                  payload: 'calendar',
-                );
+                // Filtrar las actividades pendientes
+                final pendingActivities = state.activities
+                    .where((activity) => activity.status == 'PENDING')
+                    .toList();
+
+                // Solo notificar si hay alguna pendiente
+                if (pendingActivities.isNotEmpty) {
+                  FirebaseMessageService.showLocalNotification(
+                    title:
+                        'Tienes ${pendingActivities.length} actividades pendientes 🎯',
+                    body: '¡No te olvides de completarlas hoy!',
+                    payload: 'calendar',
+                  );
+                }
               }
             },
           ),
