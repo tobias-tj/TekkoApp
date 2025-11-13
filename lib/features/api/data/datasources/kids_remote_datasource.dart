@@ -128,4 +128,31 @@ class KidsRemoteDatasource {
       );
     }
   }
+
+  Future<void> updateExperienceData(String token, int newExp) async {
+    try {
+      final response = await dio.put(
+        ApiConstants.updateExperienceEndpoint,
+        data: {
+          'points': newExp,
+        },
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $token',
+          },
+        ),
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 204) {
+        return;
+      } else {
+        throw Exception('Error al actualizar la experiencia');
+      }
+    } on DioException catch (e) {
+      throw Exception(
+        e.response?.data['message'] ??
+            'Error de red al actualizar la experiencia',
+      );
+    }
+  }
 }

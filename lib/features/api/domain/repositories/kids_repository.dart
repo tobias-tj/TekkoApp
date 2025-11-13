@@ -8,4 +8,5 @@ abstract class KidsRepository {
       String dateFilter, String token);
   Future<void> updateActivity(int activityId, String token);
   Future<void> updateTask(UpdateTaskStatusDto updateTask);
+  Future<void> updateExperienceData(String token, int newExp);
 }

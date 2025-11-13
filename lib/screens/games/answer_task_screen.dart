@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
+import 'package:tekko/features/api/data/bloc/experience/experience_bloc.dart';
 import 'package:tekko/features/api/data/bloc/task/task_bloc.dart';
 import 'package:tekko/features/api/data/models/get_task_dto.dart';
 import 'package:tekko/features/api/data/models/update_task_status_dto.dart';
@@ -71,6 +72,31 @@ class _AnswerTaskScreenState extends State<AnswerTaskScreen> {
     }
   }
 
+  Future<void> _getExperienceData() async {
+    try {
+      final token = await StorageUtils.getString('token');
+
+      context.read<ExperienceBloc>().add(FetchExperienceEvent(token!));
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: ${e.toString()}')),
+      );
+    }
+  }
+
+  Future<void> _updateExperience(int points) async {
+    try {
+      final token = await StorageUtils.getString('token');
+
+      context.read<ExperienceBloc>().add(UpdateExperienceEvent(token!, points));
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            content: Text('Error al actualizar experiencia: ${e.toString()}')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final task = widget.task;
@@ -79,31 +105,45 @@ class _AnswerTaskScreenState extends State<AnswerTaskScreen> {
     return BlocListener<TaskBloc, TaskState>(
         listener: (context, state) {
           if (state is TaskUpdateSuccess) {
-            _controller.clear();
+            // _controller.clear();
+            final userAnswer = int.tryParse(_controller.text);
+            final correctAnswer = widget.task.correctanswer;
 
             setState(() {
               _isSaving = false;
             });
 
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('✓ Tarea guardada exitosamente'),
-                backgroundColor: Colors.green,
-                behavior: SnackBarBehavior.floating,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
+            bool isCorrect = userAnswer == correctAnswer;
+
+            // 🎯 Mostrar mensaje de resultado (correcto / incorrecto)
+            Future.delayed(const Duration(milliseconds: 900), () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(isCorrect
+                      ? '🎉 ¡Respuesta Correcta! Has ganado +5 puntos de experiencia.'
+                      : '❌ Respuesta Incorrecta. La respuesta correcta era $correctAnswer.'),
+                  backgroundColor: isCorrect ? Colors.green : Colors.red,
+                  behavior: SnackBarBehavior.floating,
+                  shape: const RoundedRectangleBorder(
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(10)),
+                  ),
+                  duration: const Duration(seconds: 2),
                 ),
-              ),
-            );
-            Future.delayed(const Duration(milliseconds: 500), () {
-              if (mounted) {
-                context.goNamed('tasks');
-              }
+              );
+
+              _updateExperience(isCorrect ? 5 : 2);
+            });
+            // Limpieza del campo y redirección después del feedback
+            _controller.clear();
+            Future.delayed(const Duration(seconds: 3), () {
+              if (mounted) context.goNamed('tasks');
             });
           } else if (state is TaskError) {
             setState(() {
               _isSaving = false; // Desactivar carga al tener éxito
             });
+
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(state.message),

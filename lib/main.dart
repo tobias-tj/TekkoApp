@@ -45,6 +45,7 @@ import 'package:tekko/features/api/domain/usecases/recovery_account.dart';
 import 'package:tekko/features/api/domain/usecases/register_usecase.dart';
 import 'package:tekko/features/api/domain/usecases/send_pin_by_email.dart';
 import 'package:tekko/features/api/domain/usecases/update_activity.dart';
+import 'package:tekko/features/api/domain/usecases/update_experience.dart';
 import 'package:tekko/features/api/domain/usecases/update_map_info.dart';
 import 'package:tekko/features/api/domain/usecases/update_pin.dart';
 import 'package:tekko/features/api/domain/usecases/update_profile.dart';
@@ -136,6 +137,13 @@ final class MainApp extends StatelessWidget {
           BlocProvider(
             create: (context) => ExperienceBloc(
               getExperience: GetExperience(
+                KidsRepositoryImpl(
+                  remoteDataSource: KidsRemoteDatasource(
+                    dio: context.read<DioClient>().dio,
+                  ),
+                ),
+              ),
+              updateExperience: UpdateExperience(
                 KidsRepositoryImpl(
                   remoteDataSource: KidsRemoteDatasource(
                     dio: context.read<DioClient>().dio,

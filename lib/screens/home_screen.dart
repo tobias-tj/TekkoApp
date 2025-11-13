@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:tekko/components/list_card_item_home.dart';
 import 'package:tekko/components/top_custom_background.dart';
@@ -67,6 +68,19 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  Future<void> _checkForLevelUp(int currentLevel) async {
+    final savedLevelStr = await StorageUtils.getString('levelCurrent');
+    final savedLevel = int.tryParse(savedLevelStr ?? '0') ?? 0;
+
+    if (currentLevel > savedLevel && currentLevel >= 2) {
+      // 🎉 Mostrar felicitación
+      context.pushNamed('levelUp', extra: currentLevel);
+    }
+
+    // 🔄 Actualizar nivel guardado
+    await StorageUtils.setString('levelCurrent', currentLevel.toString());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -122,6 +136,7 @@ class _HomePageState extends State<HomePage> {
                 builder: (context, state) {
                   if (state is ExperienceLoaded) {
                     final levelCurrent = state.experience.level;
+                    _checkForLevelUp(levelCurrent);
 
                     return Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),

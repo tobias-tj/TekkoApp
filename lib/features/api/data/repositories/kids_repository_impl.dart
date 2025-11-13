@@ -45,4 +45,13 @@ class KidsRepositoryImpl implements KidsRepository {
       rethrow;
     }
   }
+
+  @override
+  Future<void> updateExperienceData(String token, int newExp) {
+    try {
+      return remoteDataSource.updateExperienceData(token, newExp);
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

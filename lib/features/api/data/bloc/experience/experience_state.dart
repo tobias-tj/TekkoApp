@@ -28,3 +28,12 @@ class ExperienceError extends ExperienceState {
   @override
   List<Object> get props => [message];
 }
+
+class ExperienceUpdated extends ExperienceState {
+  final String message;
+
+  const ExperienceUpdated(this.message);
+
+  @override
+  List<Object> get props => [message];
+}

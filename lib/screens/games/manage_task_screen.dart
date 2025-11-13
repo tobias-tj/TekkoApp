@@ -398,14 +398,28 @@ class _ManageTaskScreenState extends State<ManageTaskScreen> {
   Widget _buildTaskCard(Tasks task, bool isCompleted) {
     final operationSymbol = getOperationSymbol(task.operation);
 
+    // Verificamos si la respuesta del niño coincide con la del padre
+    final bool isCorrect = task.childanswer == task.correctanswer;
+
+    // Determinar color según estado
+    Color cardColor;
+    if (!isCompleted) {
+      // 🟠 No completada
+      cardColor = Colors.orange.withOpacity(0.8);
+    } else if (isCompleted && isCorrect) {
+      // 🟢 Completada correctamente
+      cardColor = Colors.green.withOpacity(0.5);
+    } else {
+      // 🔴 Completada pero incorrecta
+      cardColor = Colors.red.withOpacity(0.5);
+    }
+
     return Card(
       elevation: isCompleted ? 2 : 4,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15),
       ),
-      color: isCompleted
-          ? Colors.green.withOpacity(0.5)
-          : Colors.orange.withOpacity(0.8),
+      color: cardColor,
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(

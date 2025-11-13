@@ -144,11 +144,12 @@ final GoRouter appRouter = GoRouter(
           NoTransitionPage(child: const WinnerScreen()),
     ),
     GoRoute(
-      name: 'levelUp',
-      path: '/levelUp',
-      pageBuilder: (context, state) =>
-          NoTransitionPage(child: const LevelUpScreen()),
-    ),
+        name: 'levelUp',
+        path: '/levelUp',
+        pageBuilder: (context, state) {
+          final newLevel = state.extra as int;
+          return NoTransitionPage(child: LevelUpScreen(newLevel: newLevel));
+        }),
     GoRoute(
         name: 'createActivity',
         path: '/createActivity',
