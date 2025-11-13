@@ -21,6 +21,7 @@ class CreateActivityScreen extends StatefulWidget {
 
 class _CreateActivityScreenState extends State<CreateActivityScreen> {
   InterstitialAd? _interstitialAd;
+  bool _isSubmitting = false;
 
   void _loadInterstitial() {
     InterstitialAd.load(
@@ -95,6 +96,9 @@ class _CreateActivityScreenState extends State<CreateActivityScreen> {
   }
 
   void _submitForm() async {
+    if (_isSubmitting) return; // 🚫 Evita múltiples toques
+    setState(() => _isSubmitting = true); // 🔒 Bloquear
+
     final token = await StorageUtils.getString('token');
 
     if (_formKey.currentState!.validate() &&
@@ -109,6 +113,7 @@ class _CreateActivityScreenState extends State<CreateActivityScreen> {
             backgroundColor: Colors.red,
           ),
         );
+        setState(() => _isSubmitting = false); // 🔓 Desbloquear si hay error
         return;
       }
 
@@ -125,6 +130,8 @@ class _CreateActivityScreenState extends State<CreateActivityScreen> {
       context
           .read<ActivityBloc>()
           .add(ActivityRequested(activityModel: formModel));
+    } else {
+      setState(() => _isSubmitting = false);
     }
   }
 
@@ -133,6 +140,8 @@ class _CreateActivityScreenState extends State<CreateActivityScreen> {
     return BlocListener<ActivityBloc, ActivityState>(
       listener: (context, state) {
         if (state is ActivitySuccess) {
+          setState(() => _isSubmitting = false);
+
           // Limpiar campos
           _formKey.currentState?.reset();
           _titleController.clear();
@@ -171,6 +180,8 @@ class _CreateActivityScreenState extends State<CreateActivityScreen> {
             }
           });
         } else if (state is ActivityError) {
+          setState(() => _isSubmitting = false);
+
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(state.message),
@@ -497,7 +508,7 @@ class _CreateActivityScreenState extends State<CreateActivityScreen> {
                       children: [
                         Expanded(
                           child: ElevatedButton(
-                            onPressed: _submitForm,
+                            onPressed: _isSubmitting ? null : _submitForm,
                             style: ElevatedButton.styleFrom(
                               backgroundColor: AppColors.chocolateNewDark,
                               padding: const EdgeInsets.symmetric(vertical: 16),
@@ -505,14 +516,23 @@ class _CreateActivityScreenState extends State<CreateActivityScreen> {
                                 borderRadius: BorderRadius.circular(12),
                               ),
                             ),
-                            child: const Text(
-                              'Crear Actividad',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
+                            child: _isSubmitting
+                                ? const SizedBox(
+                                    width: 22,
+                                    height: 22,
+                                    child: CircularProgressIndicator(
+                                      color: Colors.white,
+                                      strokeWidth: 2,
+                                    ),
+                                  )
+                                : const Text(
+                                    'Crear Actividad',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
                           ),
                         ),
                         const SizedBox(width: 16),

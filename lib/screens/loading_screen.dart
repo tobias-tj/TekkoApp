@@ -53,7 +53,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
 
   void _goNext() {
     Future.delayed(const Duration(seconds: 2), () {
-      if (mounted) context.pushReplacement('/maps');
+      if (mounted) context.pushReplacement('/home');
     });
   }
 
