@@ -16,49 +16,58 @@ class RegisterAccount extends StatefulWidget {
 }
 
 class _RegisterAccountState extends State<RegisterAccount> {
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+  final _nameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
 
   bool _isLoading = false;
 
-  void _goToLogin() {
-    // Lógica para redirigir al Login
-    context.goNamed('login');
-  }
+  String? _nameError;
+  String? _emailError;
+  String? _passwordError;
 
-  @override
-  void dispose() {
-    _nameController.dispose();
-    _emailController.dispose();
-    _passwordController.dispose();
-    super.dispose();
+  void _goToLogin() => context.goNamed('login');
+
+  bool _isValidEmail(String email) {
+    final regex = RegExp(r'^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$');
+    return regex.hasMatch(email);
   }
 
   Future<void> _register() async {
     if (_isLoading) return;
 
+    setState(() {
+      _nameError =
+          _nameController.text.isEmpty ? 'El nombre es obligatorio' : null;
+      _emailError = _emailController.text.isEmpty
+          ? 'El correo es obligatorio'
+          : !_isValidEmail(_emailController.text)
+              ? 'Correo inválido'
+              : null;
+      _passwordError = _passwordController.text.isEmpty
+          ? 'La contraseña es obligatoria'
+          : _passwordController.text.length < 6
+              ? 'Debe tener al menos 6 caracteres'
+              : null;
+    });
+
+    if (_nameError != null || _emailError != null || _passwordError != null)
+      return;
+
     setState(() => _isLoading = true);
 
-    if (_passwordController.text.length < 6) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('La contraseña debe tener al menos 6 caracteres'),
-        ),
-      );
-      setState(() => _isLoading = false);
-      return;
-    }
     try {
       final nameKid = await StorageUtils.getString('userName') ?? '';
       final ageKid = await StorageUtils.getInt('userAge') ?? 0;
 
       final authModel = AuthModel(
-          fullNameParent: _nameController.text,
-          email: _emailController.text,
-          password: _passwordController.text,
-          nameKid: nameKid,
-          ageKid: ageKid);
+        fullNameParent: _nameController.text.trim(),
+        email: _emailController.text.trim(),
+        password: _passwordController.text,
+        nameKid: nameKid,
+        ageKid: ageKid,
+      );
+
       context.read<AuthBloc>().add(RegisterRequested(authModel: authModel));
     } catch (e) {
       setState(() => _isLoading = false);
@@ -69,143 +78,131 @@ class _RegisterAccountState extends State<RegisterAccount> {
   }
 
   @override
+  void dispose() {
+    _nameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
     return BlocListener<AuthBloc, AuthState>(
-        listener: (context, state) {
-          if (state is AuthSuccess) {
-            StorageUtils.setString('token', state.token);
-
-            // await showSuccessAnimation();
-
-            if (mounted) {
-              context.pushReplacement('/loading');
-            }
-          } else if (state is AuthFailure) {
-            setState(() => _isLoading = false);
-            ScaffoldMessenger.of(context)
-                .showSnackBar(SnackBar(content: Text(state.error)));
-          }
-        },
-        child: Scaffold(
-          backgroundColor: AppColors.cardBackgroundSoft,
-          body: Stack(
-            children: [
-              Container(
-                width: size.width,
-                height: size.height,
-                color: AppColors.softCream,
-              ),
-              const CustomBackground(),
-              Positioned(
-                top: 80,
-                left: 0,
-                right: 0,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          width: 60,
-                          height: 60,
-                          decoration: BoxDecoration(
-                            image: const DecorationImage(
-                              image: AssetImage("assets/images/shibaIcon.png"),
-                              fit: BoxFit.fill,
-                            ),
-                          ),
+      listener: (context, state) {
+        if (state is AuthSuccess) {
+          StorageUtils.setString('token', state.token);
+          context.pushReplacement('/loading');
+        } else if (state is AuthFailure) {
+          setState(() => _isLoading = false);
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text(state.error)));
+        }
+      },
+      child: Scaffold(
+        resizeToAvoidBottomInset: true,
+        backgroundColor: AppColors.cardBackgroundSoft,
+        body: Stack(
+          children: [
+            const CustomBackground(),
+            SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                children: [
+                  const SizedBox(height: 50),
+                  const _Header(),
+                  const SizedBox(height: 60),
+                  InputAccount(
+                    hintText: "Nombre Completo",
+                    inputController: _nameController,
+                    isPass: false,
+                    inputType: TextInputType.name,
+                    errorText: _nameError,
+                  ),
+                  const SizedBox(height: 20),
+                  InputAccount(
+                    hintText: "Correo Electrónico",
+                    inputController: _emailController,
+                    isPass: false,
+                    inputType: TextInputType.emailAddress,
+                    errorText: _emailError,
+                  ),
+                  const SizedBox(height: 20),
+                  InputAccount(
+                    hintText: "Contraseña",
+                    inputController: _passwordController,
+                    isPass: true,
+                    inputType: TextInputType.text,
+                    errorText: _passwordError,
+                  ),
+                  const SizedBox(height: 40),
+                  ButtonIntro(
+                    onNext: _register,
+                    textButton:
+                        _isLoading ? 'Creando cuenta...' : 'Crear Cuenta',
+                    isParent: true,
+                  ),
+                  const SizedBox(height: 25),
+                  GestureDetector(
+                    onTap: _goToLogin,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 14, horizontal: 25),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        color: AppColors.chocolateNewDark.withOpacity(0.1),
+                      ),
+                      child: const Text(
+                        '¿Ya tienes una cuenta?  Inicia Sesión',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: AppColors.chocolateDark,
+                          fontWeight: FontWeight.bold,
                         ),
-                        const SizedBox(width: 6),
-                        const Text(
-                          'TEKKO',
-                          style: TextStyle(
-                            fontSize: 45,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.cardMaskSoft,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 30),
-                    const Text(
-                      'Register',
-                      style: TextStyle(
-                        fontSize: 35,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.softCream,
-                        letterSpacing: 1,
                       ),
                     ),
-                    const SizedBox(height: 80),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Column(
-                        children: [
-                          InputAccount(
-                            hintText: "Nombre Completo",
-                            inputController: _nameController,
-                            isPass: false,
-                            inputType: TextInputType.name,
-                          ),
-                          const SizedBox(height: 20),
-                          InputAccount(
-                            hintText: "Ingresar Correo Electrónico",
-                            inputController: _emailController,
-                            isPass: false,
-                            inputType: TextInputType.emailAddress,
-                          ),
-                          const SizedBox(height: 20),
-                          InputAccount(
-                            hintText: "Ingresar Contraseña",
-                            inputController: _passwordController,
-                            isPass: true,
-                            inputType: TextInputType.text,
-                          ),
-                          const SizedBox(height: 30),
-                          ButtonIntro(
-                            onNext: _register,
-                            textButton: _isLoading
-                                ? 'Creando cuenta...'
-                                : 'Crear Cuenta',
-                            isParent: true,
-                          ),
-                          const SizedBox(height: 20),
-                          TextButton(
-                            onPressed: _goToLogin,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const Text(
-                                  'Ya Tienes Una Cuenta?',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: AppColors.chocolateDark,
-                                  ),
-                                ),
-                                SizedBox(width: 8),
-                                const Text(
-                                  'Sign In',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: AppColors.chocolateNewDark,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                  const SizedBox(height: 40),
+                ],
               ),
-            ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _Header extends StatelessWidget {
+  const _Header();
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Image.asset("assets/images/shibaIcon.png", width: 70),
+        const SizedBox(height: 10),
+        const Text(
+          'TEKKO',
+          style: TextStyle(
+            fontSize: 42,
+            fontWeight: FontWeight.bold,
+            color: AppColors.cardMaskSoft,
+            letterSpacing: 1.5,
           ),
-        ));
+        ),
+        const SizedBox(height: 5),
+        const Text(
+          'Crear Cuenta',
+          style: TextStyle(
+            fontSize: 28,
+            fontWeight: FontWeight.bold,
+            color: AppColors.softCreamDark,
+          ),
+        ),
+      ],
+    );
   }
 }
 

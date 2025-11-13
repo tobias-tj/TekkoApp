@@ -21,14 +21,51 @@ class _LoginAccountState extends State<LoginAccount> {
 
   bool _isLoading = false;
 
-  void _goToRegister() {
-    // Lógica para redirigir al Register
-    context.goNamed('register');
+  String? _emailError;
+  String? _passwordError;
+
+  void _goToRegister() => context.goNamed('register');
+  void _goToRecoveryAccount() => context.goNamed('recovery');
+
+  bool _isValidEmail(String email) {
+    final regex = RegExp(r'^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$');
+    return regex.hasMatch(email);
   }
 
-  void _goToRecoveryAccount() {
-    // Lógica para redirigir al Recovery Account
-    context.goNamed('recovery');
+  Future<void> _login() async {
+    if (_isLoading) return;
+
+    setState(() {
+      _emailError = _emailController.text.isEmpty
+          ? 'El correo es obligatorio'
+          : !_isValidEmail(_emailController.text)
+              ? 'Correo inválido'
+              : null;
+
+      _passwordError = _passwordController.text.isEmpty
+          ? 'La contraseña es obligatoria'
+          : _passwordController.text.length < 6
+              ? 'Debe tener al menos 6 caracteres'
+              : null;
+    });
+
+    // Si hay errores, no continúa
+    if (_emailError != null || _passwordError != null) return;
+
+    setState(() => _isLoading = true);
+
+    try {
+      final loginModel = LoginModel(
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim(),
+      );
+
+      context.read<AuthBloc>().add(LoginRequested(loginModel: loginModel));
+    } catch (e) {
+      setState(() => _isLoading = false);
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Error: ${e.toString()}')));
+    }
   }
 
   @override
@@ -38,168 +75,125 @@ class _LoginAccountState extends State<LoginAccount> {
     super.dispose();
   }
 
-  Future<void> _login() async {
-    if (_isLoading) return;
-
-    setState(() => _isLoading = true);
-
-    final loginModel = LoginModel(
-        email: _emailController.text, password: _passwordController.text);
-    context.read<AuthBloc>().add(LoginRequested(loginModel: loginModel));
-  }
-
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
     return BlocListener<AuthBloc, AuthState>(
-        listener: (context, state) {
-          if (state is AuthSuccess) {
-            StorageUtils.setString('token', state.token);
+      listener: (context, state) {
+        if (state is AuthSuccess) {
+          StorageUtils.setString('token', state.token);
+          if (mounted) context.goNamed('home');
+        } else if (state is AuthFailure) {
+          setState(() => _isLoading = false);
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text(state.error)));
+        }
+      },
+      child: Scaffold(
+        resizeToAvoidBottomInset: true,
+        backgroundColor: AppColors.cardBackgroundSoft,
+        body: Stack(
+          children: [
+            const CustomBackground(),
+            SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                children: [
+                  const SizedBox(height: 50),
+                  const _Header(),
+                  const SizedBox(height: 60),
 
-            if (mounted) {
-              context.goNamed('home');
-            }
-          } else if (state is AuthFailure) {
-            setState(() => _isLoading = false);
-            ScaffoldMessenger.of(context)
-                .showSnackBar(SnackBar(content: Text(state.error)));
-          }
-        },
-        child: Scaffold(
-            backgroundColor: AppColors.cardBackgroundSoft,
-            body: Stack(
-              children: [
-                Container(
-                  width: size.width,
-                  height: size.height,
-                  color: AppColors.softCream,
-                ),
-                const CustomBackground(),
-                Positioned(
-                  top: 80,
-                  left: 0,
-                  right: 0,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Row(
+                  // Email
+                  InputAccount(
+                    hintText: "Ingresar Correo Electrónico",
+                    inputController: _emailController,
+                    isPass: false,
+                    inputType: TextInputType.emailAddress,
+                    errorText: _emailError,
+                  ),
+                  const SizedBox(height: 20),
+
+                  // Password
+                  InputAccount(
+                    hintText: "Ingresar Contraseña",
+                    inputController: _passwordController,
+                    isPass: true,
+                    inputType: TextInputType.text,
+                    errorText: _passwordError,
+                  ),
+                  const SizedBox(height: 10),
+
+                  GestureDetector(
+                    onTap: _goToRecoveryAccount,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 14, horizontal: 25),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        color: AppColors.chocolateNewDark.withOpacity(0.1),
+                      ),
+                      child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            width: 60,
-                            height: 60,
-                            decoration: BoxDecoration(
-                              image: const DecorationImage(
-                                image:
-                                    AssetImage("assets/images/shibaIcon.png"),
-                                fit: BoxFit.fill,
-                              ),
+                        children: const [
+                          Text(
+                            '¿Olvidaste tu contraseña?',
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: AppColors.chocolateDark,
                             ),
                           ),
-                          const SizedBox(width: 6),
-                          const Text(
-                            'TEKKO',
+                          SizedBox(width: 4),
+                          Text(
+                            'Recuperar cuenta',
                             style: TextStyle(
-                              fontSize: 45,
+                              fontSize: 14,
+                              color: AppColors.chocolateNewDark,
                               fontWeight: FontWeight.bold,
-                              color: AppColors.cardMaskSoft,
                             ),
                           ),
                         ],
                       ),
-                      const SizedBox(height: 30),
-                      const Text(
-                        'Login',
-                        style: TextStyle(
-                          fontSize: 35,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.softCream,
-                          letterSpacing: 1,
-                        ),
-                      ),
-                      const SizedBox(height: 80),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Column(
-                          children: [
-                            InputAccount(
-                              hintText: "Ingresar Correo Electrónico",
-                              inputController: _emailController,
-                              isPass: false,
-                              inputType: TextInputType.emailAddress,
-                            ),
-                            const SizedBox(height: 20),
-                            InputAccount(
-                              hintText: "Ingresar Contraseña",
-                              inputController: _passwordController,
-                              isPass: true,
-                              inputType: TextInputType.text,
-                            ),
-                            const SizedBox(height: 10),
-                            TextButton(
-                              onPressed: _goToRecoveryAccount,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  const Text(
-                                    'Olvidaste tu Contraseña?',
-                                    style: TextStyle(
-                                      fontSize: 13,
-                                      color: AppColors.chocolateDark,
-                                    ),
-                                  ),
-                                  SizedBox(width: 4),
-                                  const Text(
-                                    'Recuperar Cuenta',
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: AppColors.chocolateNewDark,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(height: 10),
-                            ButtonIntro(
-                              onNext: _login,
-                              textButton:
-                                  _isLoading ? 'Ingresando...' : 'Ingresar',
-                              isParent: true,
-                            ),
-                            const SizedBox(height: 20),
-                            TextButton(
-                              onPressed: _goToRegister,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  const Text(
-                                    'No Tienes Una Cuenta?',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color: AppColors.chocolateDark,
-                                    ),
-                                  ),
-                                  SizedBox(width: 8),
-                                  const Text(
-                                    'Register Now',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color: AppColors.chocolateNewDark,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
-                ),
-              ],
-            )));
+                  const SizedBox(height: 10),
+
+                  // Botón de login
+                  ButtonIntro(
+                    onNext: _login,
+                    textButton: _isLoading ? 'Ingresando...' : 'Ingresar',
+                    isParent: true,
+                  ),
+                  const SizedBox(height: 20),
+
+                  // Botón de registro
+                  GestureDetector(
+                    onTap: _goToRegister,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 14, horizontal: 25),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        color: AppColors.chocolateNewDark.withOpacity(0.1),
+                      ),
+                      child: const Text(
+                        '¿No tienes una cuenta?  Regístrate',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: AppColors.chocolateDark,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 30),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
 
@@ -217,6 +211,38 @@ class CustomBackground extends StatelessWidget {
         height: size.height,
         fit: BoxFit.cover,
       ),
+    );
+  }
+}
+
+class _Header extends StatelessWidget {
+  const _Header();
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Image.asset("assets/images/shibaIcon.png", width: 70),
+        const SizedBox(height: 10),
+        const Text(
+          'TEKKO',
+          style: TextStyle(
+            fontSize: 42,
+            fontWeight: FontWeight.bold,
+            color: AppColors.cardMaskSoft,
+            letterSpacing: 1.5,
+          ),
+        ),
+        const SizedBox(height: 5),
+        const Text(
+          'Ingresar a la Cuenta',
+          style: TextStyle(
+            fontSize: 28,
+            fontWeight: FontWeight.bold,
+            color: AppColors.softCreamDark,
+          ),
+        ),
+      ],
     );
   }
 }

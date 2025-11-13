@@ -103,7 +103,6 @@ class _CreateAccountStepState extends State<CreateAccountStep> {
       top: size.height * 0.3,
       child: PageView(
         controller: _pageController,
-        physics: const NeverScrollableScrollPhysics(),
         children: [
           // Paso 1: Nombre
           _buildStep(
@@ -134,37 +133,52 @@ class _CreateAccountStepState extends State<CreateAccountStep> {
     );
   }
 
-  Widget _buildStep(
-      {required String title,
-      required String inputHint,
-      required TextEditingController controller,
-      required String buttonText,
-      required VoidCallback onPressed,
-      required TextInputType inputType,
-      required bool isAge}) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            title,
-            style: const TextStyle(
-              fontSize: 30,
-              fontWeight: FontWeight.bold,
-              color: AppColors.chocolateDark,
+  Widget _buildStep({
+    required String title,
+    required String inputHint,
+    required TextEditingController controller,
+    required String buttonText,
+    required VoidCallback onPressed,
+    required TextInputType inputType,
+    required bool isAge,
+  }) {
+    return SafeArea(
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          return SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
+            physics: const BouncingScrollPhysics(),
+            child: IntrinsicHeight(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 300),
+                    child: Text(
+                      title,
+                      key: ValueKey(title),
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.chocolateDark,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  InputAnimation(
+                    inputController: controller,
+                    hintText: inputHint,
+                    inputType: inputType,
+                    isAgeInput: isAge,
+                  ),
+                  const SizedBox(height: 20),
+                  ButtonIntro(onNext: onPressed, textButton: buttonText),
+                ],
+              ),
             ),
-          ),
-          const SizedBox(height: 20),
-          InputAnimation(
-            inputController: controller,
-            hintText: inputHint,
-            inputType: inputType,
-            isAgeInput: isAge,
-          ),
-          const SizedBox(height: 20),
-          ButtonIntro(onNext: onPressed, textButton: buttonText),
-        ],
+          );
+        },
       ),
     );
   }
