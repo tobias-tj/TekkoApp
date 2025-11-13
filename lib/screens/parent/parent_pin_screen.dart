@@ -90,7 +90,8 @@ class _ParentPinScreenState extends State<ParentPinScreen> {
         ),
       );
     } finally {
-      setState(() => _isResending = false);
+      await Future.delayed(const Duration(seconds: 4));
+      if (mounted) setState(() => _isResending = false);
     }
   }
 
@@ -228,15 +229,29 @@ class _ParentPinScreenState extends State<ParentPinScreen> {
                       delay: const Duration(milliseconds: 500),
                       child: TextButton(
                         onPressed: _isResending ? null : _resendPin,
-                        child: Text(
-                          _isResending
-                              ? 'Reenviando PIN...'
-                              : '¿Olvidaste tu PIN? Reenviar',
-                          style: const TextStyle(
-                            color: AppColors.chocolateNewDark,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
+                        child: _isResending
+                            ? const Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  SizedBox(
+                                    width: 16,
+                                    height: 16,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                      color: AppColors.chocolateNewDark,
+                                    ),
+                                  ),
+                                  SizedBox(width: 8),
+                                  Text('Reenviando PIN...'),
+                                ],
+                              )
+                            : const Text(
+                                '¿Olvidaste tu PIN? Reenviar',
+                                style: TextStyle(
+                                  color: AppColors.chocolateNewDark,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
                       ),
                     ),
                     const SizedBox(height: 30),
