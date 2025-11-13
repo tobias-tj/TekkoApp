@@ -40,6 +40,7 @@ dependencies:
   latlong2: ^0.9.1
   lottie: ^3.3.0
   meta: ^1.15.0
+  package_info_plus: ^8.0.0
   path_provider: ^2.1.5
   qr_flutter: ^4.1.0
   shared_preferences: ^2.5.2

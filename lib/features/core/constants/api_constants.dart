@@ -23,4 +23,5 @@ class ApiConstants {
   static const String recoverAccountEndpoint = '/recoverAccount';
   static const String sendPinByEmailEndpoint = '/senderPin';
   static const String deleteTaskByKid = '/deleteTaskByKid';
+  static const String versionAppEndpoint = '/versionApp';
 }
