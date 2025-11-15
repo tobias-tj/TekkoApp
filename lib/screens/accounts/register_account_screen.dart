@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tekko/components/button_intro.dart';
+import 'package:tekko/components/google_button.dart';
 import 'package:tekko/features/api/data/models/auth_model.dart';
 import 'package:tekko/features/api/data/bloc/auth_bloc.dart';
 import 'package:tekko/features/core/utils/storage_utils.dart';
 import 'package:tekko/styles/app_colors.dart';
 import 'package:tekko/components/input_account.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class RegisterAccount extends StatefulWidget {
   const RegisterAccount({super.key});
@@ -77,6 +79,43 @@ class _RegisterAccountState extends State<RegisterAccount> {
     }
   }
 
+  Future<void> _registerWithGoogle() async {
+    try {
+      setState(() => _isLoading = true);
+
+      const scopes = [
+        'https://www.googleapis.com/auth/userinfo.email',
+        'https://www.googleapis.com/auth/userinfo.profile',
+        'openid',
+      ];
+      final googleSignIn = GoogleSignIn.instance;
+      await googleSignIn.initialize(
+        serverClientId:
+            '746910990367-lmf3ajat3u3lmmkh52bqfptub12luc09.apps.googleusercontent.com',
+      );
+
+      final googleUser = await googleSignIn.authenticate(scopeHint: scopes);
+
+      final googleAuthentication = googleUser.authentication;
+
+      final idToken = googleAuthentication.idToken;
+
+      if (idToken == null) {
+        throw Exception("Google no devolvió idToken");
+      }
+
+      context.read<AuthBloc>().add(
+            RegisterWithGoogleRequested(idToken: idToken),
+          );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Error: $e")),
+      );
+    } finally {
+      setState(() => _isLoading = false);
+    }
+  }
+
   @override
   void dispose() {
     _nameController.dispose();
@@ -142,6 +181,11 @@ class _RegisterAccountState extends State<RegisterAccount> {
                     textButton:
                         _isLoading ? 'Creando cuenta...' : 'Crear Cuenta',
                     isParent: true,
+                  ),
+                  const SizedBox(height: 15),
+                  GoogleButton(
+                    onPressed: _registerWithGoogle,
+                    loading: _isLoading,
                   ),
                   const SizedBox(height: 25),
                   GestureDetector(

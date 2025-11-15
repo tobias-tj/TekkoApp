@@ -12,7 +12,28 @@
           "package_name": "com.yvagacore.tekko"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "746910990367-2kgcgdfd5bqof0lncn22jij1qjv867kh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.yvagacore.tekko",
+            "certificate_hash": "5e44de422f691f7db5a21362a148b6074accf65b"
+          }
+        },
+        {
+          "client_id": "746910990367-69buvqjt9jp53mrpk4hta4msoah8m1vs.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.yvagacore.tekko",
+            "certificate_hash": "31ebe995afbfd49d4e83bc7f01e1ae3a980a5199"
+          }
+        },
+        {
+          "client_id": "746910990367-lmf3ajat3u3lmmkh52bqfptub12luc09.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDzSzaq-G-EwiXZJ_mvYyKlr_ZyQTYebVk"
@@ -20,9 +41,15 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "746910990367-lmf3ajat3u3lmmkh52bqfptub12luc09.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
-      }
+      },
+      "admob_app_id": "ca-app-pub-1581073586389436~1468648191"
     }
   ],
   "configuration_version": "1"

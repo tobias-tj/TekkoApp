@@ -1,7 +1,10 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:tekko/components/button_intro.dart';
+import 'package:tekko/components/google_button.dart';
 import 'package:tekko/components/input_account.dart';
 import 'package:tekko/features/api/data/bloc/auth_bloc.dart';
 import 'package:tekko/features/api/data/models/login_model.dart';
@@ -65,6 +68,43 @@ class _LoginAccountState extends State<LoginAccount> {
       setState(() => _isLoading = false);
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text('Error: ${e.toString()}')));
+    }
+  }
+
+  Future<void> _loginWithGoogle() async {
+    try {
+      setState(() => _isLoading = true);
+
+      const scopes = [
+        'https://www.googleapis.com/auth/userinfo.email',
+        'https://www.googleapis.com/auth/userinfo.profile',
+        'openid',
+      ];
+      final googleSignIn = GoogleSignIn.instance;
+      await googleSignIn.initialize(
+        serverClientId:
+            '746910990367-lmf3ajat3u3lmmkh52bqfptub12luc09.apps.googleusercontent.com',
+      );
+
+      final googleUser = await googleSignIn.authenticate(scopeHint: scopes);
+
+      final googleAuthentication = googleUser.authentication;
+
+      final idToken = googleAuthentication.idToken;
+
+      if (idToken == null) {
+        throw Exception("Google no devolvió idToken");
+      }
+
+      context.read<AuthBloc>().add(
+            LoginWithGoogleRequested(idToken: idToken),
+          );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Error: $e")),
+      );
+    } finally {
+      setState(() => _isLoading = false);
     }
   }
 
@@ -163,6 +203,13 @@ class _LoginAccountState extends State<LoginAccount> {
                     onNext: _login,
                     textButton: _isLoading ? 'Ingresando...' : 'Ingresar',
                     isParent: true,
+                  ),
+
+                  const SizedBox(height: 15),
+
+                  GoogleButton(
+                    onPressed: _loginWithGoogle,
+                    loading: _isLoading,
                   ),
                   const SizedBox(height: 20),
 

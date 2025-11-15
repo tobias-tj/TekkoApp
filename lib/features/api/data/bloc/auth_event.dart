@@ -24,3 +24,21 @@ class LoginRequested extends AuthEvent {
   @override
   List<Object> get props => [loginModel];
 }
+
+class RegisterWithGoogleRequested extends AuthEvent {
+  final String idToken;
+
+  const RegisterWithGoogleRequested({required this.idToken});
+
+  @override
+  List<Object> get props => [idToken];
+}
+
+class LoginWithGoogleRequested extends AuthEvent {
+  final String idToken;
+
+  const LoginWithGoogleRequested({required this.idToken});
+
+  @override
+  List<Object> get props => [idToken];
+}

@@ -8,4 +8,6 @@ abstract class AuthRepository {
   Future<Map<String, dynamic>> accessParentPin(SecurityModel securityModel);
   Future<void> recoveryAccount(String email);
   Future<void> sendPinByEmail(String token);
+  Future<Map<String, dynamic>> registerWithGoogle(String googleToken);
+  Future<Map<String, dynamic>> loginWithGoogle(String googleToken);
 }

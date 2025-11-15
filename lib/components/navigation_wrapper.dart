@@ -48,40 +48,44 @@ class _NavigationWrapperState extends State<NavigationWrapper> {
 
     final currentIndex = routesIndex[currentRouteName] ?? 0;
 
-    return SafeArea(
-      top: false,
-      child: CurvedNavigationBar(
-        backgroundColor: AppColors.softCream,
-        color: AppColors.softCreamDark,
-        buttonBackgroundColor: Colors.white,
-        animationDuration: const Duration(milliseconds: 300),
-        index: currentIndex,
-        items: const [
-          HugeIcon(
-              icon: HugeIcons.strokeRoundedHome01,
-              color: AppColors.chocolateNewDark,
-              size: 27.0),
-          HugeIcon(
-              icon: HugeIcons.strokeRoundedCalendarFavorite02,
-              color: AppColors.chocolateNewDark,
-              size: 27.0),
-          HugeIcon(
-              icon: HugeIcons.strokeRoundedMapsGlobal01,
-              color: AppColors.chocolateNewDark,
-              size: 27.0),
-          HugeIcon(
-              icon: HugeIcons.strokeRoundedFavourite,
-              color: AppColors.chocolateNewDark,
-              size: 27.0),
-          HugeIcon(
-              icon: HugeIcons.strokeRoundedSettings01,
-              color: AppColors.chocolateNewDark,
-              size: 27.0),
-        ],
-        onTap: (index) {
-          final routes = routesIndex.keys.toList();
-          context.go(routes[index]);
-        },
+    return Container(
+      color: AppColors.softCreamDark,
+      child: SafeArea(
+        top: false,
+        bottom: true,
+        child: CurvedNavigationBar(
+          backgroundColor: AppColors.softCream,
+          color: AppColors.softCreamDark,
+          buttonBackgroundColor: Colors.white,
+          animationDuration: const Duration(milliseconds: 300),
+          index: currentIndex,
+          items: const [
+            HugeIcon(
+                icon: HugeIcons.strokeRoundedHome01,
+                color: AppColors.chocolateNewDark,
+                size: 27.0),
+            HugeIcon(
+                icon: HugeIcons.strokeRoundedCalendarFavorite02,
+                color: AppColors.chocolateNewDark,
+                size: 27.0),
+            HugeIcon(
+                icon: HugeIcons.strokeRoundedMapsGlobal01,
+                color: AppColors.chocolateNewDark,
+                size: 27.0),
+            HugeIcon(
+                icon: HugeIcons.strokeRoundedFavourite,
+                color: AppColors.chocolateNewDark,
+                size: 27.0),
+            HugeIcon(
+                icon: HugeIcons.strokeRoundedSettings01,
+                color: AppColors.chocolateNewDark,
+                size: 27.0),
+          ],
+          onTap: (index) {
+            final routes = routesIndex.keys.toList();
+            context.go(routes[index]);
+          },
+        ),
       ),
     );
   }

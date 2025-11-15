@@ -34,4 +34,14 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<void> sendPinByEmail(String token) {
     return remoteDataSource.sendPinByEmail(token);
   }
+
+  @override
+  Future<Map<String, dynamic>> loginWithGoogle(String googleToken) {
+    return remoteDataSource.authGoogle(googleToken);
+  }
+
+  @override
+  Future<Map<String, dynamic>> registerWithGoogle(String googleToken) {
+    return remoteDataSource.authGoogle(googleToken);
+  }
 }

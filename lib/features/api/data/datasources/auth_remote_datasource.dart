@@ -122,4 +122,19 @@ class AuthRemoteDataSource {
       throw Exception(errorMessage);
     }
   }
+
+  Future<Map<String, dynamic>> authGoogle(String googleToken) async {
+    try {
+      final response = await dio.post(
+        ApiConstants.authGoogleEndpoint,
+        data: {'idToken': googleToken},
+      );
+      return {
+        'token': response.data['data']['token'],
+      };
+    } on DioException catch (e) {
+      throw Exception(e.response?.data['message'] ??
+          'Error en la autenticación con Google');
+    }
+  }
 }

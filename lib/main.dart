@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -41,8 +43,10 @@ import 'package:tekko/features/api/domain/usecases/get_experience.dart';
 import 'package:tekko/features/api/domain/usecases/get_map_info.dart';
 import 'package:tekko/features/api/domain/usecases/get_profile_details.dart';
 import 'package:tekko/features/api/domain/usecases/get_task_by_kid.dart';
+import 'package:tekko/features/api/domain/usecases/login_google.dart';
 import 'package:tekko/features/api/domain/usecases/login_usecase.dart';
 import 'package:tekko/features/api/domain/usecases/recovery_account.dart';
+import 'package:tekko/features/api/domain/usecases/register_google.dart';
 import 'package:tekko/features/api/domain/usecases/register_usecase.dart';
 import 'package:tekko/features/api/domain/usecases/send_pin_by_email.dart';
 import 'package:tekko/features/api/domain/usecases/update_activity.dart';
@@ -105,21 +109,34 @@ final class MainApp extends StatelessWidget {
         providers: [
           BlocProvider(
             create: (context) => AuthBloc(
-              registerUseCase: RegisterUseCase(
-                repository: AuthRepositoryImpl(
-                  remoteDataSource: AuthRemoteDataSource(
-                    dio: context.read<DioClient>().dio,
+                registerUseCase: RegisterUseCase(
+                  repository: AuthRepositoryImpl(
+                    remoteDataSource: AuthRemoteDataSource(
+                      dio: context.read<DioClient>().dio,
+                    ),
                   ),
                 ),
-              ),
-              loginUsecase: LoginUsecase(
-                repository: AuthRepositoryImpl(
-                  remoteDataSource: AuthRemoteDataSource(
-                    dio: context.read<DioClient>().dio,
+                loginUsecase: LoginUsecase(
+                  repository: AuthRepositoryImpl(
+                    remoteDataSource: AuthRemoteDataSource(
+                      dio: context.read<DioClient>().dio,
+                    ),
                   ),
                 ),
-              ),
-            ),
+                registerGoogle: RegisterGoogle(
+                  repository: AuthRepositoryImpl(
+                    remoteDataSource: AuthRemoteDataSource(
+                      dio: context.read<DioClient>().dio,
+                    ),
+                  ),
+                ),
+                loginGoogle: LoginGoogle(
+                  repository: AuthRepositoryImpl(
+                    remoteDataSource: AuthRemoteDataSource(
+                      dio: context.read<DioClient>().dio,
+                    ),
+                  ),
+                )),
           ),
           BlocProvider(
               create: (context) => RecoveryBloc(
