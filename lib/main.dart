@@ -11,6 +11,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:tekko/app_routes.dart';
 import 'package:tekko/features/api/data/bloc/activity/activity_bloc.dart';
+import 'package:tekko/features/api/data/bloc/book/book_bloc.dart';
 import 'package:tekko/features/api/data/bloc/donation/donation_bloc.dart';
 import 'package:tekko/features/api/data/bloc/experience/experience_bloc.dart';
 import 'package:tekko/features/api/data/bloc/maps/map_bloc.dart';
@@ -21,12 +22,14 @@ import 'package:tekko/features/api/data/bloc/setting/setting_bloc.dart';
 import 'package:tekko/features/api/data/bloc/task/task_bloc.dart';
 import 'package:tekko/features/api/data/datasources/auth_remote_datasource.dart';
 import 'package:tekko/features/api/data/bloc/auth_bloc.dart';
+import 'package:tekko/features/api/data/datasources/books_remote_datasource.dart';
 import 'package:tekko/features/api/data/datasources/donation_remote_datasource.dart';
 import 'package:tekko/features/api/data/datasources/kids_remote_datasource.dart';
 import 'package:tekko/features/api/data/datasources/maps_remote_datasource.dart';
 import 'package:tekko/features/api/data/datasources/parent_remote_datasource.dart';
 import 'package:tekko/features/api/data/datasources/setting_remote_datasource.dart';
 import 'package:tekko/features/api/data/repositories/auth_repository_impl.dart';
+import 'package:tekko/features/api/data/repositories/books_repository_impl.dart';
 import 'package:tekko/features/api/data/repositories/donation_repository_impl.dart';
 import 'package:tekko/features/api/data/repositories/kids_repository_impl.dart';
 import 'package:tekko/features/api/data/repositories/map_repository_impl.dart';
@@ -39,6 +42,8 @@ import 'package:tekko/features/api/domain/usecases/create_task.dart';
 import 'package:tekko/features/api/domain/usecases/delete_task_by_kid.dart';
 import 'package:tekko/features/api/domain/usecases/get_activities.dart';
 import 'package:tekko/features/api/domain/usecases/get_activities_by_kid.dart';
+import 'package:tekko/features/api/domain/usecases/get_book_pdf.dart';
+import 'package:tekko/features/api/domain/usecases/get_books_info.dart';
 import 'package:tekko/features/api/domain/usecases/get_experience.dart';
 import 'package:tekko/features/api/domain/usecases/get_map_info.dart';
 import 'package:tekko/features/api/domain/usecases/get_profile_details.dart';
@@ -269,7 +274,18 @@ final class MainApp extends StatelessWidget {
                         remoteDataSource: ParentRemoteDatasource(
                             dio: context.read<DioClient>().dio))),
                 analytics: analytics),
-          )
+          ),
+          BlocProvider(
+              create: (context) => BookBloc(
+                  getBookInfo: GetBooksInfoUseCases(
+                    repository: BooksRepositoryImpl(
+                        remoteDatasource: BooksRemoteDatasource(
+                            dio: context.read<DioClient>().dio)),
+                  ),
+                  getBookFilePdf: GetBookPdf(
+                      repository: BooksRepositoryImpl(
+                          remoteDatasource: BooksRemoteDatasource(
+                              dio: context.read<DioClient>().dio)))))
         ],
         child: MaterialApp.router(
           debugShowCheckedModeBanner: false,

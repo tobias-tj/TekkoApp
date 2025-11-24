@@ -18,6 +18,8 @@ import 'package:tekko/screens/loading_screen.dart';
 import 'package:tekko/screens/maps/admin_maps_screen.dart';
 import 'package:tekko/screens/maps/maps_screen.dart';
 import 'package:tekko/screens/maps/qr_maps_screen.dart';
+import 'package:tekko/screens/parent/admin_books_screen.dart';
+import 'package:tekko/screens/parent/book_render_screen.dart';
 import 'package:tekko/screens/parent/create_activity_screen.dart';
 import 'package:tekko/screens/calendar/calendar_screen.dart';
 import 'package:tekko/screens/calendar/level_up_screen.dart';
@@ -206,6 +208,12 @@ final GoRouter appRouter = GoRouter(
                 NoTransitionPage(child: const AdminMapsScreen()),
           ),
           GoRoute(
+            name: 'adminBooks',
+            path: '/adminBooks',
+            pageBuilder: (context, state) =>
+                NoTransitionPage(child: const AdminBooksScreen()),
+          ),
+          GoRoute(
             name: 'adminHelp',
             path: '/adminHelp',
             pageBuilder: (context, state) => NoTransitionPage(
@@ -228,6 +236,13 @@ final GoRouter appRouter = GoRouter(
         return NoTransitionPage(child: ParentPinScreen(email: email));
       },
     ),
+    GoRoute(
+        name: 'bookRender',
+        path: '/bookRender',
+        pageBuilder: (context, state) {
+          final idBook = state.extra as int;
+          return NoTransitionPage(child: BookRenderScreen(idBook: idBook));
+        }),
     ShellRoute(
       builder: (context, state, child) {
         return Scaffold(
