@@ -26,4 +26,7 @@ class ApiConstants {
   static const String versionAppEndpoint = '/versionApp';
   static const String authGoogleEndpoint = '/authGoogle';
   static const String getBooksInfoEndpoint = '/books/list';
+  static const String blockBookEndpoint = '/books/block';
+  static const String deleteBlockEndpoint = '/books/deleteBlock';
+  static const String getKidBooksEndpoint = '/books/listKid';
 }

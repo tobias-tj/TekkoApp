@@ -12,7 +12,7 @@ class Books {
   final String descripcion;
   final int totalPaginas;
   final String portada;
-  final bool? isVisible;
+  final bool isVisible;
 
   Books(
       {required this.libroId,
@@ -21,5 +21,5 @@ class Books {
       required this.descripcion,
       required this.totalPaginas,
       required this.portada,
-      this.isVisible = true});
+      required this.isVisible});
 }

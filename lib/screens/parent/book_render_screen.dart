@@ -1,5 +1,6 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:tekko/features/api/data/bloc/book/book_bloc.dart';
@@ -17,15 +18,33 @@ class _BookRenderScreenState extends State<BookRenderScreen> {
   @override
   void initState() {
     super.initState();
+
+    // 🔒 Forzar modo horizontal al entrar
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]);
+
     _getBookPdf();
+  }
+
+  @override
+  void dispose() {
+    // 🔄 Restaurar orientación normal al salir
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+
+    super.dispose();
   }
 
   Future<void> _getBookPdf() async {
     try {
       final token = await StorageUtils.getString('token');
-      context
-          .read<BookBloc>()
-          .add(BookPdfRequested(token: token!, bookId: widget.idBook));
+      context.read<BookBloc>().add(
+            BookPdfRequested(token: token!, bookId: widget.idBook),
+          );
     } catch (_) {}
   }
 
@@ -48,12 +67,6 @@ class _BookRenderScreenState extends State<BookRenderScreen> {
               swipeHorizontal: true,
               autoSpacing: true,
               pageSnap: true,
-              onError: (error) {
-                // return Center(child: Text("Error: $error"));
-              },
-              onRender: (_pages) {
-                // PDF listo para usarse
-              },
             ),
           );
         }

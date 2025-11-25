@@ -6,30 +6,45 @@ import 'package:hugeicons/hugeicons.dart';
 import 'package:tekko/features/api/data/bloc/book/book_bloc.dart';
 import 'package:tekko/features/api/data/bloc/experience/experience_bloc.dart';
 import 'package:tekko/features/api/data/models/get_book_dto.dart';
+import 'package:tekko/features/api/data/models/get_book_kid_dto.dart';
 import 'package:tekko/features/core/utils/storage_utils.dart';
 import 'package:tekko/styles/app_colors.dart';
 
-class AdminBooksScreen extends StatefulWidget {
-  const AdminBooksScreen({super.key});
+class BooksKidScreen extends StatefulWidget {
+  const BooksKidScreen({super.key});
 
   @override
-  State<AdminBooksScreen> createState() => _AdminBooksScreenState();
+  State<BooksKidScreen> createState() => _BooksKidScreenState();
 }
 
-class _AdminBooksScreenState extends State<AdminBooksScreen> {
+class _BooksKidScreenState extends State<BooksKidScreen>
+    with TickerProviderStateMixin {
   // Estado local
   int selectedLevel = 1;
   int currentPage = 1;
   bool isLoadingMore = false;
 
-  List<Books> paginatedBooks = [];
+  List<BooksKid> paginatedBooks = [];
   bool hasMore = true;
+
+  late final AnimationController _sparkleController;
 
   @override
   void initState() {
     super.initState();
+    _sparkleController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1400),
+    )..repeat(reverse: true);
+
     _getExperienceData();
     _fetchPaginatedBooks(reset: true);
+  }
+
+  @override
+  void dispose() {
+    _sparkleController.dispose();
+    super.dispose();
   }
 
   // ---------------------------------------------------------------------------
@@ -50,7 +65,7 @@ class _AdminBooksScreenState extends State<AdminBooksScreen> {
     setState(() => isLoadingMore = true);
 
     context.read<BookBloc>().add(
-          BookGetRequested(
+          BookKidRequested(
             token: token!,
             limit: 3,
             page: currentPage,
@@ -82,128 +97,63 @@ class _AdminBooksScreenState extends State<AdminBooksScreen> {
           backgroundColor: Colors.transparent,
           child: FadeInDown(
             child: Container(
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.all(24),
               decoration: BoxDecoration(
                 color: AppColors.cardBackgroundSoft,
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(22),
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   const HugeIcon(
-                      size: 45,
-                      icon: HugeIcons.strokeRoundedAward01,
-                      color: AppColors.chocolateNewDark),
-                  const SizedBox(height: 15),
+                    size: 50,
+                    icon: HugeIcons.strokeRoundedAward01,
+                    color: AppColors.chocolateNewDark,
+                  ),
+                  const SizedBox(height: 18),
                   const Text(
                     "¿Cómo subir de nivel?",
                     style: TextStyle(
-                      fontSize: 22,
+                      fontSize: 24,
                       fontWeight: FontWeight.bold,
                       color: AppColors.chocolateNewDark,
                     ),
                   ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 14),
                   const Text(
-                    "Crea tareas para tu hij@. Al completarlas gana experiencia "
-                    "y desbloquea libros de mayor nivel.",
+                    "Para subir de nivel, pedile a tus padres que te asignen "
+                    "tareas o actividades. Cuando las completes, ganarás puntos "
+                    "de experiencia y podrás desbloquear libros nuevos.",
                     textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: () => Navigator.pop(context),
-                    child: const Text("Entendido"),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  void _showVisibilityConfirmDialog(Books book) {
-    final isVisible = book.isVisible!;
-
-    showDialog(
-      context: context,
-      builder: (context) {
-        return Dialog(
-          backgroundColor: Colors.transparent,
-          child: FadeInDown(
-            child: Container(
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: AppColors.cardBackgroundSoft,
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    isVisible ? Icons.visibility_off : Icons.visibility,
-                    size: 45,
-                    color: AppColors.chocolateNewDark,
-                  ),
-                  const SizedBox(height: 15),
-                  Text(
-                    isVisible ? "¿Ocultar libro?" : "¿Mostrar libro?",
-                    style: const TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
+                    style: TextStyle(
+                      fontSize: 16,
+                      height: 1.4,
                     ),
                   ),
-                  const SizedBox(height: 15),
-                  Text(
-                    isVisible
-                        ? "Tu hijo dejará de ver este libro."
-                        : "Tu hijo podrá ver este libro.",
-                    textAlign: TextAlign.center,
+                  const SizedBox(height: 22),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () => Navigator.pop(context),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.chocolateNewDark,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(14),
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 12,
+                        ),
+                      ),
+                      child: const Text(
+                        "Entendido",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
                   ),
-                  const SizedBox(height: 25),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: OutlinedButton(
-                          onPressed: () => Navigator.pop(context),
-                          child: const Text("Cancelar"),
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: ElevatedButton(
-                          onPressed: () async {
-                            final token = await StorageUtils.getString('token');
-
-                            if (isVisible) {
-                              // Ocultar libro → bloquear
-                              context.read<BookBloc>().add(
-                                    CreateBlockBookRequested(
-                                        token: token!, bookId: book.libroId),
-                                  );
-                              Navigator.pop(context);
-                            } else {
-                              // Mostrar libro → desbloquear
-                              context.read<BookBloc>().add(
-                                    DeleteBlockBookRequested(
-                                        token: token!, bookId: book.libroId),
-                                  );
-                              Navigator.pop(context);
-                            }
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor:
-                                isVisible ? Colors.red : Colors.green,
-                          ),
-                          child: Text(
-                            isVisible ? "Ocultar" : "Mostrar",
-                            style: const TextStyle(color: Colors.white),
-                          ),
-                        ),
-                      ),
-                    ],
-                  )
                 ],
               ),
             ),
@@ -229,7 +179,10 @@ class _AdminBooksScreenState extends State<AdminBooksScreen> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Icon(Icons.lock, size: 40, color: Colors.redAccent),
+                  const HugeIcon(
+                      icon: HugeIcons.strokeRoundedSquareLockPassword,
+                      size: 35,
+                      color: Colors.redAccent),
                   const SizedBox(height: 15),
                   Text(
                     "Nivel bloqueado",
@@ -271,17 +224,12 @@ class _AdminBooksScreenState extends State<AdminBooksScreen> {
           // --------------------------- BOOKS --------------------------
           BlocListener<BookBloc, BookState>(
             listener: (context, state) {
-              if (state is BookGetSuccess) {
+              if (state is BookKidGetSuccess) {
                 setState(() {
                   hasMore = state.booksList.hasMore;
                   paginatedBooks.addAll(state.booksList.booksListData);
                   isLoadingMore = false;
                 });
-              }
-
-              if (state is BlockBookSuccess ||
-                  state is DeleteBlockBookSuccess) {
-                _fetchPaginatedBooks(reset: true);
               }
 
               if (state is BookError) {
@@ -346,18 +294,7 @@ class _AdminBooksScreenState extends State<AdminBooksScreen> {
             children: [
               const SizedBox(height: 50),
 
-              Text(
-                'Gestión de Libros',
-                style: TextStyle(
-                  color: AppColors.softCream,
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-
-              const SizedBox(height: 30),
-
-              _buildLevelProgress(level, exp, nextExp),
+              _buildHeader(level),
 
               const SizedBox(height: 30),
 
@@ -427,138 +364,71 @@ class _AdminBooksScreenState extends State<AdminBooksScreen> {
   }
 
   // ---------------------------------------------------------------------------
-  // PROGRESO DE NIVEL
-  // ---------------------------------------------------------------------------
-
-  Widget _buildLevelProgress(int level, int exp, int missingExp) {
-    final totalNeeded = exp + missingExp;
-    final percent = exp / totalNeeded;
-
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: AppColors.cardMaskSoft,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text("Nivel actual",
-                  style: TextStyle(color: AppColors.chocolateNewDark)),
-              IconButton(
-                icon:
-                    Icon(Icons.info_outline, color: AppColors.chocolateNewDark),
-                onPressed: _showLevelInfoModal,
-              ),
-            ],
-          ),
-          TweenAnimationBuilder<double>(
-            tween: Tween(begin: 0, end: level.toDouble()),
-            duration: const Duration(milliseconds: 700),
-            builder: (_, value, __) => Text(
-              "Nivel ${value.toInt()}",
-              style: const TextStyle(
-                fontSize: 32,
-                color: AppColors.chocolateNewDark,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-          const SizedBox(height: 20),
-          TweenAnimationBuilder<double>(
-            tween: Tween(begin: 0, end: percent),
-            duration: const Duration(milliseconds: 800),
-            curve: Curves.easeOutCubic,
-            builder: (_, value, __) => LinearProgressIndicator(
-              value: value,
-              minHeight: 12,
-              color: AppColors.chocolateDark,
-              backgroundColor: Colors.white70,
-            ),
-          ),
-          const SizedBox(height: 10),
-          Text("$exp / $totalNeeded EXP"),
-          Text("Faltan $missingExp EXP para llegar al Nivel ${level + 1}"),
-        ],
-      ),
-    );
-  }
-
-  // ---------------------------------------------------------------------------
   // BOOK CARD
   // ---------------------------------------------------------------------------
 
-  Widget _buildBookCard(BuildContext context, Books book) {
-    final isVisible = book.isVisible;
-
+  Widget _buildBookCard(BuildContext context, BooksKid book) {
     return Card(
-      elevation: 5,
-      color: AppColors.cardBackgroundSoft,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+      elevation: 6,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(14),
         child: Row(
           children: [
             ClipRRect(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(16),
               child: Image.network(
                 book.portada,
-                width: 90,
-                height: 130,
+                width: 100,
+                height: 140,
                 fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) => Image.asset(
-                  'assets/images/iconTitleDog.png',
-                  width: 90,
-                  height: 130,
-                  fit: BoxFit.cover,
-                ),
               ),
             ),
-            const SizedBox(width: 15),
+            const SizedBox(width: 14),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          book.titulo,
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () => _showVisibilityConfirmDialog(book),
-                        child: Icon(
-                          isVisible ? Icons.visibility : Icons.visibility_off,
-                          color: isVisible ? Colors.green : Colors.red,
-                          size: 24,
-                        ),
-                      )
-                    ],
+                  Text(
+                    book.titulo,
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.brown,
+                    ),
                   ),
-                  const SizedBox(height: 6),
+                  const SizedBox(height: 8),
                   Text(
                     book.descripcion,
-                    maxLines: 3,
+                    maxLines: 2,
                     overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(fontSize: 14),
                   ),
-                  const SizedBox(height: 12),
-                  ElevatedButton.icon(
-                    onPressed: () =>
-                        context.push('/bookRender', extra: book.libroId),
-                    icon: const HugeIcon(
-                        icon: HugeIcons.strokeRoundedArrowRight01,
-                        color: AppColors.textColor),
-                    label: const Text("Ver Libro",
-                        style: TextStyle(color: AppColors.textColor)),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.chocolateNewDark,
+                  const SizedBox(height: 16),
+
+                  // BOTÓN GRANDE
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton.icon(
+                      onPressed: () =>
+                          context.push('/bookRender', extra: book.libroId),
+                      icon: HugeIcon(
+                          icon: HugeIcons.strokeRoundedBookOpen02,
+                          color: AppColors.textColor,
+                          size: 28),
+                      label: const Text(
+                        "Leer",
+                        style: TextStyle(color: Colors.white, fontSize: 16),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.orange.shade400,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 12),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(14)),
+                      ),
                     ),
                   ),
                 ],
@@ -579,46 +449,109 @@ class _AdminBooksScreenState extends State<AdminBooksScreen> {
           ? () {
               setState(() {
                 selectedLevel = nivelFiltro;
-                _fetchPaginatedBooks(reset: true); // recargar lista
+                _fetchPaginatedBooks(reset: true);
               });
             }
-          : () {
-              _showLockedLevelDialog(nivelFiltro);
-            },
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          : () => _showLockedLevelDialog(nivelFiltro),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 250),
+        curve: Curves.easeOut,
+        padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 14),
+        margin: const EdgeInsets.only(right: 12, bottom: 10),
         decoration: BoxDecoration(
-          color: isUnlocked
-              ? (isSelected ? AppColors.chocolateNewDark : Colors.white)
-              : Colors.grey.shade300,
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(
-            color: isUnlocked
-                ? (isSelected
-                    ? AppColors.chocolateNewDark
-                    : Colors.grey.shade400)
-                : Colors.grey.shade400,
-          ),
+          borderRadius: BorderRadius.circular(40),
+          color: !isUnlocked
+              ? Colors.grey.shade300
+              : isSelected
+                  ? AppColors.chocolateNewDark
+                  : AppColors.textColor,
+          boxShadow: [
+            if (isSelected)
+              BoxShadow(
+                color: Colors.black26,
+                blurRadius: 6,
+                offset: Offset(0, 3),
+              )
+          ],
         ),
         child: Row(
           children: [
+            HugeIcon(
+              icon: isUnlocked
+                  ? HugeIcons.strokeRoundedStar
+                  : HugeIcons.strokeRoundedSquareLockPassword,
+              size: 20,
+              color: isSelected ? Colors.white : Colors.black87,
+            ),
+            const SizedBox(width: 8),
             Text(
               label,
               style: TextStyle(
-                color: isUnlocked
-                    ? (isSelected ? Colors.white : Colors.grey.shade700)
-                    : Colors.grey.shade600,
-                fontWeight: FontWeight.w600,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: isSelected ? Colors.white : Colors.black87,
               ),
             ),
-
-            // Icono candado si está bloqueado
-            if (!isUnlocked) ...[
-              const SizedBox(width: 8),
-              const Icon(Icons.lock, size: 18, color: Colors.grey),
-            ]
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildHeader(int level) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 6),
+      child: Row(
+        children: [
+          // Sparkly star + title
+          ScaleTransition(
+            scale: Tween(begin: 0.95, end: 1.05).animate(CurvedAnimation(
+              parent: _sparkleController,
+              curve: Curves.easeInOut,
+            )),
+            child: Image.asset(
+              "assets/images/activities/readIcon.png",
+              width: 40,
+              height: 40,
+            ),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Biblioteca',
+                    style: TextStyle(
+                        color: AppColors.textColor,
+                        fontSize: 26,
+                        fontWeight: FontWeight.bold)),
+                const SizedBox(height: 4),
+                Text('Explora cuentos y actividades',
+                    style: TextStyle(color: AppColors.softCreamDark)),
+              ],
+            ),
+          ),
+
+          // Level pill
+          GestureDetector(
+            onTap: _showLevelInfoModal,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+              decoration: BoxDecoration(
+                color: AppColors.chocolateDark.withOpacity(0.95),
+                borderRadius: BorderRadius.circular(30),
+              ),
+              child: Row(children: [
+                Image.asset("assets/images/importantText.png",
+                    width: 35, height: 35),
+                const SizedBox(width: 8),
+                Text('Nivel $level',
+                    style: const TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.bold)),
+              ]),
+            ),
+          ),
+        ],
       ),
     );
   }

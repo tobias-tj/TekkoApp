@@ -33,3 +33,40 @@ class BookPdfRequested extends BookEvent {
   @override
   List<Object> get props => [token, bookId];
 }
+
+class CreateBlockBookRequested extends BookEvent {
+  final String token;
+  final int bookId;
+
+  const CreateBlockBookRequested({required this.token, required this.bookId});
+
+  @override
+  List<Object> get props => [token, bookId];
+}
+
+class DeleteBlockBookRequested extends BookEvent {
+  final String token;
+  final int bookId;
+
+  const DeleteBlockBookRequested({required this.token, required this.bookId});
+
+  @override
+  List<Object> get props => [token, bookId];
+}
+
+class BookKidRequested extends BookEvent {
+  final String token;
+  final int level;
+  final int page;
+  final int limit;
+
+  const BookKidRequested({
+    required this.token,
+    required this.level,
+    required this.page,
+    required this.limit,
+  });
+
+  @override
+  List<Object> get props => [token, level, page, limit];
+}

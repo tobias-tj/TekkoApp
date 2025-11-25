@@ -1,9 +1,6 @@
-import 'dart:async';
-
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
@@ -36,15 +33,18 @@ import 'package:tekko/features/api/data/repositories/map_repository_impl.dart';
 import 'package:tekko/features/api/data/repositories/parent_repository_impl.dart';
 import 'package:tekko/features/api/data/repositories/setting_repository_impl.dart';
 import 'package:tekko/features/api/domain/usecases/create_activity.dart';
+import 'package:tekko/features/api/domain/usecases/create_block_book.dart';
 import 'package:tekko/features/api/domain/usecases/create_map_info.dart';
 import 'package:tekko/features/api/domain/usecases/create_payment.dart';
 import 'package:tekko/features/api/domain/usecases/create_task.dart';
+import 'package:tekko/features/api/domain/usecases/delete_block_book.dart';
 import 'package:tekko/features/api/domain/usecases/delete_task_by_kid.dart';
 import 'package:tekko/features/api/domain/usecases/get_activities.dart';
 import 'package:tekko/features/api/domain/usecases/get_activities_by_kid.dart';
 import 'package:tekko/features/api/domain/usecases/get_book_pdf.dart';
 import 'package:tekko/features/api/domain/usecases/get_books_info.dart';
 import 'package:tekko/features/api/domain/usecases/get_experience.dart';
+import 'package:tekko/features/api/domain/usecases/get_kid_books.dart';
 import 'package:tekko/features/api/domain/usecases/get_map_info.dart';
 import 'package:tekko/features/api/domain/usecases/get_profile_details.dart';
 import 'package:tekko/features/api/domain/usecases/get_task_by_kid.dart';
@@ -71,10 +71,6 @@ final FirebaseAnalytics analytics = FirebaseAnalytics.instance;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown,
-  ]);
   FirebaseMessaging.onBackgroundMessage(
       FirebaseMessageService.firebaseMessagingBackgroundHandler);
   await initializeDateFormatting('es');
@@ -276,16 +272,30 @@ final class MainApp extends StatelessWidget {
                 analytics: analytics),
           ),
           BlocProvider(
-              create: (context) => BookBloc(
-                  getBookInfo: GetBooksInfoUseCases(
+            create: (context) => BookBloc(
+                getBookInfo: GetBooksInfoUseCases(
+                  repository: BooksRepositoryImpl(
+                      remoteDatasource: BooksRemoteDatasource(
+                          dio: context.read<DioClient>().dio)),
+                ),
+                getBookFilePdf: GetBookPdf(
+                  repository: BooksRepositoryImpl(
+                      remoteDatasource: BooksRemoteDatasource(
+                          dio: context.read<DioClient>().dio)),
+                ),
+                blockBook: CreateBlockBookUsecases(
+                    bookRepository: BooksRepositoryImpl(
+                        remoteDatasource: BooksRemoteDatasource(
+                            dio: context.read<DioClient>().dio))),
+                deleteBlockBook: DeleteBlockBookUsecases(
+                    bookRepository: BooksRepositoryImpl(
+                        remoteDatasource: BooksRemoteDatasource(
+                            dio: context.read<DioClient>().dio))),
+                getKidBooks: GetKidBooks(
                     repository: BooksRepositoryImpl(
                         remoteDatasource: BooksRemoteDatasource(
-                            dio: context.read<DioClient>().dio)),
-                  ),
-                  getBookFilePdf: GetBookPdf(
-                      repository: BooksRepositoryImpl(
-                          remoteDatasource: BooksRemoteDatasource(
-                              dio: context.read<DioClient>().dio)))))
+                            dio: context.read<DioClient>().dio)))),
+          )
         ],
         child: MaterialApp.router(
           debugShowCheckedModeBanner: false,

@@ -9,12 +9,23 @@ abstract class BookState extends Equatable {
 
 class BookLoading extends BookState {}
 
+class BookLoadingBlock extends BookState {}
+
 class BookInitial extends BookState {}
 
 class BookError extends BookState {
   final String message;
 
   const BookError({required this.message});
+
+  @override
+  List<Object> get props => [message];
+}
+
+class BookBlockError extends BookState {
+  final String message;
+
+  const BookBlockError({required this.message});
 
   @override
   List<Object> get props => [message];
@@ -36,4 +47,31 @@ class BookGetPdfSuccess extends BookState {
 
   @override
   List<Object?> get props => [file];
+}
+
+class BlockBookSuccess extends BookState {
+  final bool isSucess;
+
+  const BlockBookSuccess({required this.isSucess});
+
+  @override
+  List<Object?> get props => [isSucess];
+}
+
+class DeleteBlockBookSuccess extends BookState {
+  final bool isSucess;
+
+  const DeleteBlockBookSuccess({required this.isSucess});
+
+  @override
+  List<Object?> get props => [isSucess];
+}
+
+class BookKidGetSuccess extends BookState {
+  final GetBookKidDto booksList;
+
+  const BookKidGetSuccess({required this.booksList});
+
+  @override
+  List<Object?> get props => [booksList];
 }
