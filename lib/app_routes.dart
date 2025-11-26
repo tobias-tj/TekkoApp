@@ -10,7 +10,7 @@ import 'package:tekko/screens/accounts/maps_account_screen.dart';
 import 'package:tekko/screens/accounts/recovery_account_screen.dart';
 import 'package:tekko/screens/accounts/register_account_screen.dart';
 import 'package:tekko/screens/activity/activity_screen.dart';
-import 'package:tekko/screens/books_kid_screen.dart';
+import 'package:tekko/screens/books/books_kid_screen.dart';
 import 'package:tekko/screens/games/answer_task_screen.dart';
 import 'package:tekko/screens/games/manage_task_screen.dart';
 import 'package:tekko/screens/games/create_task_screen.dart';

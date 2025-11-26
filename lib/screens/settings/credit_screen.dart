@@ -212,6 +212,69 @@ class CreditsScreen extends StatelessWidget {
             ),
             const SizedBox(height: 30),
 
+            // Sección de Libros y Recursos Educativos
+            FadeInUp(
+              child: Card(
+                elevation: 3,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Icon(
+                            HugeIcons.strokeRoundedBookOpen01,
+                            color: AppColors.chocolateNewDark,
+                            size: 28,
+                          ),
+                          const SizedBox(width: 12),
+                          const Text(
+                            'Libros Infantiles',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.chocolateNewDark,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 15),
+                      const Text(
+                        'Los libros disponibles en Tekko provienen en parte de:',
+                        style: TextStyle(fontSize: 16),
+                      ),
+                      const SizedBox(height: 10),
+                      ListTile(
+                        leading: const Icon(Icons.link),
+                        title: const Text('StoryWeaver – Pratham Books'),
+                        subtitle: const Text('https://storyweaver.org.in'),
+                        onTap: () =>
+                            _launchURL('https://storyweaver.org.in/en'),
+                        trailing: const Icon(Icons.open_in_new),
+                      ),
+                      const SizedBox(height: 10),
+                      const Text(
+                        'StoryWeaver es una plataforma creada por Pratham Books que ofrece '
+                        'libros infantiles de acceso abierto bajo licencias Creative Commons. '
+                        'Tekko utiliza estos materiales con fines educativos y sin fines de lucro, '
+                        'respetando las condiciones de uso establecidas por sus creadores.',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontStyle: FontStyle.italic,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 30),
+
             // Nota Legal
             FadeInUp(
               child: SafeArea(

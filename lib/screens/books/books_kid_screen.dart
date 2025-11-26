@@ -2,35 +2,50 @@ import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hugeicons/hugeicons.dart';
-import 'package:tekko/components/books/parent/book_card_parent.dart';
-import 'package:tekko/components/books/parent/filter_niveles_parent.dart';
+import 'package:tekko/components/books/book_card.dart';
+import 'package:tekko/components/books/book_kid_header.dart';
+import 'package:tekko/components/books/filter_niveles_kid.dart';
 import 'package:tekko/features/api/data/bloc/book/book_bloc.dart';
 import 'package:tekko/features/api/data/bloc/experience/experience_bloc.dart';
-import 'package:tekko/features/api/data/models/get_book_dto.dart';
+import 'package:tekko/features/api/data/models/get_book_kid_dto.dart';
 import 'package:tekko/features/core/utils/storage_utils.dart';
 import 'package:tekko/styles/app_colors.dart';
 
-class AdminBooksScreen extends StatefulWidget {
-  const AdminBooksScreen({super.key});
+class BooksKidScreen extends StatefulWidget {
+  const BooksKidScreen({super.key});
 
   @override
-  State<AdminBooksScreen> createState() => _AdminBooksScreenState();
+  State<BooksKidScreen> createState() => _BooksKidScreenState();
 }
 
-class _AdminBooksScreenState extends State<AdminBooksScreen> {
+class _BooksKidScreenState extends State<BooksKidScreen>
+    with TickerProviderStateMixin {
   // Estado local
   int selectedLevel = 1;
   int currentPage = 1;
   bool isLoadingMore = false;
 
-  List<Books> paginatedBooks = [];
+  List<BooksKid> paginatedBooks = [];
   bool hasMore = true;
+
+  late final AnimationController sparkleController;
 
   @override
   void initState() {
     super.initState();
+    sparkleController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1400),
+    )..repeat(reverse: true);
+
     _getExperienceData();
     _fetchPaginatedBooks(reset: true);
+  }
+
+  @override
+  void dispose() {
+    sparkleController.dispose();
+    super.dispose();
   }
 
   // ---------------------------------------------------------------------------
@@ -51,7 +66,7 @@ class _AdminBooksScreenState extends State<AdminBooksScreen> {
     setState(() => isLoadingMore = true);
 
     context.read<BookBloc>().add(
-          BookGetRequested(
+          BookKidRequested(
             token: token!,
             limit: 3,
             page: currentPage,
@@ -75,55 +90,6 @@ class _AdminBooksScreenState extends State<AdminBooksScreen> {
   // MODALES
   // ---------------------------------------------------------------------------
 
-  void _showLevelInfoModal() {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return Dialog(
-          backgroundColor: Colors.transparent,
-          child: FadeInDown(
-            child: Container(
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: AppColors.cardBackgroundSoft,
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const HugeIcon(
-                      size: 45,
-                      icon: HugeIcons.strokeRoundedAward01,
-                      color: AppColors.chocolateNewDark),
-                  const SizedBox(height: 15),
-                  const Text(
-                    "¿Cómo subir de nivel?",
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.chocolateNewDark,
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  const Text(
-                    "Crea tareas para tu hij@. Al completarlas gana experiencia "
-                    "y desbloquea libros de mayor nivel.",
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: () => Navigator.pop(context),
-                    child: const Text("Entendido"),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
-
   void _showLockedLevelDialog(int requiredLevel) {
     showDialog(
       context: context,
@@ -140,7 +106,10 @@ class _AdminBooksScreenState extends State<AdminBooksScreen> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Icon(Icons.lock, size: 40, color: Colors.redAccent),
+                  const HugeIcon(
+                      icon: HugeIcons.strokeRoundedSquareLockPassword,
+                      size: 35,
+                      color: Colors.redAccent),
                   const SizedBox(height: 15),
                   Text(
                     "Nivel bloqueado",
@@ -169,10 +138,6 @@ class _AdminBooksScreenState extends State<AdminBooksScreen> {
     );
   }
 
-  // ---------------------------------------------------------------------------
-  // BUILD
-  // ---------------------------------------------------------------------------
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -182,17 +147,12 @@ class _AdminBooksScreenState extends State<AdminBooksScreen> {
           // --------------------------- BOOKS --------------------------
           BlocListener<BookBloc, BookState>(
             listener: (context, state) {
-              if (state is BookGetSuccess) {
+              if (state is BookKidGetSuccess) {
                 setState(() {
                   hasMore = state.booksList.hasMore;
                   paginatedBooks.addAll(state.booksList.booksListData);
                   isLoadingMore = false;
                 });
-              }
-
-              if (state is BlockBookSuccess ||
-                  state is DeleteBlockBookSuccess) {
-                _fetchPaginatedBooks(reset: true);
               }
 
               if (state is BookError) {
@@ -218,6 +178,10 @@ class _AdminBooksScreenState extends State<AdminBooksScreen> {
       ),
     );
   }
+
+  // ---------------------------------------------------------------------------
+  // UI PRINCIPAL
+  // ---------------------------------------------------------------------------
 
   Widget _buildContent(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -253,18 +217,7 @@ class _AdminBooksScreenState extends State<AdminBooksScreen> {
             children: [
               const SizedBox(height: 50),
 
-              Text(
-                'Gestión de Libros',
-                style: TextStyle(
-                  color: AppColors.softCream,
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-
-              const SizedBox(height: 30),
-
-              _buildLevelProgress(level, exp, nextExp),
+              BookKidHeader(level: level, sparkleController: sparkleController),
 
               const SizedBox(height: 30),
 
@@ -278,23 +231,23 @@ class _AdminBooksScreenState extends State<AdminBooksScreen> {
                     SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: Row(
-                          children: List.generate(
-                        5,
-                        (i) {
+                        children: List.generate(5, (i) {
                           final nivel = i + 1;
-                          return FilterNivelesParent(
+                          return FilterNivelesKid(
                             label: "Nivel $nivel",
                             nivelFiltro: nivel,
                             currentLevel: level,
                             selectedLevel: selectedLevel,
                             onSelected: () {
-                              selectedLevel = nivel;
-                              _fetchPaginatedBooks(reset: true);
+                              setState(() {
+                                selectedLevel = nivel;
+                                _fetchPaginatedBooks(reset: true);
+                              });
                             },
                             onLockedTap: () => _showLockedLevelDialog(nivel),
                           );
-                        },
-                      )),
+                        }),
+                      ),
                     ),
                   ],
                 ),
@@ -308,10 +261,9 @@ class _AdminBooksScreenState extends State<AdminBooksScreen> {
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: paginatedBooks.length,
                 itemBuilder: (context, index) => Padding(
-                    padding: const EdgeInsets.only(bottom: 20),
-                    child: BookCardParent(
-                      book: paginatedBooks[index],
-                    )),
+                  padding: const EdgeInsets.only(bottom: 20),
+                  child: BookCard(book: paginatedBooks[index]),
+                ),
               ),
 
               // --------------------------- VER MÁS ---------------------------
@@ -336,62 +288,6 @@ class _AdminBooksScreenState extends State<AdminBooksScreen> {
           ),
         ),
       ],
-    );
-  }
-
-  Widget _buildLevelProgress(int level, int exp, int missingExp) {
-    final totalNeeded = exp + missingExp;
-    final percent = exp / totalNeeded;
-
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: AppColors.cardMaskSoft,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text("Nivel actual",
-                  style: TextStyle(color: AppColors.chocolateNewDark)),
-              IconButton(
-                icon:
-                    Icon(Icons.info_outline, color: AppColors.chocolateNewDark),
-                onPressed: _showLevelInfoModal,
-              ),
-            ],
-          ),
-          TweenAnimationBuilder<double>(
-            tween: Tween(begin: 0, end: level.toDouble()),
-            duration: const Duration(milliseconds: 700),
-            builder: (_, value, __) => Text(
-              "Nivel ${value.toInt()}",
-              style: const TextStyle(
-                fontSize: 32,
-                color: AppColors.chocolateNewDark,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-          const SizedBox(height: 20),
-          TweenAnimationBuilder<double>(
-            tween: Tween(begin: 0, end: percent),
-            duration: const Duration(milliseconds: 800),
-            curve: Curves.easeOutCubic,
-            builder: (_, value, __) => LinearProgressIndicator(
-              value: value,
-              minHeight: 12,
-              color: AppColors.chocolateDark,
-              backgroundColor: Colors.white70,
-            ),
-          ),
-          const SizedBox(height: 10),
-          Text("$exp / $totalNeeded EXP"),
-          Text("Faltan $missingExp EXP para llegar al Nivel ${level + 1}"),
-        ],
-      ),
     );
   }
 }
